@@ -21,6 +21,12 @@ class Address{
     getCapZip(){return this.capZip;}
     setCapZip(capZip){this.capZip=capZip;}
 
-    getProvReg(){return this.isFirstAccess;}
-    setProvReg(isFirstAccess){this.isFirstAccess=isFirstAccess;}
+    getProvReg(){return this.provReg;}
+    setProvReg(provReg){this.provReg=provReg;}
+
+    getNazione(){return this.nazione;}
+    setNazione(nazione){this.nazione=nazione;}
+
+    getIsVerified(){return this.isVerified;}
+    setIsVerified(isVerified){this.isVerified=isVerified;}
 }
