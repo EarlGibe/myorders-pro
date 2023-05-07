@@ -1,23 +1,23 @@
 class Catalogo {
 
     constructor( id, articoli, status, idAziendaFornitrice) { 
-        this.id = id
-        this.articoli = articoli
-        this.status = status
-        this.idAziendaFornitrice = idAziendaFornitrice
+        this.id = id;
+        this.articoli = articoli;
+        this.status = status;
+        this.idAziendaFornitrice = idAziendaFornitrice;
     }
 
-    getId() { return this.id }
-    setID(id) { this.id = id }
+    getId() { return this.id; }
+    setID(id) { this.id = id; }
 
-    getArticoli() { return this.articoli }
-    setArticoli(articoli) { this.articoli = articoli }
+    getArticoli() { return this.articoli; }
+    setArticoli(articoli) { this.articoli = articoli; }
 
-    getStatus() { return this.status }
-    setStatus(status) { this.status = status }
+    getStatus() { return this.status; }
+    setStatus(status) { this.status = status; }
 
-    getIdAziendaFornitrice() { return this.idAziendaFornitrice }
-    setIdAziendaFornitrice(idAziendaFornitrice) { this.idAziendaFornitrice = idAziendaFornitrice }
+    getIdAziendaFornitrice() { return this.idAziendaFornitrice; }
+    setIdAziendaFornitrice(idAziendaFornitrice) { this.idAziendaFornitrice = idAziendaFornitrice; }
 
     getArticoloByID(idArticolo) {
 
