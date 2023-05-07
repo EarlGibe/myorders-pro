@@ -1,6 +1,5 @@
 class AziendaFornitrice {
-    constructor(){
 
-    }
+    constructor() { id }
 
 }
