@@ -1,0 +1,6 @@
+class Articolo {
+    constructor(){
+
+    }
+
+}

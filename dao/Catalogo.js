@@ -1,0 +1,6 @@
+class Catalogo {
+    constructor(){
+
+    }
+
+}

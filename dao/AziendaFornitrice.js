@@ -1,0 +1,6 @@
+class AziendaFornitrice {
+    constructor(){
+
+    }
+
+}
