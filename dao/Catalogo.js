@@ -19,4 +19,24 @@ class Catalogo {
     getIdAziendaFornitrice() { return this.idAziendaFornitrice }
     setIdAziendaFornitrice(idAziendaFornitrice) { this.idAziendaFornitrice = idAziendaFornitrice }
 
+    getArticoloByID(idArticolo) {
+
+    }
+
+    addArticolo(articolo) {
+
+    }
+
+    removeArticolo(idArticolo) {
+
+    }
+
+    addListArticoli(Articoli) {
+
+    }
+
+    removeListArticoli(idListArticoli) {
+        
+    }
+
 }

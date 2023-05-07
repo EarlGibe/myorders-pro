@@ -14,5 +14,17 @@ class AziendaFornitrice {
 
     getStatus() { return this.status }
     setStatus(status) { this.status = status}
+
+    getCatalogoByID(idCatalogo) {
+
+    }
+
+    addCatalogo(catalogo) {
+
+    }
     
+    removeCatalogo(idCatalogo) {
+        
+    }
+
 }
