@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-const articoliSchema = new Schema({
+const articoloSchema = new Schema({
     id: Number,
     descrizione: String,
     coloriDisponibili: Array,
@@ -11,4 +11,4 @@ const articoliSchema = new Schema({
     stato: Boolean
 });
 
-module.exports = mongoose.model('Articolo', articoliSchema);
+module.exports = mongoose.model('Articolo', articoloSchema);

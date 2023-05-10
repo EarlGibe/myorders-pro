@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-const articoliSchema = new Schema({
+const ordineSchema = new Schema({
     id: Number,
-    descrizione: String,
+    cliente: Cliente,
     coloriDisponibili: Array,
     taglieDisponibili: Array,
     scontoApplicato: Number,
