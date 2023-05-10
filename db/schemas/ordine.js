@@ -4,9 +4,14 @@ const { Schema } = mongoose;
 const ordineSchema = new Schema({
     id: Number,
     cliente: Cliente,
-    coloriDisponibili: Array,
-    taglieDisponibili: Array,
-    scontoApplicato: Number,
-    prezzo: Number,
-    stato: Boolean
+    subagente: Array,
+    data: Date,
+    listaArticoli: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Articolo'
+      }],
+    indirizzoSpedizione: String,
+    status: Boolean
 });
+
+module.exports = mongoose.model('Ordine', ordineSchema);
