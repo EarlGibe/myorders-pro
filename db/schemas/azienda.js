@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-const clientiSchema = new Schema({
+const aziendaSchema = new Schema({
     id: Number,
     nome: String,
     cognome: String,
@@ -25,8 +25,9 @@ const clientiSchema = new Schema({
     nazioneSede: String,
     isVerifiedSede: Boolean,
     codSDI: String,
-    pec: String,
-    status: Boolean    
+    pec: String,    
+    status: Boolean,
+    cataloghi: Array
 });
 
-module.exports = mongoose.model('Cliente', clientiSchema);
+module.exports = mongoose.model('Azienda', aziendaSchema);
