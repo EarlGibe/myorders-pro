@@ -10,5 +10,3 @@ const articoliSchema = new Schema({
     prezzo: Number,
     stato: Boolean
 });
-
-module.exports = mongoose.model('Articolo', articoliSchema);
