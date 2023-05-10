@@ -3,12 +3,19 @@ const { Schema } = mongoose;
 const Articolo = require('./articoloSchema');
 
 const catalogoSchema = new Schema({
-    id: Number,
+    id: {
+        type: Number,
+        required: true,
+        unique: true
+    },
     articoli: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Articolo'
       }],
-    status: Boolean
+    status: {
+        type: Boolean,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('Catalogo', catalogoSchema);
