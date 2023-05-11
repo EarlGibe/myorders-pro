@@ -1,0 +1,14 @@
+{
+  "name": "myorders-pro",
+  "version": "1.0.0",
+  "description": "Software Engineering project for University course. The name of the project is MyOrders Pro. The first sprint ends on May 21st. ciao ciao",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
