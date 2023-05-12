@@ -1,13 +1,30 @@
 const express = require('express');
 const app = express();
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+//Uncomment to import swagger file
+/*var options = {
+    swaggerOptions: {
+        url: "/api-docs/swagger.json",
+    },
+}
+app.get("/api-docs/swagger.json", (req, res) => res.json(swaggerDocument));
+app.use('/api-docs', swaggerUi.serveFiles(null, options), swaggerUi.setup(null, options));*/
+
+//
+
 const cors = require('cors')
 
 const authentication = require('./authentication.js');
 const tokenChecker = require('./tokenChecker.js');
 
-const students = require('./students.js');
-const books = require('./books.js');
-const booklendings = require('./booklendings.js');
+const cliente = require('./cliente.js');
+const ordine = require('./ordine.js');
+//implement others...
 
 
 /**
