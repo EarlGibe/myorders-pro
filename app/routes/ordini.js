@@ -7,21 +7,21 @@ const port = 3000;
 app.use(bodyParser.json());
 
 // Definisci l'endpoint per gli utenti
-app.post('/cataloghi/read/all', (req, res) => {
+app.post('/ordini/read/all', (req, res) => {
   // Effettua l'autenticazione
   /*if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
     res.status(401).send('Unauthorized');
   }*/
 
   // Recupera l'elenco degli utenti dal database
-  const cataloghi = getAllCataloghi();
+  const ordini = getAllOrdini();
 
   // Restituisci l'elenco degli utenti come JSON
-  res.json(cataloghi);
+  res.json(ordini);
 });
 
 // Definisci l'endpoint per gli utenti
-app.post('/cataloghi/read/:id', (req, res) => {
+app.post('/ordini/read/:id', (req, res) => {
     // Effettua l'autenticazione
     /*if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
       res.status(401).send('Unauthorized');
@@ -31,18 +31,18 @@ app.post('/cataloghi/read/:id', (req, res) => {
     const id = req.params.id;
   
     // Recupera l'utente corrispondente dall'ID
-    const catalogo = getCatalogoById(id);
+    const ordine = getOrdineById(id);
   
-    if (!catalogo) {
-      res.status(404).send('Catalogo non trovato');
+    if (!ordine) {
+      res.status(404).send('ordine non trovato');
     }
   
     // Restituisci l'utente come JSON
-    res.json(catalogo);
+    res.json(ordine);
   });
   
   // Definisci l'endpoint per gli utenti
-app.post('/cataloghi/read/:id/articoli/all', (req, res) => {
+app.post('/ordini/read/:id/articoli/all', (req, res) => {
     // Effettua l'autenticazione
     /*if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
       res.status(401).send('Unauthorized');
@@ -52,7 +52,7 @@ app.post('/cataloghi/read/:id/articoli/all', (req, res) => {
     const id = req.params.id;
   
     // Recupera l'utente corrispondente dall'ID
-    const articoli = getArticoliByCatalogoId(id);
+    const articoli = getArticoliByordineId(id);
   
     if (!articoli) {
       res.status(404).send('Articoli non trovati');
@@ -63,97 +63,97 @@ app.post('/cataloghi/read/:id/articoli/all', (req, res) => {
   });
   
   // Definisci l'endpoint per creare un nuovo utente
-  app.post('/cataloghi/create', (req, res) => {
+  app.post('/ordini/create', (req, res) => {
   
     // Recupera i dati dell'utente dal corpo della richiesta
-    const newCatalogo = req.body;
+    const newordine = req.body;
   
     // Effettua la validazione dei dati dell'utente
-    if (!newCatalogo.name) {
-      res.status(400).send('Nome del catalogo obbligatorio');
+    if (!newordine.name) {
+      res.status(400).send('Nome del ordine obbligatorio');
     }
   
     // Crea il nuovo utente nel database
-    const createdCatalogo = createCatalogo(newCatalogo);
+    const createdordine = createOrdine(newordine);
   
     // Restituisci il nuovo utente come JSON
-    res.json(createdCatalogo);
+    res.json(createdordine);
   });
 
   // Definisci l'endpoint per creare un nuovo utente
-  app.post('/cataloghi/update/:id', (req, res) => {
+  app.post('/ordini/update/:id', (req, res) => {
   
     // Recupera i dati dell'utente dal corpo della richiesta
     const id = req.params.id;
-    const newCatalogo = req.body;
+    const updateordine = req.body;
   
     // Effettua la validazione dei dati dell'utente
-    if (!newCatalogo.name) {
-      res.status(400).send('Nome del catalogo obbligatorio');
+    if (!updateordine.name) {
+      res.status(400).send('Nome del ordine obbligatorio');
     }
 
     // Crea il nuovo utente nel database
-    const updatedCatalogo = updateCatalogo(id,newCatalogo);
+    const updatedordine = updateordine(id,updateordine);
   
     // Restituisci il nuovo utente come JSON
-    res.json(updatedCatalogo);
+    res.json(updatedordine);
   });
 
   // Definisci l'endpoint per creare un nuovo utente
-  app.post('/cataloghi/create', (req, res) => {
+  app.post('/ordini/create', (req, res) => {
   
     // Recupera i dati dell'utente dal corpo della richiesta
-    const newCatalogo = req.body;
+    const newordine = req.body;
   
     // Effettua la validazione dei dati dell'utente
-    if (!newCatalogo.name) {
-      res.status(400).send('Nome del catalogo obbligatorio');
+    if (!newordine.name) {
+      res.status(400).send('Nome del ordine obbligatorio');
     }
   
     // Crea il nuovo utente nel database
-    const createdCatalogo = createCatalogo(newCatalogo);
+    const createdordine = createOrdine(newordine);
   
     // Restituisci il nuovo utente come JSON
-    res.json(createdCatalogo);
+    res.json(createdordine);
   });
 
   // Definisci l'endpoint per creare un nuovo utente
-  app.post('/cataloghi/delete/:id', (req, res) => {
+  app.post('/ordini/delete/:id', (req, res) => {
   
     // Recupera i dati dell'utente dal corpo della richiesta
     const id = req.params.id;
 
     // Crea il nuovo utente nel database
-    const deletedCatalogo = deleteCatalogo(id);
+    const deletedordine = deleteordine(id);
   
     // Restituisci il nuovo utente come JSON
-    res.json(deletedCatalogo);
+    res.json(deletedordine);
   });
 
   // Funzione di esempio per recuperare un utente dal database
-  function getAllCataloghi() {
-    const cataloghi = [
+  function getAllOrdini() {
+    const ordini = [
       { id: 1, name: 'Mario Rossi' },
       { id: 2, name: 'Luigi Verdi' },
       { id: 3, name: 'Carlo Bianchi' },
     ];
   
-    return cataloghi;
+    return ordini;
   }
 
   // Funzione di esempio per recuperare un utente dal database
-  function getCatalogoById(id) {
-    const cataloghi = [
+  function getOrdineById(id) {
+    const ordini = [
       { id: 1, name: 'Mario Rossi' },
       { id: 2, name: 'Luigi Verdi' },
       { id: 3, name: 'Carlo Bianchi' },
     ];
   
-    return cataloghi.find(catalogo => cataloghi.id === parseInt(id));
+    return ordini.find(ordine => ordini.id === parseInt(id));
   }
 
   // Funzione di esempio per recuperare un utente dal database
-  function getArticoliByCatalogoId(id) {
+  function getArticoliByordineId(id) {
     const articoli = [
       { id: 1, name: 'Mario Rossi' },
       { id: 2, name: 'Luigi Verdi' },
@@ -164,27 +164,27 @@ app.post('/cataloghi/read/:id/articoli/all', (req, res) => {
   }
   
   // Funzione di esempio per creare un nuovo utente nel database
-  function createCatalogo(newCatalogo) {
+  function createOrdine(newordine) {
     // Logica per creare un nuovo utente nel database
     return {
       id: 1,
-      name: newCatalogo.name,
-      articoli: newCatalogo.articoli,
-      status: newCatalogo.status
+      name: newordine.name,
+      articoli: newordine.articoli,
+      status: newordine.status
     };
   }
 
-  function updateCatalogo(id,newCatalogo) {
+  function updateordine(id,newOrdine) {
     // Logica per creare un nuovo utente nel database
     return {
       id: id,
-      name: newCatalogo.name,
-      articoli: newCatalogo.articoli,
-      status: newCatalogo.status
+      name: updateordine.name,
+      articoli: updateordine.articoli,
+      status: updateordine.status
     };
   }
 
-  function deleteCatalogo(id){
+  function deleteordine(id){
     return {
         id: id,
         done: 'yes'
