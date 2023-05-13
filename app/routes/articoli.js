@@ -13,7 +13,7 @@ app.listen(port, () => {
 });
 
 // Definisci l'endpoint per gli articoli
-app.get('/articoli/read/all', (req, res) => {
+app.post('/articoli/read/all', (req, res) => {
   // Effettua l'autenticazione
   // if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
   //  res.status(401).send('Unauthorized');
