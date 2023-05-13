@@ -11,6 +11,24 @@ app.listen(port, () => {
   console.log('API avviata sulla porta ' + port);
 });
 
+// Definisci l'endpoint per creare un nuovo subagente
+app.post('/subagenti/create', (req, res) => {
+
+  // Recupera i dati del subagente dal corpo della richiesta
+  const newSubagente = req.body;
+
+  // Effettua la validazione dei dati del subagente
+  if (!newSubagente.anagrafica) {
+    res.status(400).send('Anagrafica del subagente obbligatoria');
+  }
+
+  // Crea il nuovo subagente nel database
+  const createdSubagente = createSubagente(newSubagente);
+
+  // Restituisci il nuovo subagente come JSON
+  res.json(createdSubagente);
+});
+
 // Definisci l'endpoint per i subagenti
 app.post('/subagenti/read/all', (req, res) => {
   // Effettua l'autenticazione
@@ -24,27 +42,6 @@ app.post('/subagenti/read/all', (req, res) => {
   // Restituisci l'elenco dei subagenti come JSON
   res.json(subagenti);
 });
-
-// Definisci l'endpoint per i subagenti
-app.post('/subagenti/read/:id', (req, res) => {
-    // Effettua l'autenticazione
-    /*if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
-      res.status(401).send('Unauthorized');
-    }*/
-  
-    // Recupera l'ID del subagente dal parametro della richiesta
-    const id = req.params.id;
-  
-    // Recupera l'subagente corrispondente dall'ID
-    const subagente = getSubagenteById(id);
-  
-    if (!subagente) {
-      res.status(404).send('Subagente non trovato');
-    }
-  
-    // Restituisci l'subagente come JSON
-    res.json(subagente);
-  });
   
   // Definisci l'endpoint per i subagenti
 app.post('/subagenti/read/:id/', (req, res) => {
@@ -57,69 +54,28 @@ app.post('/subagenti/read/:id/', (req, res) => {
     const id = req.params.id;
   
     // Recupera l'subagente corrispondente dall'ID
-    const articoli = getArticoliBySubagenteId(id);
+    const articoli = getSubagenteById(id);
   
     if (!articoli) {
-      res.status(404).send('Articoli non trovati');
+      res.status(404).send('Subagente non trovato');
     }
   
     // Restituisci l'subagente come JSON
     res.json(articoli);
   });
-  
-  // Definisci l'endpoint per creare un nuovo subagente
-  app.post('/subagenti/create', (req, res) => {
-  
-    // Recupera i dati del subagente dal corpo della richiesta
-    const newSubagente = req.body;
-  
-    // Effettua la validazione dei dati del subagente
-    if (!newSubagente.name) {
-      res.status(400).send('Nome del subagente obbligatorio');
-    }
-  
-    // Crea il nuovo subagente nel database
-    const Subagente = createSubagente(newSubagente);
-  
-    // Restituisci il nuovo subagente come JSON
-    res.json(createdSubagente);
-  });
 
   // Definisci l'endpoint per creare un nuovo subagente
   app.post('/subagenti/update/:id', (req, res) => {
-  
+
     // Recupera i dati del subagente dal corpo della richiesta
     const id = req.params.id;
-    const newSubagente = req.body;
-  
-    // Effettua la validazione dei dati del subagente
-    if (!newSubagente.name) {
-      res.status(400).send('Nome del subagente obbligatorio');
-    }
+    const subagente = req.body;
 
     // aggiorna il subagente nel database
-    const updatedSubagente = updateSubagente(id,newSubagente);
+    const updatedSubagente = updateSubagente(id,subagente);
   
     // Restituisci il nuovo subagente come JSON
     res.json(updatedSubagente);
-  });
-
-  // Definisci l'endpoint per creare un nuovo subagente
-  app.post('/subagenti/create', (req, res) => {
-  
-    // Recupera i dati del subagente dal corpo della richiesta
-    const newSubagente = req.body;
-  
-    // Effettua la validazione dei dati del subagente
-    if (!newSubagente.anagrafica) {
-      res.status(400).send('Anagrafica del subagente obbligatoria');
-    }
-  
-    // Crea il nuovo subagente nel database
-    const createdSubagente = createSubagente(newSubagente);
-  
-    // Restituisci il nuovo subagente come JSON
-    res.json(createdSubagente);
   });
 
   // Definisci l'endpoint per creare un nuovo subagente
@@ -135,7 +91,18 @@ app.post('/subagenti/read/:id/', (req, res) => {
     res.json(deletedSubagente);
   });
 
-  // Funzione di esempio per recuperare un subagente dal database
+  // Funzione di esempio per creare un nuovo subagente nel database
+  function createSubagente(newSubagente) {
+    // Logica per creare un nuovo subagente nel database
+    return {
+      id: 1,
+      name: newSubagente.name,
+      articoli: newSubagente.articoli,
+      status: newSubagente.status
+    };
+  }
+
+  // Funzione di esempio per recuperare tutti i subagenti dal database
   function getAllSubagenti() {
     const subagenti = [
       { id: 1, name: 'Mario Rossi' },
@@ -156,20 +123,9 @@ app.post('/subagenti/read/:id/', (req, res) => {
   
     return subagenti.find(subagente => subagenti.id === parseInt(id));
   }
-  
-  // Funzione di esempio per creare un nuovo subagente nel database
-  function createSubagente(newSubagente) {
-    // Logica per creare un nuovo subagente nel database
-    return {
-      id: 1,
-      name: newSubagente.name,
-      articoli: newSubagente.articoli,
-      status: newSubagente.status
-    };
-  }
 
   function updateSubagente(id,newSubagente) {
-    // Logica per creare un nuovo subagente nel database
+    // Logica per aggiornare un subagente nel database
     return {
       id: id,
       name: newSubagente.name,
@@ -179,6 +135,7 @@ app.post('/subagenti/read/:id/', (req, res) => {
   }
 
   function deleteSubagente(id){
+        // Logica per eliminare un subagente nel database
     return {
         id: id,
         done: 'yes'

@@ -11,7 +11,25 @@ app.listen(port, () => {
   console.log('API avviata sulla porta ' + port);
 });
 
-// Definisci l'endpoint per i clienti
+// Definisci l'endpoint per creare un nuovo utente
+app.post('/clienti/create', (req, res) => {
+
+  // Recupera i dati del cliente dal corpo della richiesta
+  const newCliente = req.body;
+
+  // Effettua la validazione dei dati del cliente
+  if (!newCliente.anagrafica) {
+    res.status(400).send('Anagrafica del cliente obbligatoria');
+  }
+
+  // Crea il nuovo cliente nel database
+  const createdCliente = createCliente(newCliente);
+
+  // Restituisci il nuovo utente come JSON
+  res.json(createdCliente);
+});
+
+// Definisci l'endpoint per la lettura di tutti i clienti
 app.post('/clienti/read/all', (req, res) => {
   // Effettua l'autenticazione
   /*if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
@@ -45,45 +63,6 @@ app.post('/clienti/read/:id', (req, res) => {
     // Restituisci l'utente come JSON
     res.json(cliente);
   });
-  
-  // Definisci l'endpoint per i clienti
-app.post('/clienti/read/all', (req, res) => {
-    // Effettua l'autenticazione
-    /*if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
-      res.status(401).send('Unauthorized');
-    }*/
-  
-    // Recupera l'ID del cliente dal parametro della richiesta
-    const id = req.params.id;
-  
-    // Recupera l'utente corrispondente dall'ID
-    const articoli = getArticoliByClienteId(id);
-  
-    if (!articoli) {
-      res.status(404).send('Articoli non trovati');
-    }
-  
-    // Restituisci l'utente come JSON
-    res.json(articoli);
-  });
-  
-  // Definisci l'endpoint per creare un nuovo utente
-  app.post('/clienti/create', (req, res) => {
-  
-    // Recupera i dati del cliente dal corpo della richiesta
-    const newCliente = req.body;
-  
-    // Effettua la validazione dei dati del cliente
-    if (!newCliente.name) {
-      res.status(400).send('Nome del cliente obbligatorio');
-    }
-  
-    // Crea il nuovo utente nel database
-    const Cliente = createCliente(newCliente);
-  
-    // Restituisci il nuovo utente come JSON
-    res.json(createdCliente);
-  });
 
   // Definisci l'endpoint per creare un nuovo utente
   app.post('/clienti/update/:id', (req, res) => {
@@ -105,24 +84,6 @@ app.post('/clienti/read/all', (req, res) => {
   });
 
   // Definisci l'endpoint per creare un nuovo utente
-  app.post('/clienti/create', (req, res) => {
-  
-    // Recupera i dati del cliente dal corpo della richiesta
-    const newCliente = req.body;
-  
-    // Effettua la validazione dei dati del cliente
-    if (!newCliente.anagrafica) {
-      res.status(400).send('Anagrafica del cliente obbligatoria');
-    }
-  
-    // Crea il nuovo utente nel database
-    const createdCliente = createCliente(newCliente);
-  
-    // Restituisci il nuovo utente come JSON
-    res.json(createdCliente);
-  });
-
-  // Definisci l'endpoint per creare un nuovo utente
   app.post('/clienti/delete/:id', (req, res) => {
   
     // Recupera i dati del cliente dal corpo della richiesta
@@ -134,6 +95,17 @@ app.post('/clienti/read/all', (req, res) => {
     // Restituisci il nuovo utente come JSON
     res.json(deletedCliente);
   });
+
+  // Funzione di esempio per creare un nuovo utente nel database
+  function createCliente(newCliente) {
+    // Logica per creare un nuovo utente nel database
+    return {
+      id: 1,
+      name: newCliente.name,
+      articoli: newCliente.articoli,
+      status: newCliente.status
+    };
+  }
 
   // Funzione di esempio per recuperare un utente dal database
   function getAllClienti() {
@@ -156,25 +128,12 @@ app.post('/clienti/read/all', (req, res) => {
   
     return clienti.find(cliente => clienti.id === parseInt(id));
   }
-  
-  // Funzione di esempio per creare un nuovo utente nel database
-  function createCliente(newCliente) {
-    // Logica per creare un nuovo utente nel database
-    return {
-      id: 1,
-      name: newCliente.name,
-      articoli: newCliente.articoli,
-      status: newCliente.status
-    };
-  }
 
-  function updateCliente(id,newCliente) {
+  function updateCliente(id,cliente) {
     // Logica per creare un nuovo utente nel database
     return {
       id: id,
-      name: newCliente.name,
-      articoli: newCliente.articoli,
-      status: newCliente.status
+      name: cliente.anagrafica
     };
   }
 
