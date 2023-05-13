@@ -19,7 +19,7 @@ app.post('/clienti/read/all', (req, res) => {
   }*/
 
   // Recupera l'elenco dei clienti dal database
-  const clienti = getAllclienti();
+  const clienti = getAllClienti();
 
   // Restituisci l'elenco dei clienti come JSON
   res.json(clienti);
@@ -47,7 +47,7 @@ app.post('/clienti/read/:id', (req, res) => {
   });
   
   // Definisci l'endpoint per i clienti
-app.post('/clienti/read/:id/articoli/all', (req, res) => {
+app.post('/clienti/read/all', (req, res) => {
     // Effettua l'autenticazione
     /*if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
       res.status(401).send('Unauthorized');
@@ -136,7 +136,7 @@ app.post('/clienti/read/:id/articoli/all', (req, res) => {
   });
 
   // Funzione di esempio per recuperare un utente dal database
-  function getAllclienti() {
+  function getAllClienti() {
     const clienti = [
       { id: 1, name: 'Mario Rossi' },
       { id: 2, name: 'Luigi Verdi' },
