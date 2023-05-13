@@ -34,7 +34,7 @@ app.post('/ordini/read/:id', (req, res) => {
     const ordine = getOrdineById(id);
   
     if (!ordine) {
-      res.status(404).send('ordine non trovato');
+      res.status(404).send('Ordine non trovato');
     }
   
     // Restituisci l'utente come JSON
@@ -52,7 +52,7 @@ app.post('/ordini/read/:id/articoli/all', (req, res) => {
     const id = req.params.id;
   
     // Recupera l'utente corrispondente dall'ID
-    const articoli = getArticoliByordineId(id);
+    const articoli = getArticoliByOrdineId(id);
   
     if (!articoli) {
       res.status(404).send('Articoli non trovati');
@@ -61,23 +61,43 @@ app.post('/ordini/read/:id/articoli/all', (req, res) => {
     // Restituisci l'utente come JSON
     res.json(articoli);
   });
+
+app.post('/ordini/read/:id/cliente', (req, res) => {
+  // Effettua l'autenticazione
+  /*if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
+    res.status(401).send('Unauthorized');
+  }*/
+
+  // Recupera l'ID dell'utente dal parametro della richiesta
+  const id = req.params.id;
+
+  // Recupera l'utente corrispondente dall'ID
+  const cliente = getClienteByOrdineId(id);
+
+  if (!cliente) {
+    res.status(404).send('Cliente non trovati');
+  }
+
+  // Restituisci l'utente come JSON
+  res.json(cliente);
+});
   
   // Definisci l'endpoint per creare un nuovo utente
   app.post('/ordini/create', (req, res) => {
   
     // Recupera i dati dell'utente dal corpo della richiesta
-    const newordine = req.body;
+    const newOrdine = req.body;
   
     // Effettua la validazione dei dati dell'utente
-    if (!newordine.name) {
-      res.status(400).send('Nome del ordine obbligatorio');
+    if (!newOrdine.id || !newOrdine.cliente || !newOrdine.subagente) {
+      res.status(400).send('Nome del Ordine obbligatorio');
     }
   
     // Crea il nuovo utente nel database
-    const createdordine = createOrdine(newordine);
+    const createdOrdine = createOrdine(newOrdine);
   
     // Restituisci il nuovo utente come JSON
-    res.json(createdordine);
+    res.json(createdOrdine);
   });
 
   // Definisci l'endpoint per creare un nuovo utente
@@ -85,36 +105,36 @@ app.post('/ordini/read/:id/articoli/all', (req, res) => {
   
     // Recupera i dati dell'utente dal corpo della richiesta
     const id = req.params.id;
-    const updateordine = req.body;
+    const newOrdine = req.body;
   
     // Effettua la validazione dei dati dell'utente
-    if (!updateordine.name) {
-      res.status(400).send('Nome del ordine obbligatorio');
+    if (!newOrdine.name) {
+      res.status(400).send('Nome del Ordine obbligatorio');
     }
 
     // Crea il nuovo utente nel database
-    const updatedordine = updateordine(id,updateordine);
+    const updatedOrdine = updateOrdine(id,newOrdine);
   
     // Restituisci il nuovo utente come JSON
-    res.json(updatedordine);
+    res.json(updatedOrdine);
   });
 
   // Definisci l'endpoint per creare un nuovo utente
   app.post('/ordini/create', (req, res) => {
   
     // Recupera i dati dell'utente dal corpo della richiesta
-    const newordine = req.body;
+    const newOrdine = req.body;
   
     // Effettua la validazione dei dati dell'utente
-    if (!newordine.name) {
-      res.status(400).send('Nome del ordine obbligatorio');
+    if (!newOrdine.name) {
+      res.status(400).send('Nome del Ordine obbligatorio');
     }
   
     // Crea il nuovo utente nel database
-    const createdordine = createOrdine(newordine);
+    const createdOrdine = createOrdine(newOrdine);
   
     // Restituisci il nuovo utente come JSON
-    res.json(createdordine);
+    res.json(createdOrdine);
   });
 
   // Definisci l'endpoint per creare un nuovo utente
@@ -124,36 +144,47 @@ app.post('/ordini/read/:id/articoli/all', (req, res) => {
     const id = req.params.id;
 
     // Crea il nuovo utente nel database
-    const deletedordine = deleteordine(id);
+    const deletedOrdine = deleteOrdine(id);
   
     // Restituisci il nuovo utente come JSON
-    res.json(deletedordine);
+    res.json(deletedOrdine);
   });
 
   // Funzione di esempio per recuperare un utente dal database
   function getAllOrdini() {
-    const ordini = [
+    const Ordini = [
       { id: 1, name: 'Mario Rossi' },
       { id: 2, name: 'Luigi Verdi' },
       { id: 3, name: 'Carlo Bianchi' },
     ];
   
-    return ordini;
+    return Ordini;
   }
 
   // Funzione di esempio per recuperare un utente dal database
   function getOrdineById(id) {
-    const ordini = [
+    const Ordini = [
       { id: 1, name: 'Mario Rossi' },
       { id: 2, name: 'Luigi Verdi' },
       { id: 3, name: 'Carlo Bianchi' },
     ];
   
-    return ordini.find(ordine => ordini.id === parseInt(id));
+    return Ordini.find(Ordine => Ordini.id === parseInt(id));
   }
 
   // Funzione di esempio per recuperare un utente dal database
-  function getArticoliByordineId(id) {
+  function getArticoliByOrdineId(id) {
+    const articoli = [
+      { id: 1, name: 'Mario Rossi' },
+      { id: 2, name: 'Luigi Verdi' },
+      { id: 3, name: 'Carlo Bianchi' },
+    ];
+  
+    return articoli.find(articolo => articoli.id === parseInt(id));
+  }
+
+  // Funzione di esempio per recuperare un utente dal database
+  function getClienteByOrdineId(id) {
     const articoli = [
       { id: 1, name: 'Mario Rossi' },
       { id: 2, name: 'Luigi Verdi' },
@@ -164,27 +195,27 @@ app.post('/ordini/read/:id/articoli/all', (req, res) => {
   }
   
   // Funzione di esempio per creare un nuovo utente nel database
-  function createOrdine(newordine) {
+  function createOrdine(newOrdine) {
     // Logica per creare un nuovo utente nel database
     return {
       id: 1,
-      name: newordine.name,
-      articoli: newordine.articoli,
-      status: newordine.status
+      name: newOrdine.name,
+      articoli: newOrdine.articoli,
+      status: newOrdine.status
     };
   }
 
-  function updateordine(id,newOrdine) {
+  function updateOrdine(id,newOrdine) {
     // Logica per creare un nuovo utente nel database
     return {
       id: id,
-      name: updateordine.name,
-      articoli: updateordine.articoli,
-      status: updateordine.status
+      name: newOrdine.name,
+      articoli: newOrdine.articoli,
+      status: newOrdine.status
     };
   }
 
-  function deleteordine(id){
+  function deleteOrdine(id){
     return {
         id: id,
         done: 'yes'

@@ -1,3 +1,127 @@
+/**
+swagger: '2.0'
+info:
+  title: Cataloghi API
+  version: 1.0.0
+  description: API for managing catalogues and their articles.
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /cataloghi/read/all:
+    post:
+      summary: Get all catalogues
+      description: Returns a list of all catalogues in the database.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+    /cataloghi/read/{id}:
+    post:
+      summary: Get a single catalogue by ID
+      description: Returns a single catalogue with the given ID.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: ID of the catalogue to retrieve.
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+        '404':
+          description: Catalogue not found
+    /cataloghi/read/{id}/articoli/all:
+    post:
+      summary: Get all articles for a catalogue
+      description: Returns a list of all articles for the catalogue with the given ID.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: ID of the catalogue to retrieve articles for.
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+        '404':
+          description: Articles not found
+    /cataloghi/create:
+      post:
+        summary: Create a new catalogue
+        description: Creates a new catalogue in the database.
+        consumes:
+          - application/json
+        produces:
+          - application/json
+        parameters:
+          - in: body
+            name: body
+            description: Catalogue object to be created.
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+        responses:
+          '200':
+            description: OK
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+          '400':
+            description: Invalid input data
+    /cataloghi/update/{id}:
+    /cataloghi/delete/{id}
+
+    TO FINISH
+ */
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
