@@ -4,10 +4,8 @@ const app = express();
 //const authentication = require('./authentication.js');
 //const tokenChecker = require('./tokenChecker.js');
 
-const cataloghi = require('./deprecated/cataloghi.js');
-const example = require('./examples/NoDB/exampleRESTcrud.js');
-const conn1 = require('./examples/DB/conn1.js');
 const articoli = require('./articoli.js');
+const ordini = require('./ordini.js');
 
 /**
  * Configure Express.js parsing middleware
@@ -36,15 +34,13 @@ app.use((req,res,next) => {
 //app.use('/api/v1/students/me', tokenChecker);
 
 
-
 /**
  * Resource routing
  */
 
-app.use('/myorders-pro/cataloghi', cataloghi);
-app.use('/example', example);
-app.use('/api/conn', conn1);
+
 app.use('/articoli', articoli);
+app.use('/ordini', ordini);
 
 
 /* Default 404 handler */
