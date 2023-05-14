@@ -4,6 +4,7 @@ const app = express();
 const authentication = require('./authentication.js');
 const tokenChecker = require('./tokenChecker.js');
 
+const users = require('./users.js');
 const articoli = require('./articoli.js');
 //const ordini = require('./ordini.js');
 
@@ -12,6 +13,13 @@ const articoli = require('./articoli.js');
  */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+/**
+ * Serve front-end static files
+ */
+app.use('/', express.static(process.env.FRONTEND || 'static'));
+// If process.env.FRONTEND folder does not contain index.html then use the one from static
+app.use('/', express.static('static')); // expose also this folder
 
 /**
  * Print on console the request
@@ -31,7 +39,7 @@ app.use('/authentications', authentication);
 // access is restricted only to authenticated users
 // a valid token must be provided in the request
 
-app.use('users/me', tokenChecker);
+app.use('/users', tokenChecker);
 
 
 /**
@@ -39,6 +47,7 @@ app.use('users/me', tokenChecker);
  */
 
 
+app.use('/users', users);
 app.use('/articoli', articoli);
 //app.use('/ordini', ordini);
 
