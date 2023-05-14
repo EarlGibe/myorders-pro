@@ -9,6 +9,9 @@ const ordineSchema = new Schema({
   indirizzoSpedizione: { type: String, required: true },
   indirizzoFatturazione: { type: String, required: true },
   status: { type: Booolean, default: true }
+},
+{
+  collection:'ordini'
 });
 
 const Ordine = mongoose.model('Ordine', ordineSchema);
