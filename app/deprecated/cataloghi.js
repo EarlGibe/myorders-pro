@@ -131,11 +131,7 @@ const port = 3000;
 app.use(bodyParser.json());
 
 // Definisci l'endpoint per gli utenti
-app.post('/cataloghi/read/all', (req, res) => {
-  // Effettua l'autenticazione
-  /*if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
-    res.status(401).send('Unauthorized');
-  }*/
+app.get('', (req, res) => {
 
   // Recupera l'elenco degli utenti dal database
   const cataloghi = getAllCataloghi();
@@ -145,12 +141,7 @@ app.post('/cataloghi/read/all', (req, res) => {
 });
 
 // Definisci l'endpoint per gli utenti
-app.post('/cataloghi/read/:id', (req, res) => {
-    // Effettua l'autenticazione
-    /*if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
-      res.status(401).send('Unauthorized');
-    }*/
-  
+app.get('/:id', (req, res) => {
     // Recupera l'ID dell'utente dal parametro della richiesta
     const id = req.params.id;
   
@@ -166,11 +157,7 @@ app.post('/cataloghi/read/:id', (req, res) => {
   });
   
   // Definisci l'endpoint per gli utenti
-app.post('/cataloghi/read/:id/articoli/all', (req, res) => {
-    // Effettua l'autenticazione
-    /*if (req.headers.authorization !== 'Bearer TOKEN_DI_AUTENTICAZIONE') {
-      res.status(401).send('Unauthorized');
-    }*/
+app.get('/:id/articoli', (req, res) => {
   
     // Recupera l'ID dell'utente dal parametro della richiesta
     const id = req.params.id;
@@ -185,9 +172,16 @@ app.post('/cataloghi/read/:id/articoli/all', (req, res) => {
     // Restituisci l'utente come JSON
     res.json(articoli);
   });
+
+  // Metodo POST per aggiungere un nuovo libro
+app.post('', (req, res) => {
+  const newCatalogo=req.body;
+  createCatalogo(newCatalogo);
+  res.location("" + book.id).status(201).send();
+});
   
   // Definisci l'endpoint per creare un nuovo utente
-  app.post('/cataloghi/create', (req, res) => {
+  app.put('', (req, res) => {
   
     // Recupera i dati dell'utente dal corpo della richiesta
     const newCatalogo = req.body;
@@ -205,7 +199,7 @@ app.post('/cataloghi/read/:id/articoli/all', (req, res) => {
   });
 
   // Definisci l'endpoint per creare un nuovo utente
-  app.post('/cataloghi/update/:id', (req, res) => {
+  app.put('/:id', (req, res) => {
   
     // Recupera i dati dell'utente dal corpo della richiesta
     const id = req.params.id;
@@ -224,25 +218,7 @@ app.post('/cataloghi/read/:id/articoli/all', (req, res) => {
   });
 
   // Definisci l'endpoint per creare un nuovo utente
-  app.post('/cataloghi/create', (req, res) => {
-  
-    // Recupera i dati dell'utente dal corpo della richiesta
-    const newCatalogo = req.body;
-  
-    // Effettua la validazione dei dati dell'utente
-    if (!newCatalogo.name) {
-      res.status(400).send('Nome del catalogo obbligatorio');
-    }
-  
-    // Crea il nuovo utente nel database
-    const createdCatalogo = createCatalogo(newCatalogo);
-  
-    // Restituisci il nuovo utente come JSON
-    res.json(createdCatalogo);
-  });
-
-  // Definisci l'endpoint per creare un nuovo utente
-  app.post('/cataloghi/delete/:id', (req, res) => {
+  app.delete('/:id', (req, res) => {
   
     // Recupera i dati dell'utente dal corpo della richiesta
     const id = req.params.id;
@@ -315,7 +291,4 @@ app.post('/cataloghi/read/:id/articoli/all', (req, res) => {
       };
   }
 
-// Avvia l'applicazione sulla porta port
-app.listen(port, () => {
-  console.log('API avviata sulla porta '+port);
-});
+module.exports = app;

@@ -1,5 +1,6 @@
 const https = require("node:https");
 const fs = require("fs");
+
 const express = require("express");
 
 const app = require('./app/app.js');
@@ -10,26 +11,26 @@ const secureApp = express();
 const port = 3000;
 const securePort = 4000;
 
-app.listen(port, function(){
-    console.log('Server running on port: ', port);
-})
+const user = 'Group19';
+const password = 'BDqYxCkjxOx5lWA0';
+const dbname='myorders_pro'
 
-app.get('/', (req, res) => {
-    res.send("get NOT secure")
+const URL = `mongodb+srv://${user}:${password}@maincluster.yx3zxsu.mongodb.net/${dbname}?retryWrites=true&w=majority`;
+
+app.locals.db = mongoose.connect(URL, {useNewUrlParser: true, useUnifiedTopology: true})
+.then ( () => {
+    
+    console.log("Connected to Database");
+    
+    app.listen(port, () => {
+        console.log(`Server listening on port ${port}`);
+    });
+    
 });
 
-app.post('/', (req, res) => {
-    res.send('post');
-});
 
-app.put('/', (req, res) => {
-    res.send('put');
-});
-
-app.delete('/', (req, res) => {
-    res.send('delete');
-});
-
+//HTTPS CRUD
+/*
 https.createServer({
     key: fs.readFileSync("key.pem"),
     cert: fs.readFileSync("cert.pem"),
@@ -52,4 +53,6 @@ secureApp.put('/', (req, res) => {
 secureApp.delete('/', (req, res) => {
     res.send('delete secure');
 });
+*/
 
+module.exports=app;
