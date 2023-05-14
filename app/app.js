@@ -5,7 +5,7 @@ const app = express();
 //const tokenChecker = require('./tokenChecker.js');
 
 const articoli = require('./articoli.js');
-const ordini = require('./ordini.js');
+//const ordini = require('./ordini.js');
 
 /**
  * Configure Express.js parsing middleware
@@ -40,7 +40,7 @@ app.use((req,res,next) => {
 
 
 app.use('/articoli', articoli);
-app.use('/ordini', ordini);
+//app.use('/ordini', ordini);
 
 
 /* Default 404 handler */
