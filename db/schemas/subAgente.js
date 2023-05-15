@@ -5,6 +5,12 @@ const Cliente = require('./clienteSchema');
 const Azienda = require('./aziendaSchema');
 
 const subAgenteSchema = new Schema({
+    id: [{
+        type: Number,
+        required: true,
+        unique: true
+    }],
+    
     ordini: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Ordine'
