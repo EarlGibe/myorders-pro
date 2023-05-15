@@ -13,7 +13,11 @@ router.get('', async(req,res)=>{
             .populate('azienda')
             .populate('data')
             .populate('status');
-        res.json(arrayCataloghiDB);
+            if (arrayCataloghiDB) {
+              res.json(arrayCataloghiDB);
+            } else {
+              res.status(404).json({ error: 'La lista cataloghi è vuota.' });
+            }            
     }catch(error){
         console.log(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei cataloghi.' });
