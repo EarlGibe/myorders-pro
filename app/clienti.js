@@ -13,7 +13,11 @@ router.get('', async(req,res)=>{
             .populate('subagente')
             .populate('dataInserimento')
             .populate('status');
-        res.json(arrayClientiDB);
+            if (arrayClientiDB) {
+              res.json(arrayClientiDB);
+            } else {
+              res.status(404).json({ error: 'La lista clienti è vuota.' });
+            }
     }catch(error){
         console.log(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei clienti.' });
