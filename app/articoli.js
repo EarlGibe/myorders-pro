@@ -189,8 +189,13 @@ const Articolo = require('./models/articolo');
 router.get('', async(req,res)=>{
     try{
          const arrayArticoliDB= await Articolo.find();
-         console.log(arrayArticoliDB)
-         res.json(arrayArticoliDB);
+         console.log(arrayArticoliDB);
+         if(!arrayArticoliDB){
+          res.status(404).send("Error: articoli non trovati");
+         }else{
+          res.json(arrayArticoliDB);
+         }
+         
     }catch(error){
         console.log(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca degli articoli.' });

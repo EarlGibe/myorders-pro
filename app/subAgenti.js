@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const Azienda = require('./models/anagrafica');
-const Articolo = require('./models/subagente');
+const SubAgente = require('./models/subAgente');
 
 // Gestore per la richiesta GET /subAgenti
 router.get('', async(req,res)=>{
     try{
-        const arraySubAgentiDB = await SubAgenti.find()
+        const arraySubAgentiDB = await SubAgente.find()
             .populate('id')
             .populate('matricola')
             .populate('listaOrdini.ordine')
@@ -93,7 +92,7 @@ router.put('/:id', async (req, res) => {
 // DELETE generale
 router.delete('', async (req, res) => {
   try {
-    const deletedSubAgenti = await SubAgenti.deleteMany({});
+    const deletedSubAgenti = await SubAgente.deleteMany({});
     res.status(200).json(deletedSubAgenti);
   } catch (err) {
     res.status(400).json({ message: err.message });

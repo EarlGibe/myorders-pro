@@ -3,7 +3,7 @@ const router = express.Router();
 
 const Ordine = require('./models/ordine');
 const Cliente = require('./models/cliente');
-const Subagente = require('./models/subagente');
+const Subagente = require('./models/subAgente');
 const Articolo = require('./models/articolo');
 
 // Gestore per la richiesta GET /ordini
@@ -13,7 +13,13 @@ router.get('', async(req,res)=>{
             .populate('cliente')
             .populate('subagente')
             .populate('listaArticoli.articolo');
-        res.json(arrayOrdiniDB);
+
+        if(!arrayOrdiniDB){
+          res.status(404).send("Error: ordini non trovati");
+        }else{
+          res.json(arrayOrdiniDB);
+        }
+        
     }catch(error){
         console.log(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca degli ordini.' });
