@@ -15,7 +15,11 @@ router.get('', async(req,res)=>{
             .populate('listaAziende.azienda')
             .populate('dataInserimento')
             .populate('status');
-        res.json(arraySubAgentiDB);
+            if (arraySubAgentiDB) {
+              res.json(arraySubAgentiDB);
+            } else {
+              res.status(404).json({ error: 'La lista dei subagenti è vuota.' });
+            }
     }catch(error){
         console.log(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei subagenti.' });
