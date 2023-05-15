@@ -8,6 +8,7 @@ const Articolo = require('./models/articolo');
 router.get('', async(req,res)=>{
     try{
         const arrayCataloghiDB = await Cataloghi.find()
+            .populate('id')
             .populate('listaArticoli.articolo')
             .populate('azienda')
             .populate('data')
