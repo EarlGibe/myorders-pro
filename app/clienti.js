@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const Azienda = require('./models/anagrafica');
-const Articolo = require('./models/subagente');
+const Anagrafica = require('./models/anagrafica');
+const SubAgente = require('./models/subagente');
 
 // Gestore per la richiesta GET /clienti
 router.get('', async(req,res)=>{

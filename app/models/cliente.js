@@ -12,6 +12,6 @@ const clienteSchema = new Schema({
   collection:'clienti'
 });
 
-const Ordine = mongoose.model('Clienti', clienteSchema);
+const Ordine = mongoose.model('Cliente', clienteSchema);
 
 module.exports = Cliente;
