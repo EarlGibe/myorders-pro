@@ -8,4 +8,10 @@ sudo apt install nodejs
 # postman
 
 
-# 
+# express
+
+
+# npm
+
+
+# npm update
