@@ -3,15 +3,13 @@
 # SCRIPT TO INSTALL SOFTWARE REQUIREMENTS 
 
 # Node js
-sudo apt install nodejs
+sudo apt update ; sudo apt install nodejs
 
 # postman
-
-
-# express
-
+sudo snap install postman
 
 # npm
-
+npm init
 
 # npm update
+npm update
