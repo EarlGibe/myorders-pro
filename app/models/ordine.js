@@ -8,7 +8,7 @@ const ordineSchema = new Schema({
   listaArticoli: [{ type: Schema.Types.ObjectId, ref: 'Articolo', required: true }],
   indirizzoSpedizione: { type: String, required: true },
   indirizzoFatturazione: { type: String, required: true },
-  status: { type: Booolean, default: true }
+  status: { type: Boolean, default: true }
 },
 {
   collection:'ordini'

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const Azienda = require('./models/azienda');
+//const Azienda = require('./models/azienda');
 const Articolo = require('./models/articolo');
 
 // Gestore per la richiesta GET /cataloghi
@@ -106,3 +106,5 @@ router.delete('/:id', async (req, res) => {
     res.status(400).json({ errore: err.message });
   }
 });
+
+module.exports = router;

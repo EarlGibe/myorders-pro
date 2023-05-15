@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const Anagrafica = require('./models/anagrafica');
-const SubAgente = require('./models/subagente');
+//const Anagrafica = require('./models/anagrafica');
+//const SubAgente = require('./models/subAgente');
 
 // Gestore per la richiesta GET /clienti
 router.get('', async(req,res)=>{
@@ -106,3 +106,5 @@ router.delete('/:id', async (req, res) => {
     res.status(400).json({ errore: err.message });
   }
 });
+
+module.exports = router;

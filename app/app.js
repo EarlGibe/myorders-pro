@@ -6,7 +6,10 @@ const tokenChecker = require('./tokenChecker.js');
 
 const users = require('./users.js');
 const articoli = require('./articoli.js');
-//const ordini = require('./ordini.js');
+const cataloghi = require('./cataloghi.js');
+const clienti = require('./clienti.js');
+const ordini = require('./ordini.js');
+const subAgenti = require('./subAgenti.js');
 
 /**
  * Configure Express.js parsing middleware
@@ -35,21 +38,23 @@ app.use((req,res,next) => {
  */
 app.use('/authentications', authentication);
 
-// Protect booklendings endpoint
+// Protect endpoint
 // access is restricted only to authenticated users
-// a valid token must be provided in the request
-
-app.use('/users', tokenChecker);
+// a valid token must be provided in the request.
+// No resources are available without authentication.
+app.use('', tokenChecker);
 
 
 /**
  * Resource routing
  */
 
-
 app.use('/users', users);
 app.use('/articoli', articoli);
-//app.use('/ordini', ordini);
+app.use('/cataloghi', cataloghi);
+app.use('/clienti', clienti);
+app.use('/ordini', ordini);
+app.use('/subAgenti', subAgenti);
 
 
 /* Default 404 handler */
