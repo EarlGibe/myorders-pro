@@ -74,5 +74,4 @@ function loadInfoUtente() {
         
     })
     .catch( error => console.error(error) );// If there is any error you will catch them here
-    
 }
