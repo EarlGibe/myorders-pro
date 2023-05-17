@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-const subAgenteSchema = new Schema({
+const subagenteSchema = new Schema({
   id: [{type: Number, required: true }],
   matricola: [{type: String, required: true }],
   listaOrdini: { type: Schema.Types.ObjectId, ref: 'Ordine', required: false },
@@ -11,9 +11,9 @@ const subAgenteSchema = new Schema({
   status: { type: Boolean, default: false }
 },
 {
-  collection:'subAgenti'
+  collection:'subagenti'
 });
 
-const SubAgente = mongoose.model('SubAgente', subAgenteSchema);
+const Subagente = mongoose.model('SubAgente', subagenteSchema);
 
-module.exports = SubAgente;
+module.exports = Subagente;
