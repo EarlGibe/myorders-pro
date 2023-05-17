@@ -8,7 +8,7 @@ const mongoose=require('mongoose');
 
 const secureApp = express();
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 const securePort = 4000;
 
 const user = 'Group19';
