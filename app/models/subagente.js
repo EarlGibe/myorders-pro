@@ -14,6 +14,6 @@ const subagenteSchema = new Schema({
   collection:'subagenti'
 });
 
-const Subagente = mongoose.model('SubAgente', subagenteSchema);
+const Subagente = mongoose.model('Subagente', subagenteSchema);
 
 module.exports = Subagente;
