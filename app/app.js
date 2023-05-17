@@ -11,7 +11,7 @@ const cataloghi = require('./cataloghi.js');
 const clienti = require('./clienti.js');
 const dipendenti = require('./dipendenti.js');
 const ordini = require('./ordini.js');
-const subAgenti = require('./subAgenti.js');
+const subagenti = require('./subagenti.js');
 const tecnici = require('./tecnici.js');
 
 /**
@@ -59,7 +59,7 @@ app.use('/cataloghi', cataloghi);
 app.use('/clienti', clienti);
 app.use('/dipendenti', dipendenti);
 app.use('/ordini', ordini);
-app.use('/subAgenti', subAgenti);
+app.use('/subagenti', subagenti);
 app.use('/tecnici', tecnici);
 
 /* Default 404 handler */

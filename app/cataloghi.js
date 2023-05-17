@@ -1,3 +1,178 @@
+/*
+Ecco la documentazione Swagger aggiornata per l'API fornita:
+
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: API Cataloghi
+paths:
+  /cataloghi:
+    get:
+      description: Restituisce la lista di tutti i cataloghi
+      responses:
+        200:
+          description: Successo
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Catalogo'
+        404:
+          description: La lista dei cataloghi è vuota
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Errore del server
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    post:
+      description: Crea un nuovo catalogo
+      parameters:
+        - name: body
+          in: body
+          description: Dati del catalogo da creare
+          required: true
+          schema:
+            $ref: '#/definitions/Catalogo'
+      responses:
+        200:
+          description: Catalogo inserito con successo
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        400:
+          description: Errore di validazione dei dati
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    put:
+      description: Aggiorna i dati di tutti i cataloghi
+      parameters:
+        - name: body
+          in: body
+          description: Nuovi dati per l'aggiornamento dei cataloghi
+          required: true
+          schema:
+            $ref: '#/definitions/Catalogo'
+      responses:
+        200:
+          description: Cataloghi aggiornati con successo
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        400:
+          description: Errore di validazione dei dati
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    delete:
+      description: Elimina tutti i cataloghi
+      responses:
+        200:
+          description: Cataloghi eliminati con successo
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        400:
+          description: Errore di validazione dei dati
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /cataloghi/{id}:
+    get:
+      description: Restituisce i dettagli di un catalogo specificato dall'ID
+      parameters:
+        - name: id
+          in: path
+          description: ID del catalogo da recuperare
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successo
+          schema:
+            $ref: '#/definitions/Catalogo'
+        404:
+          description: Il catalogo richiesto non è stato trovato
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Errore del server
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    put:
+      description: Aggiorna i dati di un catalogo specificato dall'ID
+      parameters:
+        - name: id
+          in: path
+          description: ID del catalogo da aggiornare
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Nuovi dati del catalogo
+          required: true
+          schema:
+            $ref: '#/definitions/Catalogo'
+      responses:
+        200:
+          description: Catalogo aggiornato con successo
+          schema:
+            $ref: '#/definitions/Catalogo'
+        400:
+
+
+          description: Errore di validazione dei dati
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    delete:
+      description: Elimina un catalogo specificato dall'ID
+      parameters:
+        - name: id
+          in: path
+          description: ID del catalogo da eliminare
+          required: true
+          type: string
+      responses:
+        200:
+          description: Catalogo eliminato con successo
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        400:
+          description: Errore di validazione dei dati
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+definitions:
+  Catalogo:
+    type: object
+    properties:
+      id:
+        type: number
+        description: Identificatore del catalogo
+      listaArticoli:
+        type: array
+        items:
+          type: string
+          description: ID degli articoli associati al catalogo
+      azienda:
+        type: string
+        description: ID dell'azienda associata al catalogo
+      data:
+        type: string
+        format: date-time
+        description: Data del catalogo
+      status:
+        type: boolean
+        description: Stato del catalogo (default: true)
+  ErrorResponse:
+    type: object
+    properties:
+      error:
+        type: string
+  SuccessResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      createdCatalogo:
+        $ref: '#/definitions/Catalogo'
+
+*/
+
+
 const express = require('express');
 const router = express.Router();
 

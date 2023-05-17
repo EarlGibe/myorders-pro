@@ -1,3 +1,211 @@
+/*
+
+openapi: 3.0.0
+info:
+  title: Documentazione API Clienti
+  version: 1.0.0
+paths:
+  /clienti:
+    get:
+      summary: Restituisce tutti i clienti
+      responses:
+        '200':
+          description: Elenco dei clienti
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cliente'
+        '404':
+          description: Lista clienti vuota
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    post:
+      summary: Inserisce un nuovo cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cliente'
+      responses:
+        '200':
+          description: Cliente inserito con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  createdCliente:
+                    type: object
+                    properties:
+                      risultato:
+                        $ref: '#/components/schemas/Cliente'
+                      request:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            example: GET
+                          url:
+                            type: string
+                            example: /clienti/1
+    put:
+      summary: Aggiorna tutti i clienti
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cliente'
+      responses:
+        '200':
+          description: Clienti aggiornati con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  n:
+                    type: integer
+                    description: Numero di documenti modificati
+                  nModified:
+                    type: integer
+                    description: Numero di documenti effettivamente modificati
+                  ok:
+                    type: integer
+                    description: Stato dell'operazione
+    delete:
+      summary: Elimina tutti i clienti
+      responses:
+        '200':
+          description: Clienti eliminati con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  n:
+                    type: integer
+                    description: Numero di documenti eliminati
+                  ok:
+                    type: integer
+                    description: Stato dell'operazione
+  /clienti/{id}:
+    get:
+      summary: Restituisce un singolo cliente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del cliente da restituire
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cliente restituito con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '404':
+          description: Cliente non trovato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    put:
+      summary: Aggiorna un singolo cliente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del cliente da aggiornare
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cliente'
+      responses:
+        '200':
+          description: Cliente aggiornato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '404':
+          description: Cliente non trovato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errore:
+                    type: string
+    delete:
+      summary: Elimina un singolo cliente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del cliente da eliminare
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cliente eliminato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '404':
+          description: Cliente non trovato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errore:
+                    type: string
+components:
+  schemas:
+    Cliente:
+      type: object
+      properties:
+        id:
+          type: array
+          items:
+            type: number
+          description: Identificatore del cliente
+        anagrafica:
+          type: string
+          description: ID dell'anagrafica associata al cliente
+        subagente:
+          type: string
+          description: ID del subagente associato al cliente
+        dataInserimento:
+          type: string
+          format: date-time
+          description: Data di inserimento del cliente
+        status:
+          type: boolean
+          description: Stato del cliente (default: true)
+*/
+
 const express = require('express');
 const router = express.Router();
 
