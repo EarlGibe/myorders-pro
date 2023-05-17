@@ -92,3 +92,5 @@ router.delete('/aziende/:id', async (req, res) => {
     res.status(400).json({ errore: err.message });
   }
 });
+
+module.exports = router;
