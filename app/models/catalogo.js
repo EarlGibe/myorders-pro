@@ -6,7 +6,7 @@ const catalogoSchema = new Schema({
   listaArticoli: [{ type: Schema.Types.ObjectId, ref: 'Articolo', required: true }],
   azienda: { type: Schema.Types.ObjectId, ref: 'Azienda', required: true },
   data: { type: Date, default: Date.now },
-  status: { type: Booolean, default: true }
+  status: { type: Booolean, default: false }
 },
 {
   collection:'cataloghi'

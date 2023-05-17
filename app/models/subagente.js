@@ -8,7 +8,7 @@ const subAgenteSchema = new Schema({
   listaClienti: { type: Schema.Types.ObjectId, ref: 'Cliente', required: false },
   listaAziende: { type: Schema.Types.ObjectId, ref: 'Azienda', required: true },
   dataInserimento: { type: Date, default: Date.now },
-  status: { type: Boolean, default: true }
+  status: { type: Boolean, default: false }
 },
 {
   collection:'subAgenti'
