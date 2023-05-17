@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const Tecnico = require('./models/tecnico');
+
 // GET /tecnici
 router.get('', async(req,res)=>{
     try{

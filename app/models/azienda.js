@@ -7,6 +7,6 @@ const aziendaSchema = new Schema({
   status: { type: Boolean, default: false }
 }, { collection: 'aziende' });
 
-const Azienda = mongoose.model('Ordine', aziendaSchema);
+const Azienda = mongoose.model('Azienda', aziendaSchema);
 
 module.exports = Azienda;

@@ -12,6 +12,6 @@ const catalogoSchema = new Schema({
   collection:'cataloghi'
 });
 
-const Ordine = mongoose.model('Catalogo', catalogoSchema);
+const Catalogo = mongoose.model('Catalogo', catalogoSchema);
 
 module.exports = Catalogo;

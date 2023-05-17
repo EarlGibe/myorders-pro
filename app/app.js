@@ -6,10 +6,13 @@ const tokenChecker = require('./tokenChecker.js');
 
 const users = require('./users.js');
 const articoli = require('./articoli.js');
+const aziende = require('./aziende.js');
 const cataloghi = require('./cataloghi.js');
 const clienti = require('./clienti.js');
+const dipendenti = require('./dipendenti.js');
 const ordini = require('./ordini.js');
 const subAgenti = require('./subAgenti.js');
+const tecnici = require('./tecnici.js');
 
 /**
  * Configure Express.js parsing middleware
@@ -51,11 +54,13 @@ app.use('', tokenChecker);
 
 app.use('/users', users);
 app.use('/articoli', articoli);
+app.use('/aziende', aziende);
 app.use('/cataloghi', cataloghi);
 app.use('/clienti', clienti);
+app.use('/dipendenti', dipendenti);
 app.use('/ordini', ordini);
 app.use('/subAgenti', subAgenti);
-
+app.use('/tecnici', tecnici);
 
 /* Default 404 handler */
 app.use((req, res) => {

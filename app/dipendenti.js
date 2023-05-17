@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const Anagrafica = require('./models/anagrafica');
+const Dipendente = require('./models/dipendente');
 
 // GET /dipendenti
 router.get('', async(req,res)=>{
