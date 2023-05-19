@@ -7,8 +7,7 @@ const tecnicoSchema = new Schema({
   status: { type: Boolean, default: false },
   loggedIn: { type: Boolean, default: false },
   isFirstAccess: { type: Boolean, default: true },
-  codiceFiscale: { type: String, required: true },
-  email: { type: String, required: true }
+  codiceFiscale: { type: String, required: true }
   
 }, { collection: 'tecnici' });
 
