@@ -9,6 +9,7 @@ const articoloSchema = new Schema({
     taglieDisponibili: { type: Array },
     scontoApplicato: { type: Number },
     prezzo: { type: Number },
+    barCodes: { type: Array },
     status: { type: Boolean, default: false }
 },
 {
