@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const ordineSchema = new Schema({
-  id: [{type: Number, required: true }],
   cliente: { type: Schema.Types.ObjectId, ref: 'Cliente', required: true },
   subagente: { type: Schema.Types.ObjectId, ref: 'Subagente', required: true },
   listaArticoli: [{ type: Schema.Types.ObjectId, ref: 'Articolo', required: true }],
