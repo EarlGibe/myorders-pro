@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-const AnagraficaSchema = new Schema({
+const anagraficaSchema = new Schema({
   nome: [{type: String }],
   cognome: [{type: String }],
   codFisc: [{type: String }],
@@ -16,6 +16,6 @@ const AnagraficaSchema = new Schema({
   collection:'anagrafiche'
 });
 
-const Cliente = mongoose.model('Anagrafica', anagraficaSchema);
+const Anagrafica = mongoose.model('Anagrafica', anagraficaSchema);
 
 module.exports = Anagrafica;

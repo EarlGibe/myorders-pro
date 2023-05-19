@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-const AddressSchema = new Schema({
+const addressSchema = new Schema({
   indirizzo: [{type: String, required: true }],
   civico: [{type: String }],
   citta: [{type: String, required: true }],
@@ -14,6 +14,6 @@ const AddressSchema = new Schema({
   collection:'addresses'
 });
 
-const Cliente = mongoose.model('Adress', addressSchema);
+const Address = mongoose.model('Address', addressSchema);
 
 module.exports = Address;
