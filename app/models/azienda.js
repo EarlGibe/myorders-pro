@@ -2,10 +2,15 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const aziendaSchema = new Schema({
+  id: [{type: Number, required: true }],
   dati: { type: Schema.Types.ObjectId, ref: 'Anagrafica', required: true},
-  listaCataloghi: [ {type: Schema.Types.ObjectId, ref: 'Catalogo', required: true} ],
-  status: { type: Boolean, default: false }
-}, { collection: 'aziende' });
+  listaCataloghi: [ {type: Schema.Types.ObjectId, ref: 'Catalogo', default: false} ], // potrebbe succedere di avere una azienda registrata che ancora non ha inviato il catralogo e lo inseriremo dopo
+  status: { type: Boolean, default: false },
+  dataInserimento: { type: Date, default: Date.now }
+},
+{
+  collection: 'aziende'
+});
 
 const Azienda = mongoose.model('Azienda', aziendaSchema);
 
