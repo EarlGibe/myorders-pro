@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - MyOrders Pro</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="../includes/css/normalize.css">
+</head>
+<body>
+
+        <img src="../img/logo.png" width="150px" height="150px">
+        <form action="users" method="post">
+            <h2>Login</h2>
+            <label for="username">Username:</label>
+            <input id="loginUsername" type="text" name="username" id="username" required>
+            <label for="password">Password:</label>
+            <input id="loginPassword" type="password" name="password" id="password" required>
+            <input id="loginButton" type="submit" onclick="login()" value="Login">
+        </form>
+
+</body>
+
+<script src="script.js"></script> 
+</html>

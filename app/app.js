@@ -45,7 +45,17 @@ app.use('/authentications', authentication);
 // access is restricted only to authenticated users
 // a valid token must be provided in the request.
 // No resources are available without authentication.
-app.use('', tokenChecker);
+//app.use('', tokenChecker);
+
+app.use('/users', tokenChecker);
+app.use('/articoli', tokenChecker);
+app.use('/aziende', tokenChecker);
+app.use('/cataloghi', tokenChecker);
+app.use('/clienti', tokenChecker);
+app.use('/dipendenti', tokenChecker);
+app.use('/ordini', tokenChecker);
+app.use('/subagenti', tokenChecker);
+app.use('/tecnici', tokenChecker);
 
 
 /**
@@ -61,6 +71,8 @@ app.use('/dipendenti', dipendenti);
 app.use('/ordini', ordini);
 app.use('/subagenti', subagenti);
 app.use('/tecnici', tecnici);
+
+
 
 /* Default 404 handler */
 app.use((req, res) => {
