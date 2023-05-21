@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  title: Documentazione API Dipendenti
+  description: API per la gestione dei dipendenti
+  version: 1.0.0
+
+paths:
+  /dipendenti:
+    get:
+      summary: Ottieni tutti i dipendenti
+      responses:
+        '200':
+          description: Successo. Restituisce la lista dei dipendenti.
+        '404':
+          description: Dipendenti non trovati.
+      tags:
+        - Dipendenti
+
+    post:
+      summary: Crea un nuovo dipendente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dipendente'
+      responses:
+        '200':
+          description: Dipendente creato con successo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dipendente'
+      tags:
+        - Dipendenti
+
+    put:
+      summary: Aggiorna tutti i dipendenti
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dipendente'
+      responses:
+        '200':
+          description: Successo. Restituisce i dipendenti aggiornati.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Dipendenti
+
+    delete:
+      summary: Elimina tutti i dipendenti
+      responses:
+        '200':
+          description: Successo. Restituisce i dipendenti eliminati.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Dipendenti
+
+  /dipendenti/{id}:
+    get:
+      summary: Ottieni un dipendente specifico
+      parameters:
+        - name: id
+          in: path
+          description: ID del dipendente da ottenere
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successo. Restituisce il dipendente richiesto.
+        '404':
+          description: Dipendente non trovato.
+      tags:
+        - Dipendenti
+
+    put:
+      summary: Aggiorna un dipendente specifico
+      parameters:
+        - name: id
+          in: path
+          description: ID del dipendente da aggiornare
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dipendente'
+      responses:
+        '200':
+          description: Successo. Restituisce il dipendente aggiornato.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Dipendenti
+
+    delete:
+      summary: Elimina un dipendente specifico
+      parameters:
+        - name: id
+          in: path
+          description: ID del dipendente da eliminare
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successo. Restituisce il dipendente eliminato.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Dipendenti
+
+components:
+  schemas:
+    Dipendente:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del dipendente
+        matricola:
+          type: number
+          description: Matricola del dipendente
+        dati:
+          type: string
+          description: ID dell'anagrafica associata al dipendente
+        dataInserimento:
+          type: string
+          format: date-time
+          description: Data di inserimento del dipendente
+      required:
+        - _id
+        - matricola
+        - dati

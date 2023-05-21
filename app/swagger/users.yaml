@@ -1,0 +1,187 @@
+openapi: 3.0.0
+info:
+  title: Documentazione API User
+  version: 1.0.0
+paths:
+  /users:
+    get:
+      summary: Ottieni tutti gli utenti
+      responses:
+        '200':
+          description: Elenco degli utenti
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '500':
+          description: Si è verificato un errore durante la ricerca degli utenti
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Messaggio di errore
+    post:
+      summary: Crea un nuovo utente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Utente creato con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Messaggio di successo
+                  createdUser:
+                    type: object
+                    properties:
+                      risultato:
+                        $ref: '#/components/schemas/User'
+                      request:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            enum: ['GET']
+                            description: Tipo di richiesta
+                          url:
+                            type: string
+                            description: URL per ottenere il nuovo utente
+        '500':
+          description: Si è verificato un errore durante la creazione dell'utente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Messaggio di errore
+  /users/{id}:
+    get:
+      summary: Ottieni un utente per ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: ID dell'utente
+      responses:
+        '200':
+          description: Dati dell'utente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: L'utente richiesto non è stato trovato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Messaggio di errore
+        '500':
+          description: Si è verificato un errore durante la ricerca dell'utente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Messaggio di errore
+    put:
+      summary: Aggiorna un utente per ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: ID dell'utente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Utente aggiornato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Errore durante l'aggiornamento dell'utente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Messaggio di errore
+    delete:
+      summary: Elimina un utente per ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: ID dell'utente
+      responses:
+        '200':
+          description: Utente eliminato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Errore durante l'eliminazione dell'utente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Messaggio di errore
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username dell'utente
+          required: true
+        password:
+          type: string
+          description: Password dell'utente
+          required: true
+        role:
+          type: string
+          description: Ruolo dell'utente
+          required: true
+        isActive:
+          type: boolean
+          description: Stato di attivazione dell'utente
+          default: false

@@ -1,0 +1,147 @@
+openapi: 3.0.0
+info:
+  title: Documentazione API Cataloghi
+  description: API per la gestione dei cataloghi
+  version: 1.0.0
+
+paths:
+  /cataloghi:
+    get:
+      summary: Ottieni tutti i cataloghi
+      responses:
+        '200':
+          description: Successo. Restituisce la lista dei cataloghi.
+        '404':
+          description: Cataloghi non trovati.
+      tags:
+        - Cataloghi
+
+    post:
+      summary: Crea un nuovo catalogo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Catalogo'
+      responses:
+        '200':
+          description: Catalogo creato con successo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalogo'
+      tags:
+        - Cataloghi
+
+    put:
+      summary: Aggiorna tutti i cataloghi
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Catalogo'
+      responses:
+        '200':
+          description: Successo. Restituisce i cataloghi aggiornati.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Cataloghi
+
+    delete:
+      summary: Elimina tutti i cataloghi
+      responses:
+        '200':
+          description: Successo. Restituisce i cataloghi eliminati.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Cataloghi
+
+  /cataloghi/{id}:
+    get:
+      summary: Ottieni un catalogo specifico
+      parameters:
+        - name: id
+          in: path
+          description: ID del catalogo da ottenere
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successo. Restituisce il catalogo richiesto.
+        '404':
+          description: Catalogo non trovato.
+      tags:
+        - Cataloghi
+
+    put:
+      summary: Aggiorna un catalogo specifico
+      parameters:
+        - name: id
+          in: path
+          description: ID del catalogo da aggiornare
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Catalogo'
+      responses:
+        '200':
+          description: Successo. Restituisce il catalogo aggiornato.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Cataloghi
+
+    delete:
+      summary: Elimina un catalogo specifico
+      parameters:
+        - name: id
+          in: path
+          description: ID del catalogo da eliminare
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successo. Restituisce il catalogo eliminato.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Cataloghi
+
+components:
+  schemas:
+    Catalogo:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del catalogo
+        listaArticoli:
+          type: array
+          items:
+            type: string
+          description: Lista degli ID degli articoli nel catalogo
+        azienda:
+          type: string
+          description: ID dell'azienda associata al catalogo
+        dataInserimento:
+          type: string
+          format: date-time
+          description: Data di inserimento del catalogo
+        status:
+          type: boolean
+          description: Stato del catalogo
+      required:
+        - _id
+        - listaArticoli
+        - azienda

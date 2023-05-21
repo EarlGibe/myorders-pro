@@ -1,0 +1,164 @@
+openapi: 3.0.0
+info:
+  title: Documentazione API Articoli
+  description: API per la gestione degli articoli
+  version: 1.0.0
+
+paths:
+  /articoli:
+    get:
+      summary: Ottieni tutti gli articoli
+      responses:
+        '200':
+          description: Successo. Restituisce la lista degli articoli.
+        '404':
+          description: Articoli non trovati.
+      tags:
+        - Articoli
+
+    post:
+      summary: Crea un nuovo articolo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Articolo'
+      responses:
+        '201':
+          description: Articolo creato con successo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Articolo'
+      tags:
+        - Articoli
+
+    put:
+      summary: Aggiorna tutti gli articoli
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Articolo'
+      responses:
+        '200':
+          description: Successo. Restituisce gli articoli aggiornati.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Articoli
+
+    delete:
+      summary: Elimina tutti gli articoli
+      responses:
+        '200':
+          description: Successo. Restituisce gli articoli eliminati.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Articoli
+
+  /articoli/{id}:
+    get:
+      summary: Ottieni un articolo specifico
+      parameters:
+        - name: id
+          in: path
+          description: ID dell'articolo da ottenere
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successo. Restituisce l'articolo richiesto.
+        '404':
+          description: Articolo non trovato.
+      tags:
+        - Articoli
+
+    put:
+      summary: Aggiorna un articolo specifico
+      parameters:
+        - name: id
+          in: path
+          description: ID dell'articolo da aggiornare
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/Articolo'
+      responses:
+        '200':
+          description: Successo. Restituisce l'articolo aggiornato.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Articoli
+
+    delete:
+      summary: Elimina un articolo specifico
+      parameters:
+        - name: id
+          in: path
+          description: ID dell'articolo da eliminare
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successo. Restituisce l'articolo eliminato.
+        '400':
+          description: Errore nella richiesta.
+      tags:
+        - Articoli
+
+components:
+  schemas:
+    Articolo:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID dell'articolo
+        nome:
+          type: string
+          description: Nome dell'articolo
+        descrizione:
+          type: string
+          description: Descrizione dell'articolo
+        coloriDisponibili:
+          type: array
+          items:
+            type: string
+          description: Colori disponibili per l'articolo
+        taglieDisponibili:
+          type: array
+          items:
+            type: string
+          description: Taglie disponibili per l'articolo
+        scontoApplicato:
+          type: number
+          description: Sconto applicato all'articolo
+        prezzo:
+          type: number
+          description: Prezzo dell'articolo
+        barCodes:
+          type: array
+          items:
+            type: string
+          description: Codici a barre dell'articolo
+        status:
+          type: boolean
+          description: Stato dell'articolo
+      required:
+        - _id
+        - nome
+        - descrizione
+
+    
