@@ -6,8 +6,8 @@ const articoloSchema = new Schema({
     descrizione: {type: String},
     coloriDisponibili: { type: Array },
     taglieDisponibili: { type: Array },
-    scontoApplicato: { type: Number },
-    prezzo: { type: Number },
+    scontoApplicato: { type: Number, default: 0},
+    prezzo: { type: Number, required: true },
     barCodes: { type: Array },
     status: { type: Boolean, default: true }
 },
