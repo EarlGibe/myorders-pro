@@ -108,21 +108,24 @@ function populateAziende(aziende){
     const aziendeList = document.getElementById("aziendeList");
     // Popolamento dell'elenco delle aziende
     aziende.forEach(azienda => {
-        const listItem = document.createElement("li");
-        listItem.textContent = azienda.dati.nome;
-      
-        const selectButton = document.createElement("button");
-        selectButton.textContent = "Seleziona";
-        selectButton.addEventListener("click", () => {
-          // Logica per gestire la selezione dell'azienda
-            console.log("Azienda selezionata:", azienda._id);
-            localStorage.setItem("aziendaSelezionata",JSON.stringify(azienda))
-            window.location.href='./cataloghiDisponibili.html';
-         
-        });
-      
-        listItem.appendChild(selectButton);
-        aziendeList.appendChild(listItem);
+        if(subagente.listaAziende.includes(azienda._id)){
+            const listItem = document.createElement("li");
+            listItem.textContent = azienda.dati.nome;
+        
+            const selectButton = document.createElement("button");
+            selectButton.textContent = "Seleziona";
+            selectButton.addEventListener("click", () => {
+            // Logica per gestire la selezione dell'azienda
+                console.log("Azienda selezionata:", azienda._id);
+                localStorage.setItem("aziendaSelezionata",JSON.stringify(azienda))
+                window.location.href='./cataloghiDisponibili.html';
+            
+            });
+        
+            listItem.appendChild(selectButton);
+            aziendeList.appendChild(listItem);
+        }
+        
       });    
 }
 

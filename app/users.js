@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const User = require('./models/user');
+const User = require('./models/user.js');
 
 router.get('', async(req,res)=>{
     try{
@@ -29,36 +29,25 @@ router.get('/:id', async (req, res) => {
     }
   });
 
- // Gestore per la richiesta POST /articoli
+   // Gestore per la richiesta POST /users
 router.post('', async (req, res) => {
-    const newUser = req.body;
-  
-    try {
-      // Crea un nuovo oggetto User con i dati ricevuti dalla richiesta
-      const nuovoUser = new User({
-        newUser
-      });
-  
-      // Salva il nuovo user nel database
-      const risultato = await nuovoUser.save();
-
-
-      // Invia la risposta HTTP con il nuovo documento creato
-      res.status(201).json({
-        message: "User creato con successo",
-        createdUser: {
-          risultato,
-          request: {
-            type: 'GET',
-            url: '/' + risultato._id
-          }
+  try {
+    const nuovouser = new User(req.body);
+    const risultato = await nuovouser.save();
+    res.json({
+      message: "User inserito con successo",
+      createduser: {
+        risultato,
+        request: {
+          type: 'GET',
+          id: risultato._id
         }
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json("error: "+error);
-    }
-  });
+      }
+    });
+  } catch (err) {
+    res.status(400).json({ errore: err.message });
+  }
+});
 
 // PUT generale
 router.put('', async (req, res) => {

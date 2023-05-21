@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Creazione Subagente</title>
+  <title>Creazione Dipendente</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="../includes/css/normalize.css">
 </head>
 <body>
-  <h1>Creazione Subagente</h1>
-  <form action="salva_subagente.php" method="post">
+  <h1>Creazione Dipendente</h1>
+  <form id="dipendenteForm" method="post">
     <h2>Anagrafica</h2>
     <label for="nome">Nome:</label>
     <input type="text" id="nome" name="nome[]"><br>
@@ -19,11 +19,7 @@
     <input type="text" id="codiceFiscale" name="codiceFiscale[]"><br>
 
     <label for="residenza">Residenza:</label>
-    <select id="residenza" name="residenza">
-      <option value="address1">Address 1</option>
-      <option value="address2">Address 2</option>
-      <option value="address3">Address 3</option>
-    </select><br>
+    <input type="text" id="residenza" name="residenza"><br>
 
     <label for="telefono">Telefono:</label>
     <input type="text" id="telefono" name="telefono" required><br>
@@ -38,11 +34,7 @@
     <input type="text" id="pIVA" name="pIVA[]"><br>
 
     <label for="sede">Sede:</label>
-    <select id="sede" name="sede">
-      <option value="address1">Address 1</option>
-      <option value="address2">Address 2</option>
-      <option value="address3">Address 3</option>
-    </select><br>
+    <input type="text" id="sede" name="sede"><br>
 
     <label for="codSDI">Codice SDI:</label>
     <input type="text" id="codSDI" name="codSDI[]"><br>
@@ -50,25 +42,8 @@
     <label for="pec">PEC:</label>
     <input type="text" id="pec" name="pec[]"><br>
 
-    <h2>Lista Clienti</h2>
-    <label for="listaClienti">Seleziona Clienti:</label>
-    <select id="listaClienti" name="listaClienti" multiple>
-      <option value="cliente1">Cliente 1</option>
-      <option value="cliente2">Cliente 2</option>
-      <option value="cliente3">Cliente 3</option>
-    </select><br>
-
-    <h2>Lista Aziende</h2>
-    <label for="listaAziende">Seleziona Aziende:</label>
-    <select id="listaAziende" name="listaAziende" multiple>
-      <option value="azienda1">Azienda 1</option>
-      <option value="azienda2">Azienda 2</option>
-      <option value="azienda3">Azienda 3</option>
-    </select><br>
-
-    <input type="submit" value="Salva">
+    <input id="saveButton" onclick="salvaDipendente()" type="submit" value="Salva">
   </form>
 </body>
 <script src="./script.js"></script> 
 </html>
-

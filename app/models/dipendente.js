@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const dipendenteSchema = new Schema({
-  matricola: { type: Number, required: true },
-  dati: {type: Schema.Types.ObjectId, ref: 'Anagrafica'},
+  anagrafica: {type: Object},
   dataInserimento: { type: Date, default: Date.now }
 },
 {

@@ -43,7 +43,7 @@ function registerCliente(){
             // Elaboro la risposta del server
             console.log('Dati salvati:', data);
             // Esegui altre azioni o reindirizzamento alla pagina desiderata
-            window.location.href='../home?token=' + token + '&id=' + userId;
+            window.location.href='../home';
           })
           .catch(error => {
             console.error('Errore durante la richiesta:', error);

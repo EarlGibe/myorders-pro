@@ -41,7 +41,7 @@ router.post('', async (req, res) => {
         risultato,
         request: {
           type: 'GET',
-          url: '/' + risultato._id
+          id: risultato._id
         }
       }
     });

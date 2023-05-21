@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const articoloSchema = new Schema({
-    nome: { type: String},
+    nome: { type: String, required: true},
     descrizione: {type: String},
     coloriDisponibili: { type: Array },
     taglieDisponibili: { type: Array },
