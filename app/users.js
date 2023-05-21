@@ -266,6 +266,9 @@ router.put('', async (req, res) => {
 // PUT con ID specifico
 router.put('/:id', async (req, res) => {
   try {
+    console.log(req.body);
+    console.log(res.body);
+
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       req.body,

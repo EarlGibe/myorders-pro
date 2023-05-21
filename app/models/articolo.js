@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const articoloSchema = new Schema({
-    id: [{type: Number, required: true }],
     nome: { type: String, required: true },
     descrizione: {type: String, required: true },
     coloriDisponibili: { type: Array },

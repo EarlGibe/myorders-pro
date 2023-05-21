@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const clienteSchema = new Schema({
-  anagrafica: { type: Schema.Types.ObjectId, ref: 'Anagrafica', required: true },
-  subagente: { type: Schema.Types.ObjectId, ref: 'Subagente', required: true },
-  status: { type: Boolean, default: false },
+  anagrafica: { type: Object, required: true },
+  status: { type: Boolean, default: true },
   dataInserimento: { type: Date, default: Date.now }  
 },
 {

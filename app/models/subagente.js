@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const subagenteSchema = new Schema({
-  id: [{type: Number, required: true }],
   matricola: [{type: String, required: true }],
   dati: {type: Schema.Types.ObjectId, ref: 'Anagrafica'},
   listaOrdini: { type: Schema.Types.ObjectId, ref: 'Ordine', required: false },

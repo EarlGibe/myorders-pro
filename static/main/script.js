@@ -29,13 +29,21 @@ function login()
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data to modify as you please
         //console.log(data);
-        loggedUser.token = data.token;
-        loggedUser.username = data.username;
-        loggedUser.id = data.id;
-        loggedUser.isActive=data.isActive;
-        loggedUser.self = data.self;
-        // loggedUser.id = loggedUser.self.substring(loggedUser.self.lastIndexOf('/') + 1);
-        redirect();
+
+        if(data.success){
+            loggedUser.token = data.token;
+            loggedUser.username = data.username;
+            loggedUser.id = data.id;
+            loggedUser.isActive=data.isActive;
+            loggedUser.self = data.self;
+            // loggedUser.id = loggedUser.self.substring(loggedUser.self.lastIndexOf('/') + 1);
+            redirect();
+        
+        }else{
+            document.getElementById("warningMessage").textContent="Username o password errati";
+        }
+        
+        
         return;
     })
     .catch( error => console.error(error) ); // If there is any error you will catch them here
@@ -58,12 +66,12 @@ function redirect() {
         
         console.log(data);
 
+        
         if(data.isActive){
-            window.location.href = "../home";
+            window.location.href = "../home?token="+loggedUser.token+"&id="+loggedUser.id;
         }else{
             window.location.href = "../activateAccount/index.html?token="+loggedUser.token+"&id="+loggedUser.id;
         }
-
         
     })
     .catch( error => console.error(error) );// If there is any error you will catch them here

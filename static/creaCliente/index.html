@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Crea Nuovo Cliente</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="../includes/css/normalize.css">
+</head>
+<body>
+  <h1>Crea Nuovo Cliente</h1>
+  <form id="clienteForm" method="post">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required><br>
+
+    <label for="cognome">Cognome:</label>
+    <input type="text" id="cognome" name="cognome" required><br>
+
+    <label for="codiceFiscale">Codice Fiscale:</label>
+    <input type="text" id="codiceFiscale" name="codiceFiscale" required><br>
+
+    <label for="residenza">Residenza:</label>
+    <input type="text" id="residenza" name="residenza" required><br>
+
+    <label for="telefono">Telefono:</label>
+    <input type="text" id="telefono" name="telefono" required><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"><br>
+
+    <label for="ragioneSociale">Ragione Sociale:</label>
+    <input type="text" id="ragioneSociale" name="ragioneSociale"><br>
+
+    <label for="pIVA">Partita IVA:</label>
+    <input type="text" id="pIVA" name="pIVA"><br>
+
+    <label for="sede">Sede:</label>
+    <input type="text" id="sede" name="sede" required><br>
+
+    <label for="codSDI">Codice SDI:</label>
+    <input type="text" id="codSDI" name="codSDI"><br>
+
+    <label for="pec">PEC:</label>
+    <input type="text" id="pec" name="pec"><br>
+
+    <input type="submit" onclick="registerCliente()" value="Salva">
+  </form>
+</body>
+<script src="./script.js"></script> 
+</html>
+
+
