@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const catalogoSchema = new Schema({
+  nome: { type: String},
   listaArticoli: [{ type: Schema.Types.ObjectId, ref: 'Articolo', required: true }],
-  azienda: { type: Schema.Types.ObjectId, ref: 'Azienda', required: true },
   dataInserimento: { type: Date, default: Date.now },
-  status: { type: Booolean, default: false },
+  status: { type: Boolean, default: true },
   dataInserimento: { type: Date, default: Date.now }
 },
 {

@@ -1,19 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const subagente = require('./models/subagente');
+const Subagente = require('./models/subagente');
 
 // Gestore per la richiesta GET /Subagenti
 router.get('', async(req,res)=>{
     try{
-        const arraySubagentiDB = await subagente.find()
-            .populate('id')
-            .populate('matricola')
-            .populate('listaOrdini.ordine')
-            .populate('listaClienti.cliente')
-            .populate('listaAziende.azienda')
-            .populate('dataInserimento')
-            .populate('status');
+        const arraySubagentiDB = await Subagente.find();
+
             if (arraySubagentiDB) {
               res.json(arraySubagentiDB);
             } else {
@@ -29,13 +23,8 @@ router.get('', async(req,res)=>{
 router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const subagente = await subagente.findById(id)
-          .populate('matricola')
-          .populate('listaOrdini.ordine')
-          .populate('listaClienti.cliente')
-          .populate('listaAziende.azienda')
-          .populate('dataInserimento')
-          .populate('status');
+        const subagente = await Subagente.findById(id)
+          
         if (subagente) {
             res.json(subagente);
         } else {
@@ -50,7 +39,7 @@ router.get('/:id', async (req, res) => {
  // Gestore per la richiesta POST /subagenti
 router.post('', async (req, res) => {
   try {
-    const nuovosubagente = new subagente(req.body);
+    const nuovosubagente = new Subagente(req.body);
     const risultato = await nuovosubagente.save();
     res.json({
       message: "subagente inserito con successo",
@@ -70,7 +59,7 @@ router.post('', async (req, res) => {
 // PUT generale
 router.put('', async (req, res) => {
   try {
-    const updatedsubagente = await subagente.updateMany({}, req.body);
+    const updatedsubagente = await Subagente.updateMany({}, req.body);
     res.status(200).json(updatedsubagente);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -82,7 +71,7 @@ router.put('/:id', async (req, res) => {
   try {
     const idsubagente = req.params.id;
     const nuovosubagente = req.body;
-    const risultato = await subagente.findByIdAndUpdate(idsubagente, nuovosubagente, { new: true });
+    const risultato = await Subagente.findByIdAndUpdate(idsubagente, nuovosubagente, { new: true });
     res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
@@ -92,7 +81,7 @@ router.put('/:id', async (req, res) => {
 // DELETE generale
 router.delete('', async (req, res) => {
   try {
-    const deletedSubagenti = await subagente.deleteMany({});
+    const deletedSubagenti = await Subagente.deleteMany({});
     res.status(200).json(deletedSubagenti);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -103,7 +92,7 @@ router.delete('', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const idsubagente = req.params.id;
-    const risultato = await subagente.findByIdAndDelete(idsubagente);
+    const risultato = await Subagente.findByIdAndDelete(idsubagente);
     res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });

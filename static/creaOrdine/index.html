@@ -5,17 +5,17 @@
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="../includes/css/normalize.css">
 </head>
-<body>
+<body onload="onLoadCreaOrdineIndex()">
   <h1>Creazione Ordine</h1>
-  <form action="crea_ordine.php" method="post">
+  <form id="ordineForm" method="post">
     <label for="cliente">Seleziona Cliente:</label>
-    <select id="cliente" name="cliente"></select>
+    <select id="clienteSelezionato" name="cliente"></select>
 
     <div class="button-container">
       <a href="../creaCliente">Crea Nuovo Cliente</a>
     </div>
 
-    <input type="submit" value="Crea Ordine">
+    <input id="creaOrdineButton" onclick="creaOrdine()" type="submit" value="Crea Ordine">
   </form>
 </body>
 

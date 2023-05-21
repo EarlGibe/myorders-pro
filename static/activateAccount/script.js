@@ -35,7 +35,7 @@ function changePassword(){
                                 'Content-Type': 'application/json',
                                 'x-access-token': token
                             },
-                            body: JSON.stringify({ password: nuova_password, isActive: true })
+                            body: JSON.stringify({ password: nuova_password, isFirstAccess: false })
                         })
                         .then((resp) => resp.json()) // Transform the data into json
                         .then(function(data) { // Here you get the data to modify as you please

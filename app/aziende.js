@@ -6,7 +6,7 @@ const Azienda = require('./models/azienda')
 // GET /aziende
 router.get('', async(req,res)=>{
     try{
-        const arrayAziendeDB = await Azienda.find().populate('listaCataloghi.catalogo');
+        const arrayAziendeDB = await Azienda.find();
 
         if(arrayAziendeDB) res.json(arrayAziendeDB);
         else res.status(404).json( { error: "La lista aziende è vuota." });
@@ -20,7 +20,7 @@ router.get('', async(req,res)=>{
 router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const azienda = await Azienda.findById(id).populate('listaCataloghi.catalogo');
+        const azienda = await Azienda.findById(id);
 
         if (azienda) res.json(azienda);
         else res.status(404).json({ error: 'L\'azienda richiesta non è stata trovata.' });

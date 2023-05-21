@@ -1,17 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const Articolo = require('./models/articolo');
+const Catalogo = require('./models/catalogo');
 
 // Gestore per la richiesta GET /cataloghi
 router.get('', async(req,res)=>{
     try{
-        const arrayCataloghiDB = await Cataloghi.find()
-            .populate('id')
-            .populate('listaArticoli.articolo')
-            .populate('azienda')
-            .populate('data')
-            .populate('status');
+        const arrayCataloghiDB = await Catalogo.find()
+          
             if (arrayCataloghiDB) {
               res.json(arrayCataloghiDB);
             } else {
@@ -28,10 +24,7 @@ router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const catalogo = await Catalogo.findById(id)
-          .populate('listaArticoli.articolo')
-          .populate('azienda')
-          .populate('data')
-          .populate('status');
+        
         if (catalogo) {
             res.json(catalogo);
         } else {

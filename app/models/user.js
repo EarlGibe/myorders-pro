@@ -6,9 +6,9 @@ const userSchema=new Schema({
     password: { type: String, required: true },
     email: { type: String, required: true },
     role: { type: String, required: true },
-    isActive: { type: Boolean, default: false },
+    role_id:{ type: Schema.Types.ObjectId, required: true },
+    status: { type: Boolean, default: true },
     isFirstAccess: { type: Boolean, default: true },
-    loggedIn: { type: Boolean, default: false },
     dataInserimento: { type: Date, default: Date.now }
 },
 {

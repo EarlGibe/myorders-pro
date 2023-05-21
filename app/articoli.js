@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const Articolo = require('./models/articolo');
+const Articolo = require('./models/articolo.js');
 
 router.get('', async(req,res)=>{
     try{
@@ -36,21 +36,11 @@ router.get('/:id', async (req, res) => {
 
  // Gestore per la richiesta POST /articoli
 router.post('', async (req, res) => {
-    const newArticolo = req.body;
-  
     try {
-      // Crea un nuovo oggetto Articolo con i dati ricevuti dalla richiesta
-      const nuovoArticolo = new Articolo({
-        newArticolo
-      });
-  
-      // Salva il nuovo articolo nel database
+      const nuovoArticolo = new Articolo(req.body);
       const risultato = await nuovoArticolo.save();
-
-
-      // Invia la risposta HTTP con il nuovo documento creato
-      res.status(201).json({
-        message: "Articolo creato con successo",
+      res.json({
+        message: "Articolo inserito con successo",
         createdArticolo: {
           risultato,
           request: {
@@ -59,11 +49,12 @@ router.post('', async (req, res) => {
           }
         }
       });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json("error: "+error);
+    } catch (err) {
+      res.status(400).json({ errore: err.message });
     }
   });
+
+
 
 // PUT generale
 router.put('', async (req, res) => {
@@ -111,123 +102,3 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
-
-API Documentation for Articolo:
-
-This API handles CRUD operations for "Articolo" (Italian for "Article") objects. The API is built using Node.js with Express framework and MongoDB for data storage.
-
-Endpoint: GET '/'
-
-Description: Retrieves all the articles.
-
-Request:
-- Method: GET
-- Endpoint: '/'
-- Headers: None
-- Body: None
-
-Response:
-- Status Code: 200
-- Headers: None
-- Body: JSON object containing an array of all the articles.
-
-Endpoint: GET '/:id'
-
-Description: Retrieves an article by ID.
-
-Request:
-- Method: GET
-- Endpoint: '/:id'
-- Headers: None
-- Body: None
-- Parameters: 
-  - id: the ID of the article to retrieve.
-
-Response:
-- Status Code: 200 if the article is found, 404 if not found.
-- Headers: None
-- Body: JSON object containing the article data.
-
-Endpoint: POST '/'
-
-Description: Creates a new article.
-
-Request:
-- Method: POST
-- Endpoint: '/'
-- Headers: 
-  - Content-Type: application/json
-- Body: JSON object containing the new article data.
-
-Response:
-- Status Code: 201
-- Headers: None
-- Body: JSON object containing the created article data, along with a URL to retrieve it.
-
-Endpoint: PUT '/'
-
-Description: Updates all articles.
-
-Request:
-- Method: PUT
-- Endpoint: '/'
-- Headers: 
-  - Content-Type: application/json
-- Body: JSON object containing the updated article data.
-
-Response:
-- Status Code: 200
-- Headers: None
-- Body: JSON object containing the updated article data.
-
-Endpoint: PUT '/:id'
-
-Description: Updates an article by ID.
-
-Request:
-- Method: PUT
-- Endpoint: '/:id'
-- Headers: 
-  - Content-Type: application/json
-- Body: JSON object containing the updated article data.
-- Parameters: 
-  - id: the ID of the article to update.
-
-Response:
-- Status Code: 200 if the article is updated, 404 if not found.
-- Headers: None
-- Body: JSON object containing the updated article data.
-
-Endpoint: DELETE '/'
-
-Description: Deletes all articles.
-
-Request:
-- Method: DELETE
-- Endpoint: '/'
-- Headers: None
-- Body: None
-
-Response:
-- Status Code: 200
-- Headers: None
-- Body: JSON object containing the number of deleted articles.
-
-Endpoint: DELETE '/:id'
-
-Description: Deletes an article by ID.
-
-Request:
-- Method: DELETE
-- Endpoint: '/:id'
-- Headers: None
-- Body: None
-- Parameters: 
-  - id: the ID of the article to delete.
-
-Response:
-- Status Code: 200 if the article is deleted, 404 if not found.
-- Headers: None
-- Body: JSON object containing the deleted article data.
-
-*/

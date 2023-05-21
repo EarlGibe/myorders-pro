@@ -67,7 +67,7 @@ function redirect() {
         console.log(data);
 
         
-        if(data.isActive){
+        if(!data.isFirstAccess){
             window.location.href = "../home?token="+loggedUser.token+"&id="+loggedUser.id;
         }else{
             window.location.href = "../activateAccount/index.html?token="+loggedUser.token+"&id="+loggedUser.id;

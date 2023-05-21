@@ -15,7 +15,7 @@ function registerCliente(){
       // Controllo la completezza dei campi
       //if (form.checkValidity()) {
         // Raccolgo i dati del cliente
-        const clienteData = JSON.stringify({
+        const clienteData = {
           nome: document.getElementById('nome').value,
           cognome: document.getElementById('cognome').value,
           codiceFiscale: document.getElementById('codiceFiscale').value,
@@ -27,7 +27,7 @@ function registerCliente(){
           sede: document.getElementById('sede').value,
           codSDI: document.getElementById('codSDI').value,
           pec: document.getElementById('pec').value,
-        });
+        };
 
         // Effettuo la richiesta POST per salvare i dati nel database
         fetch('../clienti', {
@@ -43,7 +43,7 @@ function registerCliente(){
             // Elaboro la risposta del server
             console.log('Dati salvati:', data);
             // Esegui altre azioni o reindirizzamento alla pagina desiderata
-            window.location.href="../home";
+            window.location.href='../home?token=' + token + '&id=' + userId;
           })
           .catch(error => {
             console.error('Errore durante la richiesta:', error);

@@ -2,18 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const Ordine = require('./models/ordine');
-const Cliente = require('./models/cliente');
-const Subagente = require('./models/subagente');
-const Articolo = require('./models/articolo');
 
 // Gestore per la richiesta GET /ordini
 router.get('', async(req,res)=>{
     try{
         const arrayOrdiniDB = await Ordine.find()
-            .populate('cliente')
-            .populate('subagente')
-            .populate('listaArticoli.articolo');
-
+            
         if(!arrayOrdiniDB){
           res.status(404).send("Error: ordini non trovati");
         }else{
@@ -31,9 +25,7 @@ router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const ordine = await Ordine.findById(id)
-            .populate('cliente')
-            .populate('subagente')
-            .populate('listaArticoli.articolo');
+          
         if (ordine) {
             res.json(ordine);
         } else {
