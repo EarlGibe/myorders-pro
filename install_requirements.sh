@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# SCRIPT TO INSTALL SOFTWARE REQUIREMENTS 
+# SCRIPT TO INSTALL SOFTWARE REQUIREMENTS.
 
 # Node js
 sudo apt update ; sudo apt install nodejs

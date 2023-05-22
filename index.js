@@ -1,15 +1,15 @@
-const https = require("node:https");
-const fs = require("fs");
+//const https = require("node:https");
+//const fs = require("fs");
 
 const express = require("express");
 
 const app = require('./app/app.js');
 const mongoose=require('mongoose');
 
-const secureApp = express();
+//const secureApp = express();
 
 const port = process.env.PORT || 3000;
-const securePort = 4000;
+//const securePort = 4000;
 
 const user = 'Group19';
 const password = 'BDqYxCkjxOx5lWA0';
