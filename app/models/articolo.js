@@ -1,18 +1,19 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-const articoloSchema=new Schema({
-    name: String,
-    descrizione: String,
-    coloriDisponibili: Array,
-    taglieDisponibili: Array,
-    scontoApplicato: Number,
-    prezzo: Number,
-    status: Boolean
+const articoloSchema = new Schema({
+    nome: { type: String, required: true},
+    descrizione: {type: String},
+    coloriDisponibili: { type: Array },
+    taglieDisponibili: { type: Array },
+    scontoApplicato: { type: Number, default: 0},
+    prezzo: { type: Number, required: true },
+    barCodes: { type: Array },
+    status: { type: Boolean, default: true }
 },
 {
-    collection:'articoli'
-})
+     collection:'articoli'
+});
 
 const Articolo=mongoose.model('Articolo',articoloSchema);
 
