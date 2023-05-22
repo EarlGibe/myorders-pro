@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Creazione Ordine</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="../includes/css/normalize.css">
+</head>
+<body onload="onLoadCreaOrdineIndex()">
+  <h1>Creazione Ordine</h1>
+  <form id="ordineForm" method="post">
+    <label for="cliente">Seleziona Cliente:</label>
+    <select id="clienteSelezionato" name="cliente"></select>
+
+    <div class="button-container">
+      <a href="../creaCliente">Crea Nuovo Cliente</a>
+    </div>
+
+    <input id="creaOrdineButton" onclick="creaOrdine()" type="submit" value="Crea Ordine">
+  </form>
+</body>
+
+<script src="./script.js"></script> 
+</html>

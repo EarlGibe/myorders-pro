@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Creazione Dipendente</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="../includes/css/normalize.css">
+</head>
+<body>
+  <h1>Creazione Dipendente</h1>
+  <form id="dipendenteForm" method="post">
+    <h2>Anagrafica</h2>
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome[]"><br>
+
+    <label for="cognome">Cognome:</label>
+    <input type="text" id="cognome" name="cognome[]"><br>
+
+    <label for="codiceFiscale">Codice Fiscale:</label>
+    <input type="text" id="codiceFiscale" name="codiceFiscale[]"><br>
+
+    <label for="residenza">Residenza:</label>
+    <input type="text" id="residenza" name="residenza"><br>
+
+    <label for="telefono">Telefono:</label>
+    <input type="text" id="telefono" name="telefono" required><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"><br>
+
+    <label for="ragioneSociale">Ragione Sociale:</label>
+    <input type="text" id="ragioneSociale" name="ragioneSociale[]"><br>
+
+    <label for="pIVA">Partita IVA:</label>
+    <input type="text" id="pIVA" name="pIVA[]"><br>
+
+    <label for="sede">Sede:</label>
+    <input type="text" id="sede" name="sede"><br>
+
+    <label for="codSDI">Codice SDI:</label>
+    <input type="text" id="codSDI" name="codSDI[]"><br>
+
+    <label for="pec">PEC:</label>
+    <input type="text" id="pec" name="pec[]"><br>
+
+    <input id="saveButton" onclick="salvaDipendente()" type="submit" value="Salva">
+  </form>
+</body>
+<script src="./script.js"></script> 
+</html>

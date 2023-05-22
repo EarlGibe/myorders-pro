@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cambia password</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="../includes/css/normalize.css">
+</head>
+<body>
+  
+        <h1>Cambia password</h1>
+        <form method="post">
+            <label for="vecchia_password">Vecchia password:</label>
+            <input type="password" name="vecchia_password" id="vecchia_password"><br><br>
+            <label for="nuova_password">Nuova password:</label>
+            <input type="password" name="nuova_password" id="nuova_password"><br><br>
+            <label for="conferma_password">Conferma nuova password:</label>
+            <input type="password" name="conferma_password" id="conferma_password"><br><br>
+            <input id="changePasswordButton" type="submit" onclick="changePassword()" value="Cambia password">
+            
+            <span id="warningMessage"></span>
+        
+        </form>
+</body>
+<script src="./script.js"></script> 
+</html>

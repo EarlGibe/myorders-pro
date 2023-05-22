@@ -8,10 +8,10 @@ document.getElementById("loginButton").addEventListener("click", function(event)
 var loggedUser = {};
 
 /**
- * This function is called when login button is pressed.
- * Note that this does not perform an actual authentication of the user.
- * A student is loaded given the specified email,
- * if it exists, the studentId is used in future calls.
+ * This functions is fired when the user clicks the login button.
+ * It takes the cretentials, check it on database,
+ * generate a token and save it on a global variable.
+ * Then call redirect function.
  */
 function login()
 {
@@ -29,14 +29,21 @@ function login()
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data to modify as you please
         //console.log(data);
-        loggedUser.token = data.token;
-        loggedUser.username = data.username;
-        loggedUser.id = data.id;
-        loggedUser.isActive=data.isActive;
-        loggedUser.self = data.self;
-        // loggedUser.id = loggedUser.self.substring(loggedUser.self.lastIndexOf('/') + 1);
-        document.getElementById("loggedUser").textContent = loggedUser.username+" "+loggedUser.id+" "+loggedUser.token;
-        loadInfoUtente();
+
+        if(data.success){
+            loggedUser.token = data.token;
+            loggedUser.username = data.username;
+            loggedUser.id = data.id;
+            loggedUser.isActive=data.isActive;
+            loggedUser.self = data.self;
+            // loggedUser.id = loggedUser.self.substring(loggedUser.self.lastIndexOf('/') + 1);
+            redirect();
+        
+        }else{
+            document.getElementById("warningMessage").textContent="Username o password errati";
+        }
+        
+        
         return;
     })
     .catch( error => console.error(error) ); // If there is any error you will catch them here
@@ -44,15 +51,11 @@ function login()
 };
 
 /**
- * This function refresh the list of bookLendings.
- * It only load bookLendings given the logged in student.
- * It is called every time a book is taken of when the user login.
+ * This functions checks the token and redirect the user to:
+ * home: if the account is activate yet.
+ * activateAccount: if not.
  */
-function loadInfoUtente() {
-
-    const sp = document.getElementById('loggedUser'); // Get the list where we will place our lendings
-
-    sp.innerHTML = '';
+function redirect() {
 
     fetch('../users/' + loggedUser.id,{
         method: 'GET',
@@ -63,15 +66,14 @@ function loadInfoUtente() {
         
         console.log(data);
 
-        sp.textContent=data.username;
-
-        if(data.isActive){
-            window.location.href = "../home.html";
+        
+        if(!data.isFirstAccess){
+            window.location.href = "../home?token="+loggedUser.token+"&id="+loggedUser.id;
         }else{
-            window.location.href = "../activeAccount.html";
+            window.location.href = "../activateAccount/index.html?token="+loggedUser.token+"&id="+loggedUser.id;
         }
-
         
     })
     .catch( error => console.error(error) );// If there is any error you will catch them here
 }
+
