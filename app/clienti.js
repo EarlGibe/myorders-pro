@@ -1,18 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-//const Anagrafica = require('./models/anagrafica');
-//const SubAgente = require('./models/subAgente');
+const Cliente = require('./models/cliente');
 
 // Gestore per la richiesta GET /clienti
 router.get('', async(req,res)=>{
     try{
-        const arrayClientiDB = await Clienti.find()
-            .populate('id')
-            .populate('anagrafica')
-            .populate('subagente')
-            .populate('dataInserimento')
-            .populate('status');
+      
+        const arrayClientiDB = await Cliente.find()
+
             if (arrayClientiDB) {
               res.json(arrayClientiDB);
             } else {
@@ -29,10 +25,6 @@ router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const cliente = await Cliente.findById(id)
-          .populate('anagrafica')
-          .populate('subagente')
-          .populate('dataInserimento')
-          .populate('status');
         if (cliente) {
             res.json(cliente);
         } else {
@@ -47,6 +39,7 @@ router.get('/:id', async (req, res) => {
  // Gestore per la richiesta POST /clienti
 router.post('', async (req, res) => {
   try {
+    console.log(req.body);
     const nuovoCliente = new Cliente(req.body);
     const risultato = await nuovoCliente.save();
     res.json({
