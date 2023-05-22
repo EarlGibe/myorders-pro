@@ -2,10 +2,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const userSchema=new Schema({
-    username: String,
-    password: String,
-    role: String,
-    isActive: Boolean
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+    role: { type: String, required: true },
+    role_id:{ type: Schema.Types.ObjectId, required: true },
+    status: { type: Boolean, default: true },
+    isFirstAccess: { type: Boolean, default: true },
+    dataInserimento: { type: Date, default: Date.now }
 },
 {
     collection:'users'
