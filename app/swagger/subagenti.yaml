@@ -1,0 +1,231 @@
+
+openapi: 3.0.0
+info:
+  title: Documentazione API Subagenti
+  version: 1.0.0
+paths:
+  /subagenti:
+    get:
+      summary: Restituisce tutti i subagenti
+      responses:
+        '200':
+          description: Elenco dei subagenti
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subagente'
+        '404':
+          description: La lista dei subagenti è vuota
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    post:
+      summary: Crea un nuovo subagente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subagente'
+      responses:
+        '200':
+          description: Subagente inserito con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  createdsubagente:
+                    type: object
+                    properties:
+                      risultato:
+                        $ref: '#/components/schemas/Subagente'
+                      request:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            example: GET
+                          url:
+                            type: string
+                            example: /subagenti/1
+    put:
+      summary: Aggiorna tutti i subagenti
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subagente'
+      responses:
+        '200':
+          description: Subagenti aggiornati con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  n:
+                    type: integer
+                    description: Numero di documenti modificati
+                  nModified:
+                    type: integer
+                    description: Numero di documenti effettivamente modificati
+                  ok:
+                    type: integer
+                    description: Stato dell'operazione
+    delete:
+      summary: Elimina tutti i subagenti
+      responses:
+        '200':
+          description: Subagenti eliminati con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  n:
+                    type: integer
+                    description: Numero di documenti eliminati
+                  ok:
+                    type: integer
+                    description: Stato dell'operazione
+  /subagenti/{id}:
+    get:
+      summary: Restituisce un singolo subagente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del subagente da restituire
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subagente restituito con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subagente'
+        '404':
+          description: Subagente non trovato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    put:
+      summary: Aggiorna un singolo subagente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del subagente da aggiornare
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subagente'
+      responses:
+        '200':
+          description: Subagente aggiornato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subagente'
+        '404':
+          description: Subagente non trovato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    delete:
+      summary: Elimina un singolo subagente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del subagente da eliminare
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subagente eliminato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subagente'
+        '404':
+          description: Subagente non trovato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+components:
+  schemas:
+    Subagente:
+      type: object
+      properties:
+        id:
+          type: array
+          items:
+            type: number
+          description: ID del subagente
+        matricola:
+          type: array
+          items:
+            type: string
+          description: Matricola del subagente
+        listaOrdini:
+          type: array
+          items:
+            type: object
+            properties:
+              ordine:
+                type: string
+                description: ID dell'ordine
+          description: Elenco degli ID degli ordini associati al subagente
+        listaClienti:
+          type: array
+          items:
+            type: object
+            properties:
+              cliente:
+                type: string
+                description: ID del cliente
+          description: Elenco degli ID dei clienti associati al subagente
+        listaAziende:
+          type: array
+          items:
+            type: object
+            properties:
+              azienda:
+                type: string
+                description: ID dell'azienda
+          description: Elenco degli ID delle aziende associate al subagente
+        dataInserimento:
+          type: string
+          format: date-time
+          description: Data di inserimento del subagente
+        status:
+          type: boolean
+          description: Stato del subagente (default: false)
