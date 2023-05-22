@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-const AnagraficaSchema = new Schema({
+const anagraficaSchema = new Schema({
   nome: [{type: String }],
   cognome: [{type: String }],
-  codFisc: [{type: String }],
+  codiceFiscale: [{type: String }],
   residenza: { type: Schema.Types.ObjectId, ref: 'Address'},
+  telefono: { type: String, required: true },
+  email: { type: String },
   ragioneSociale: [{type: String }],
   pIVA: [{type: String }],
   sede: { type: Schema.Types.ObjectId, ref: 'Address'},
@@ -16,6 +18,6 @@ const AnagraficaSchema = new Schema({
   collection:'anagrafiche'
 });
 
-const Cliente = mongoose.model('Anagrafica', anagraficaSchema);
+const Anagrafica = mongoose.model('Anagrafica', anagraficaSchema);
 
 module.exports = Anagrafica;
