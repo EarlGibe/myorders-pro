@@ -1,15 +1,24 @@
+<<<<<<< HEAD
 // const https = require("node:https");
 // const fs = require("fs");
+=======
+//const https = require("node:https");
+//const fs = require("fs");
+>>>>>>> a0b4c7d (Update files for stable version)
 
 // const express = require("express");
 
 const app = require('./app/app.js');
 const mongoose=require('mongoose');
 
+<<<<<<< HEAD
 // const secureApp = express();
+=======
+//const secureApp = express();
+>>>>>>> a0b4c7d (Update files for stable version)
 
 const port = process.env.PORT || 3000;
-const securePort = 4000;
+//const securePort = 4000;
 
 const user = 'Group19';
 const password = 'BDqYxCkjxOx5lWA0';
