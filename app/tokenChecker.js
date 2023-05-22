@@ -22,11 +22,12 @@ const tokenChecker = function(req, res, next) {
 			});		
 		} else {
 			// if everything is good, save to request for use in other routes
+      console.log("Entro in token checker");
+      console.log("From token checker, this is decoded: \n"+decoded.id);
 			req.loggedUser = decoded;
 			next();
 		}
 	});
-	
 };
 
 module.exports = tokenChecker
