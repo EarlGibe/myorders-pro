@@ -1,190 +1,7 @@
-//SWAGGER
-
-/* 
-
-swagger: "2.0"
-info:
-  title: API per la gestione degli articoli
-  version: 1.0.0
-basePath: /api
-schemes:
-  - http
-  - https
-consumes:
-  - application/json
-produces:
-  - application/json
-paths:
-  /articoli:
-    get:
-      summary: Restituisce tutti gli articoli
-      responses:
-        200:
-          description: Elenco di tutti gli articoli
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Articolo'
-        500:
-          description: Si è verificato un errore durante la ricerca degli articoli
-    post:
-      summary: Crea un nuovo articolo
-      parameters:
-        - name: Articolo
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/ArticoloInput'
-      responses:
-        201:
-          description: Articolo creato con successo
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-              createdArticolo:
-                $ref: '#/definitions/Articolo'
-        500:
-          description: Si è verificato un errore durante la creazione dell'articolo
-    put:
-      summary: Aggiorna tutti gli articoli
-      parameters:
-        - name: Articolo
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/ArticoloInput'
-      responses:
-        200:
-          description: Articoli aggiornati con successo
-          schema:
-            type: object
-            properties:
-              n:
-                type: number
-              nModified:
-                type: number
-              ok:
-                type: number
-        400:
-          description: Errore durante l'aggiornamento degli articoli
-    delete:
-      summary: Cancella tutti gli articoli
-      responses:
-        200:
-          description: Articoli cancellati con successo
-          schema:
-            type: object
-            properties:
-              n:
-                type: number
-              ok:
-                type: number
-        400:
-          description: Errore durante la cancellazione degli articoli
-  /articoli/{id}:
-    get:
-      summary: Restituisce l'articolo con l'id specificato
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: Articolo trovato con successo
-          schema:
-            $ref: '#/definitions/Articolo'
-        404:
-          description: L'articolo richiesto non è stato trovato
-        500:
-          description: Si è verificato un errore durante la ricerca dell'articolo
-    put:
-      summary: Aggiorna l'articolo con l'id specificato
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-        - name: Articolo
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/ArticoloInput'
-      responses:
-        200:
-          description: Articolo aggiornato con successo
-          schema:
-            $ref: '#/definitions/Articolo'
-        400:
-          description: Errore durante l'aggiornamento dell'articolo
-    delete:
-      summary: Elimina un articolo con un ID specifico
-      parameters:
-        - in: path
-          name: id
-          description: ID dell'articolo da eliminare
-          required: true
-          schema:
-            type: string
-            format: ObjectId
-      responses:
-        200:
-          description: Articolo eliminato con successo
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  _id:
-                    type: string
-                    format: ObjectId
-                    description: ID dell'articolo eliminato
-                  name:
-                    type: string
-                    description: Nome dell'articolo eliminato
-                  descrizione:
-                    type: string
-                    description: Descrizione dell'articolo eliminato
-                  coloriDisponibili:
-                    type: array
-                    items:
-                      type: string
-                    description: Colori disponibili per l'articolo eliminato
-                  taglieDisponibili:
-                    type: array
-                    items:
-                      type: string
-                    description: Taglie disponibili per l'articolo eliminato
-                  scontoApplicato:
-                    type: number
-                    description: Sconto applicato all'articolo eliminato
-                  prezzo:
-                    type: number
-                    description: Prezzo dell'articolo eliminato
-                  status:
-                    type: string
-                    enum: [disponibile, non disponibile]
-                    description: Stato dell'articolo eliminato
-        400:
-          description: Errore durante l'eliminazione dell'articolo
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: Descrizione dell'errore
-     
-
- */
-
 const express = require('express');
 const router = express.Router();
 
-const Articolo = require('./models/articolo');
+const Articolo = require('./models/articolo.js');
 
 router.get('', async(req,res)=>{
     try{
@@ -219,21 +36,11 @@ router.get('/:id', async (req, res) => {
 
  // Gestore per la richiesta POST /articoli
 router.post('', async (req, res) => {
-    const newArticolo = req.body;
-  
     try {
-      // Crea un nuovo oggetto Articolo con i dati ricevuti dalla richiesta
-      const nuovoArticolo = new Articolo({
-        newArticolo
-      });
-  
-      // Salva il nuovo articolo nel database
+      const nuovoArticolo = new Articolo(req.body);
       const risultato = await nuovoArticolo.save();
-
-
-      // Invia la risposta HTTP con il nuovo documento creato
-      res.status(201).json({
-        message: "Articolo creato con successo",
+      res.json({
+        message: "Articolo inserito con successo",
         createdArticolo: {
           risultato,
           request: {
@@ -242,11 +49,12 @@ router.post('', async (req, res) => {
           }
         }
       });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json("error: "+error);
+    } catch (err) {
+      res.status(400).json({ errore: err.message });
     }
   });
+
+
 
 // PUT generale
 router.put('', async (req, res) => {
@@ -294,127 +102,3 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
-
-//APIARY
-
-/*
-
-API Documentation for Articolo:
-
-This API handles CRUD operations for "Articolo" (Italian for "Article") objects. The API is built using Node.js with Express framework and MongoDB for data storage.
-
-Endpoint: GET '/'
-
-Description: Retrieves all the articles.
-
-Request:
-- Method: GET
-- Endpoint: '/'
-- Headers: None
-- Body: None
-
-Response:
-- Status Code: 200
-- Headers: None
-- Body: JSON object containing an array of all the articles.
-
-Endpoint: GET '/:id'
-
-Description: Retrieves an article by ID.
-
-Request:
-- Method: GET
-- Endpoint: '/:id'
-- Headers: None
-- Body: None
-- Parameters: 
-  - id: the ID of the article to retrieve.
-
-Response:
-- Status Code: 200 if the article is found, 404 if not found.
-- Headers: None
-- Body: JSON object containing the article data.
-
-Endpoint: POST '/'
-
-Description: Creates a new article.
-
-Request:
-- Method: POST
-- Endpoint: '/'
-- Headers: 
-  - Content-Type: application/json
-- Body: JSON object containing the new article data.
-
-Response:
-- Status Code: 201
-- Headers: None
-- Body: JSON object containing the created article data, along with a URL to retrieve it.
-
-Endpoint: PUT '/'
-
-Description: Updates all articles.
-
-Request:
-- Method: PUT
-- Endpoint: '/'
-- Headers: 
-  - Content-Type: application/json
-- Body: JSON object containing the updated article data.
-
-Response:
-- Status Code: 200
-- Headers: None
-- Body: JSON object containing the updated article data.
-
-Endpoint: PUT '/:id'
-
-Description: Updates an article by ID.
-
-Request:
-- Method: PUT
-- Endpoint: '/:id'
-- Headers: 
-  - Content-Type: application/json
-- Body: JSON object containing the updated article data.
-- Parameters: 
-  - id: the ID of the article to update.
-
-Response:
-- Status Code: 200 if the article is updated, 404 if not found.
-- Headers: None
-- Body: JSON object containing the updated article data.
-
-Endpoint: DELETE '/'
-
-Description: Deletes all articles.
-
-Request:
-- Method: DELETE
-- Endpoint: '/'
-- Headers: None
-- Body: None
-
-Response:
-- Status Code: 200
-- Headers: None
-- Body: JSON object containing the number of deleted articles.
-
-Endpoint: DELETE '/:id'
-
-Description: Deletes an article by ID.
-
-Request:
-- Method: DELETE
-- Endpoint: '/:id'
-- Headers: None
-- Body: None
-- Parameters: 
-  - id: the ID of the article to delete.
-
-Response:
-- Status Code: 200 if the article is deleted, 404 if not found.
-- Headers: None
-- Body: JSON object containing the deleted article data.
-
-*/
