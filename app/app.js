@@ -80,6 +80,4 @@ app.use((req, res) => {
     res.json({ error: 'Not found' });
 });
 
-
-
 module.exports = app;
