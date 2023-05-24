@@ -65,7 +65,6 @@ function redirect() {
     .then(function(data) { // Here you get the data to modify as you please
         
         console.log(data);
-
         
         if(!data.isFirstAccess){
             window.location.href = "../home?token="+loggedUser.token+"&id="+loggedUser.id;

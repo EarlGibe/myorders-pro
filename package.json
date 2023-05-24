@@ -19,5 +19,8 @@
     "mongoose": "^7.1.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
   }
 }

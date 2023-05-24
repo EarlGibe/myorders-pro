@@ -1,15 +1,15 @@
-//const https = require("node:https");
-//const fs = require("fs");
+// const https = require("node:https");
+// const fs = require("fs");
 
-const express = require("express");
+// const express = require("express");
 
 const app = require('./app/app.js');
 const mongoose=require('mongoose');
 
-//const secureApp = express();
+// const secureApp = express();
 
 const port = process.env.PORT || 3000;
-//const securePort = 4000;
+const securePort = 4000;
 
 const user = 'Group19';
 const password = 'BDqYxCkjxOx5lWA0';
@@ -29,8 +29,10 @@ app.locals.db = mongoose.connect(URL, {useNewUrlParser: true, useUnifiedTopology
 });
 
 
-//HTTPS CRUD
+// HTTPS CRUD
+
 /*
+
 https.createServer({
     key: fs.readFileSync("key.pem"),
     cert: fs.readFileSync("cert.pem"),
@@ -53,6 +55,7 @@ secureApp.put('/', (req, res) => {
 secureApp.delete('/', (req, res) => {
     res.send('delete secure');
 });
+
 */
 
 module.exports=app;
