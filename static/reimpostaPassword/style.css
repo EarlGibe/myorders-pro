@@ -1,31 +1,26 @@
-/* INDEX */
+/* REIMPOSTA PASSWORD */
 
-  body {
+  body{
     font-family: Arial, sans-serif;
     background-color: #BFB1A4;
     margin: 0;
     padding: 0;
   }
-
-  img{
-    margin:20px auto;
-    display: block;
-  }
   
-  form {
+   form {
     background-color: #F2F2F2;
     width: 300px;
     margin: 50px auto;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    color:#73675C;
+    color: #73675C;
   }
-  
-  h2 {
+
+  h1 {
     text-align: center;
     margin-bottom: 20px;
-    color:black;
+    color: black;
   }
   
   label {
@@ -35,7 +30,7 @@
   
   input[type="text"],
   input[type="password"] {
-    width:90%;
+    width: 90%;
     padding: 10px;
     margin-bottom: 20px;
     border-radius: 5px;
@@ -53,3 +48,17 @@
     font-weight: bold;
     cursor: pointer;
   }
+
+
+  a {
+    font-family: Arial, sans-serif;
+    background-color: #BFB1A4;
+    margin: 10;
+    padding: 10;
+  }
+  
+  
+
+  
+
+  

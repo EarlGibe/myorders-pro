@@ -1,4 +1,4 @@
 
 	document.addEventListener('DOMContentLoaded', function(){
-        window.location.href = "./main";
+        window.location.href = "./login";
     })

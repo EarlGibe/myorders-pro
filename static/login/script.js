@@ -13,9 +13,9 @@ var loggedUser = {};
  * generate a token and save it on a global variable.
  * Then call redirect function.
  */
-function login()
-{
+function login() {
     console.log("login()");
+
     //get the form object
     var username = document.getElementById("loginUsername").value;
     var password = document.getElementById("loginPassword").value;
