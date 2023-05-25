@@ -64,15 +64,18 @@ function redirect() {
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data to modify as you please
         
+        localStorage.setItem('token', loggedUser.token);
+        localStorage.setItem('id', loggedUser.id);
+
         console.log(data);
         
         if(!data.isFirstAccess){
-            window.location.href = "../home?token="+loggedUser.token+"&id="+loggedUser.id;
+            window.location.href = "../home";
         }else{
-            window.location.href = "../activateAccount/index.html?token="+loggedUser.token+"&id="+loggedUser.id;
+            window.location.href = "../activateAccount/index.html";
         }
         
     })
-    .catch( error => console.error(error) );// If there is any error you will catch them here
+    .catch( error => console.error(error) );    // If there is any error you will catch them here
 }
 
