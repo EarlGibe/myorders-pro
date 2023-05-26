@@ -1,6 +1,9 @@
 const token = localStorage.getItem("token");
 const userId = localStorage.getItem("userId");
 
+const OTPResolution = 10000000;
+var randomOTP = Math.floor( Math.random() * OTPResolution );
+
 function onLoadIndex(){
     document.getElementById("richiediOTPButton").addEventListener("click", function(event){
         event.preventDefault()
@@ -14,6 +17,35 @@ function onLoadReimpostaPassword(){
 }
 
 function richiediOTP(){
+
+    // check if the username and email are correct
+
+    var username = document.getElementById("username").value;
+    var email = document.getElementById("email").value;
+
+    fetch('../users/' + username,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': token
+        }
+    })
+    .then((resp) => resp.json()) // Transform the data into json
+    .then(function(data) { // Here you get the data to modify as you please
+
+        console.log(data);
+
+        if (email == data.email) {
+            
+            window.location.href = "../home";
+
+        } else {
+
+            console.error("Email ed username non coincidono");
+
+        }
+        
+    })
 
     window.location.href = './reimpostaPassword.html';
 }
