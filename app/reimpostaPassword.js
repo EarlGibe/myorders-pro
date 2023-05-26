@@ -32,13 +32,11 @@ router.post('', async (req, res) => {
           sgMail.send(msg).then((response) => {
               console.log(response[0].statusCode)
               console.log(response[0].headers)
+              res.json(user);
           })
             .catch((error) => {
               console.error(error)
           });
-
-          console.log(user)
-          res.json(user);
           
         } else {
           res.status(404).json({ error: 'User e email non coincidono' });
@@ -46,6 +44,7 @@ router.post('', async (req, res) => {
 
       } else {
         res.status(404).json({ error: 'User e email non coincidono' });
+        
       }} catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'user.' });

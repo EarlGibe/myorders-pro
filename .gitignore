@@ -3,3 +3,4 @@ node_modules/*
 
 csr.pem
 key.pem
+.env
