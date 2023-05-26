@@ -4,6 +4,9 @@ const app = express();
 const authentication = require('./authentication.js');
 const tokenChecker = require('./tokenChecker.js');
 
+
+const share = require('./share.js');
+
 const users = require('./users.js');
 const articoli = require('./articoli.js');
 const aziende = require('./aziende.js');
@@ -14,6 +17,29 @@ const ordini = require('./ordini.js');
 const subagenti = require('./subagenti.js');
 const tecnici = require('./tecnici.js');
 const reimpostaPassword = require('./reimpostaPassword.js');
+
+const Chiave = require('./models/chiave.js');
+app.set('arrayChiaviDB','');
+
+/**
+ * Get all the keys from DB
+ */
+if(app.get('arrayChiaviDB')==''){
+    app.use(async(req,res,next) => {
+        try{
+            arrayChiaviDB= await Chiave.find();
+            app.set('arrayChiaviDB', arrayChiaviDB);
+            console.log(arrayChiaviDB);
+            
+       }catch(error){
+           console.log(error);
+           res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiavi.' });
+       }
+    
+        next()
+    })
+}
+
 
 /**
  * Configure Express.js parsing middleware
@@ -62,6 +88,8 @@ app.use('/tecnici', tokenChecker);
 /**
  * Resource routing
  */
+
+app.use('/share', share);
 
 app.use('/users', users);
 app.use('/articoli', articoli);
