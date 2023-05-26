@@ -43,7 +43,6 @@ function login() {
             document.getElementById("warningMessage").textContent="Username o password errati";
         }
         
-        
         return;
     })
     .catch( error => console.error(error) ); // If there is any error you will catch them here

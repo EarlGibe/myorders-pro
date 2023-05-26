@@ -3,6 +3,24 @@ const router = express.Router();
 
 const Chiave = require('./models/chiave.js');
 
+// API per cercare chiave da nome chiave
+router.get('/:nome', async(req,res)=>{
+  try{
+       const nome = req.params.nome;
+       const arrayChiaviDB= await Chiave.findOne(nome);
+       console.log(arrayChiaviDB);
+       if(!arrayChiaviDB){
+        res.status(404).send("Error: chiave desiderata non trovata");
+       }else{
+        res.json(arrayChiaviDB);
+       }
+       
+  }catch(error){
+      console.log(error);
+      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca della chiave desiderata.' });
+  }
+})
+
 router.get('', async(req,res)=>{
     try{
          const arrayChiaviDB= await Chiave.find();
