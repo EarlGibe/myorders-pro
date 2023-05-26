@@ -19,37 +19,37 @@ router.post('', async (req, res) => {
         username: req.body.username,
       }).exec();
 
-      if(user.email==req.body.email){
-        const msg = {
-          to: req.body.email, // Change to your recipient
-          from: 'app.myorderspro@gmail.com', // Change to your verified sender
-          subject: 'OTP Recupera Password My Orders Pro',
-          text: 'Questo è il tuo OTP: '+req.body.OTP,
-          //html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-        }
-        
-        sgMail
-          .send(msg)
-          .then((response) => {
-            console.log(response[0].statusCode)
-            console.log(response[0].headers)
+      if(user){
+        if(user.email==req.body.email){
+          const msg = {
+            to: req.body.email, // Change to your recipient
+            from: 'app.myorderspro@gmail.com', // Change to your verified sender
+            subject: 'OTP Recupera Password My Orders Pro',
+            text: 'Questo è il tuo OTP: '+req.body.OTP,
+            //html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+          }
+          
+          sgMail.send(msg).then((response) => {
+              console.log(response[0].statusCode)
+              console.log(response[0].headers)
           })
-          .catch((error) => {
-            console.error(error)
-          })
-      }
+            .catch((error) => {
+              console.error(error)
+          });
 
-      console.log(user)
-	
-      if (user) {
-        res.json(user);
+          console.log(user)
+          res.json(user);
+          
+        } else {
+          res.status(404).json({ error: 'User e email non coincidono' });
+        }
+
       } else {
-        res.status(404).json({ error: 'L\'user richiesto non è stato trovato.' });
+        res.status(404).json({ error: 'User e email non coincidono' });
+      }} catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'user.' });
       }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'user.' });
-    }
-  });
+    });
 
   module.exports = router;

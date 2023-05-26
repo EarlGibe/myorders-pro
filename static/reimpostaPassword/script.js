@@ -35,14 +35,10 @@ function richiediOTP(){
 
         console.log(data);
 
-        if (data) {
-
+        if (!data.error) {
             window.location.href = './reimpostaPassword.html';
-
         } else {
-
-            document.getElementById("warningMessage").textContent="User o email non trovate";
-
+            document.getElementById("warningMessage").textContent=data.error;
         }
         
     })
