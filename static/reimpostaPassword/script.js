@@ -1,9 +1,6 @@
 const token = localStorage.getItem("token");
 const userId = localStorage.getItem("userId");
 
-const OTPResolution = 10000000;
-var randomOTP = Math.floor( Math.random() * OTPResolution );
-
 function onLoadIndex(){
     document.getElementById("richiediOTPButton").addEventListener("click", function(event){
         event.preventDefault()
@@ -23,31 +20,34 @@ function richiediOTP(){
     var username = document.getElementById("username").value;
     var email = document.getElementById("email").value;
 
-    fetch('../users/' + username,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'x-access-token': token
-        }
+    const OTPResolution = 10000000;
+    var randomOTP = Math.floor( Math.random() * OTPResolution );
+
+    localStorage.setItem('OTP',randomOTP);
+
+    fetch('../reimpostaPassword',{
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify( { username: username, email: email, OTP: randomOTP} ),
     })
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data to modify as you please
 
         console.log(data);
 
-        if (email == data.email) {
-            
-            window.location.href = "../home";
+        if (data) {
+
+            window.location.href = './reimpostaPassword.html';
 
         } else {
 
-            console.error("Email ed username non coincidono");
+            document.getElementById("warningMessage").textContent="User o email non trovate";
 
         }
         
     })
 
-    window.location.href = './reimpostaPassword.html';
+   
 }
 
 function resetPassword(){

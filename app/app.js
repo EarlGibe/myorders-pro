@@ -13,6 +13,7 @@ const dipendenti = require('./dipendenti.js');
 const ordini = require('./ordini.js');
 const subagenti = require('./subagenti.js');
 const tecnici = require('./tecnici.js');
+const reimpostaPassword = require('./reimpostaPassword.js');
 
 /**
  * Configure Express.js parsing middleware
@@ -71,7 +72,7 @@ app.use('/dipendenti', dipendenti);
 app.use('/ordini', ordini);
 app.use('/subagenti', subagenti);
 app.use('/tecnici', tecnici);
-
+app.use('/reimpostaPassword', reimpostaPassword);
 
 
 /* Default 404 handler */

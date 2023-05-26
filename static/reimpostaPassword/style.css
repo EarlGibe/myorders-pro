@@ -48,6 +48,10 @@
     cursor: pointer;
   }
 
+  #warningMessage{
+    color:red;
+  }
+
 
   a {
     font-family: Arial, sans-serif;

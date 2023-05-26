@@ -29,26 +29,6 @@ router.get('/:id', async (req, res) => {
     }
   });
 
-  // API to find a specific user by its username
-  router.get('/:username', async (req, res) => {
-    try {
-
-      // find the user
-      let user = await User.findOne({
-        username: req.params.username
-      }).exec();
-	
-      if (user) {
-        res.json(user);
-      } else {
-        res.status(404).json({ error: 'L\'user richiesto non è stato trovato.' });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'user.' });
-    }
-  });
-
    // Gestore per la richiesta POST /users
 router.post('', async (req, res) => {
   try {
