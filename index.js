@@ -13,7 +13,7 @@ const securePort = 4000;
 
 const user = 'Group19';
 const password = 'BDqYxCkjxOx5lWA0';
-const dbname='myorders_pro'
+const dbname='myorders_pro';
 
 const URL = `mongodb+srv://${user}:${password}@maincluster.yx3zxsu.mongodb.net/${dbname}?retryWrites=true&w=majority`;
 

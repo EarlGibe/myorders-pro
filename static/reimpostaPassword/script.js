@@ -1,11 +1,24 @@
-document.getElementById("changePasswordButton").addEventListener("click", function(event){
-    event.preventDefault()
-  });
+const token = localStorage.getItem("token");
+const userId = localStorage.getItem("userId");
 
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
+function onLoadIndex(){
+    document.getElementById("richiediOTPButton").addEventListener("click", function(event){
+        event.preventDefault()
+    });
+}
 
-function changePassword(){
+function onLoadReimpostaPassword(){
+    document.getElementById("resetPasswordButton").addEventListener("click", function(event){
+        event.preventDefault()
+    });
+}
+
+function richiediOTP(){
+
+    window.location.href = './reimpostaPassword.html';
+}
+
+function resetPassword(){
 
     var vecchia_password=document.getElementById("vecchia_password").value;
     var nuova_password = document.getElementById("nuova_password").value;

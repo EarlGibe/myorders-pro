@@ -54,6 +54,12 @@
     cursor: pointer;
   }
 
-  .button {
-    font-family: 'Arial', sans-serif;
+  #reimpostaPassword {
+    color: black;
+    display: block;
+    margin: 1rem 0 0 0;
+  }
+
+  #reimpostaPassword:hover {
+    color: blue;
   }

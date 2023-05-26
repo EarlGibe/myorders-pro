@@ -65,7 +65,7 @@ function redirect() {
     .then(function(data) { // Here you get the data to modify as you please
         
         localStorage.setItem('token', loggedUser.token);
-        localStorage.setItem('id', loggedUser.id);
+        localStorage.setItem('userId', loggedUser.id);
 
         console.log(data);
         

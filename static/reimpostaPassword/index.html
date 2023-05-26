@@ -2,21 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cambia password</title>
+    <title>Reimposta password</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="../includes/css/normalize.css">
 </head>
-<body>
+<body onload="onLoadIndex()">
   
-        <h1>Reimposta password</h1>
-        <form method="post">
-            <label for="OTP">Inserisci OTP:</label>
-            <input type="password" name="OTP" id="OTP"><br><br>
-            <label for="nuova_password">Nuova password:</label>
-            <input type="password" name="nuova_password" id="nuova_password"><br><br>
-            <label for="conferma_password">Conferma nuova password:</label>
-            <input type="password" name="conferma_password" id="conferma_password"><br><br>
-            <input id="changePasswordButton" type="submit" onclick="changePassword()" value="Reimposta password">
+        <h1>Richiedi OTP</h1>
+        <form id="getOTPForm" method="post">
+            <label for="username">Inserisci username:</label>
+            <input type="username" name="username" id="username"><br><br>
+            <label for="email">Inserisci email:</label>
+            <input type="email" name="email" id="email"><br><br>
+            <input id="richiediOTPButton" type="submit" onclick="richiediOTP()" value="Richiedi OTP">
             
             <span id="warningMessage"></span>
         
