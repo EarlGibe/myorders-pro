@@ -1,0 +1,4 @@
+﻿nome;descrizione;coloriDisponibili;taglieDisponibili;scontoApplicato;prezzo;barCodes;status
+Product 1;Description 1;Red,Blue,Green;S,M,L;10;99.99;1234567890;true
+Product 2;Description 2;Black,White;XS,S,M,L;0;49.99;9876543210;true
+Product 3;Description 3;Yellow,Purple;M,L,XL;20;149.99;5678901234;false

@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
+const csv = require('csv-parser');
+const fs = require('fs');
+
+const multer = require('multer');
+
 const Articolo = require('./models/articolo.js');
 
 router.get('', async(req,res)=>{
@@ -100,5 +105,38 @@ router.delete('/:id', async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
+//CSV IMPORT
+
+const upload = multer({ dest: 'uploads/' }); // Destination folder for uploaded files
+
+router.post('/upload', upload.single('csvFile'), (req, res) => {
+  try {
+    const file = req.file;
+
+    fs.createReadStream(file.path)
+      .pipe(csv({ separator: ',' })) // Specify the semicolon as the delimiter
+      .on('data', (data) => {
+        insertRecordToMongoDB(data);
+      })
+      .on('end', () => {
+        console.log('CSV data imported successfully');
+        res.send('CSV data imported successfully');
+      });
+  } catch (error) {
+    console.error('Error processing CSV file', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+async function insertRecordToMongoDB(record) {
+  try {
+    Articolo.create(record);
+    console.log('Record inserted successfully:', record);
+  } catch (error) {
+    console.error('Error inserting record:', error);
+  }
+}
+
 
 module.exports = router;

@@ -75,7 +75,7 @@ app.use('/authentications', authentication);
 //app.use('', tokenChecker);
 
 app.use('/users', tokenChecker);
-app.use('/articoli', tokenChecker);
+//app.use('/articoli', tokenChecker);
 app.use('/aziende', tokenChecker);
 app.use('/cataloghi', tokenChecker);
 app.use('/clienti', tokenChecker);
