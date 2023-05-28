@@ -19,26 +19,38 @@ const tecnici = require('./tecnici.js');
 const reimpostaPassword = require('./reimpostaPassword.js');
 
 const Chiave = require('./models/chiave.js');
-app.set('arrayChiaviDB','');
 
 /**
  * Get all the keys from DB
  */
-if(app.get('arrayChiaviDB')==''){
-    app.use(async(req,res,next) => {
-        try{
-            arrayChiaviDB= await Chiave.find();
-            app.set('arrayChiaviDB', arrayChiaviDB);
-            console.log(arrayChiaviDB);
-            
-       }catch(error){
-           console.log(error);
-           res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiavi.' });
-       }
+const setOnceMiddleware = async(req, res, next) => {
+    if (!req.app.locals.isSet) {
+      // Esegui l'azione che vuoi eseguire solo una volta
+
+            try{
+                arrayChiaviDB= await Chiave.find();
+                app.set('arrayChiaviDB', arrayChiaviDB);
+                console.log(arrayChiaviDB);
+                
+            }catch(error){
+                console.log(error);
+                res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiavi.' });
+            }
+     
+
+        console.log("setOnceMiddleware");
+
+      req.app.locals.isSet = true; // Imposta la flag isSet a true dopo aver eseguito app.set() una volta
     
-        next()
-    })
-}
+    }
+    next();
+  };
+  
+  // Usa il middleware personalizzato
+  app.use(setOnceMiddleware);
+
+
+
 
 
 /**
@@ -75,7 +87,7 @@ app.use('/authentications', authentication);
 //app.use('', tokenChecker);
 
 app.use('/users', tokenChecker);
-//app.use('/articoli', tokenChecker);
+app.use('/articoli', tokenChecker);
 app.use('/aziende', tokenChecker);
 app.use('/cataloghi', tokenChecker);
 app.use('/clienti', tokenChecker);

@@ -121,7 +121,7 @@ router.post('/upload', upload.single('csvFile'), (req, res) => {
       })
       .on('end', () => {
         console.log('CSV data imported successfully');
-        res.send('CSV data imported successfully');
+        res.redirect('/home');
       });
   } catch (error) {
     console.error('Error processing CSV file', error);
@@ -131,6 +131,10 @@ router.post('/upload', upload.single('csvFile'), (req, res) => {
 
 async function insertRecordToMongoDB(record) {
   try {
+    record.coloriDisponibili=record.coloriDisponibili.split(',');
+    record.taglieDisponibili=record.taglieDisponibili.split(',');
+    record.barCodes=record.barCodes.split(',');
+    
     Articolo.create(record);
     console.log('Record inserted successfully:', record);
   } catch (error) {
