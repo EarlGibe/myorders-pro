@@ -2,20 +2,9 @@
 <html>
 <head>
     <title>Product Details</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        
-        th, td {
-            text-align: left;
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        tr:hover {background-color: #f5f5f5;}
-    </style>
+    <link rel="stylesheet" href="./styleArticoliDisponibili.css">
+  <link rel="stylesheet" href="../includes/css/normalize.css">
+  <script src="../includes/js/favicon.js"></script>
 </head>
 <body onload="getAllArticoli()">
     <h1>Product Details</h1>
@@ -25,7 +14,7 @@
         <th>Nome</th>
         <th>Descrizione</th>
         <th>Colori Disponibili</th>
-        <th colspan="10">Taglie Disponibili</th>
+        <th id="taglieDisponibiliTh">Taglie Disponibili</th>
         <th>Sconto Applicato</th>
         <th>Prezzo</th>
         <th>Codici a barre</th>

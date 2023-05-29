@@ -177,6 +177,8 @@ function populateCataloghi(catalogo) {
 
 }
 
+let colSpanTaglie = 6;
+
 function getAllArticoli() {
 
     var catalogo = JSON.parse(localStorage.getItem("catalogoSelezionato"));
@@ -219,37 +221,52 @@ function populateArticoli(article) {
             `*/
 
     // Creazione delle righe per ogni colore e taglia disponibile
+    var isFirst = true;
     article.coloriDisponibili.forEach(color => {
 
         const row = document.createElement("tr");
 
-        row.innerHTML = `
-            <td >
+        if (isFirst) {
+            row.innerHTML = `
+            <td rowspan="${article.coloriDisponibili.length}">
                 ${article.nome}
             </td>
-            <td >
+            <td rowspan="${article.coloriDisponibili.length}">
                 ${article.descrizione}
             </td>
             `
 
+            isFirst = false;
+        }
+
         row.innerHTML += ` <td>${color}</td>`
 
-        article.taglieDisponibili.forEach(taglia => {
-            row.innerHTML += `
-                        <td>${taglia}</td>
-                        <td>
-                            <select>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <!-- Add more quantity options if needed -->
-                            </select>
-                        </td>
-                       
-                `;
-            });
+        if (article.taglieDisponibili.length > colSpanTaglie) {
+            colSpanTaglie = article.taglieDisponibili.length;
+        }
 
-            row.innerHTML += 
+
+        for (var i = 0; i < colSpanTaglie; i++) {
+            if (i < article.taglieDisponibili.length) {
+                row.innerHTML += `
+                    <td>${article.taglieDisponibili[i]}</td>
+                    <td>
+                        <input type="number" class="numArticoliTaglia" id="${article._id}_Taglia${article.taglieDisponibili[i]}" name="${article._id}_Taglia${article.taglieDisponibili[i]}" step="1">
+                    </td>
+                
+                `;
+
+            } else {
+                row.innerHTML += `
+                    <td></td>
+                    <td
+                    </td>
+                
+                `;
+            }
+        };
+
+        row.innerHTML +=
             `
                 <td>
                     ${article.scontoApplicato}
@@ -260,10 +277,41 @@ function populateArticoli(article) {
                 <td>
                     ${article.barCodes.join(", ")}
                 </td>
+
+                <td id="${article._id}_Totale">0</td>
             `
-            productTable.appendChild(row);
+        productTable.appendChild(row);
     });
 
-   
+    document.getElementById("taglieDisponibiliTh").colSpan = colSpanTaglie * 2;
+
+    // Seleziona tutti gli elementi <input> con la classe "numArticoliTaglia"
+    const inputElements = document.querySelectorAll('.numArticoliTaglia');
+
+    // Aggiungi un listener a ciascun elemento <input>
+    inputElements.forEach(inputElement => {
+        inputElement.addEventListener('input', function () {
+            // Funzione da eseguire quando l'input viene modificato
+            const id = extractIdFromString(inputElement.name);
+    
+            var totaleElement = document.getElementById(id + '_Totale');
+            var totaleValue = parseInt(totaleElement.textContent);
+            totaleValue += 1;
+            totaleElement.textContent = totaleValue.toString();
+
+            // Esegui altre azioni necessarie qui
+        });
+    });
 
 }
+
+function extractIdFromString(string) {
+    const idPattern = /(.+)_Taglia/;
+    const match = string.match(idPattern);
+  
+    if (match && match.length > 1) {
+      return match[1];
+    }
+  
+    return null; // Ritorna null se non viene trovato alcun ID valido
+  }
