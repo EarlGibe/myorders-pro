@@ -1,10 +1,10 @@
 {
   "name": "myorders-pro",
   "version": "1.0.0",
-  "description": "Software Engineering project for University course. The name of the project is MyOrders Pro. The first sprint ends on May 21st. ciao ciao",
+  "description": "Software Engineering project for University course. The name of the project is MyOrders Pro. The first sprint ends on May 21st.",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "start": "node index.js",
     "start_local": "echo use: $ npm run dev",
     "dev": "node -r dotenv/config index.js"
@@ -20,6 +20,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.1.1",
     "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3"
   },
