@@ -8,13 +8,6 @@ function onLoadCreaOrdineIndex() {
     getAllClienti();
     // Get all the anchor elements within the 'buttons' div
     var links = document.querySelectorAll('.button-container a');
-
-    // Iterate over each link and modify the href attribute
-    /*for (var i = 0; i < links.length; i++) {
-    var href = links[i].getAttribute('href');
-    var modifiedHref = href + '?token=' + token + '&id=' + userId;
-    links[i].setAttribute('href', modifiedHref);
-    }*/
 };
 
 
@@ -184,22 +177,73 @@ function getAllArticoli() {
     var catalogo = JSON.parse(localStorage.getItem("catalogoSelezionato"));
 
     console.log(catalogo);
+    console.log("ho iniziato");
 
-    catalogo.listaArticoli.forEach(articolo_id => {
-        fetch('../articoli/' + articolo_id, {
+    // Create an array of promises for each fetch request
+    var fetchPromises = catalogo.listaArticoli.map(articolo_id => {
+        return fetch('../articoli/' + articolo_id, {
             method: 'GET',
             headers: {
                 'x-access-token': token
             }
         })
-            .then((resp) => resp.json()) // Transform the data into json
-            .then(function (data) { // Here you get the data to modify as you please
+            .then(resp => resp.json())
+            .then(function (data) {
                 console.log(data);
                 populateArticoli(data);
             })
-            .catch(error => console.error(error)); // If there is any error, you will catch them here
-    })
+            .catch(error => console.error(error));
+    });
 
+    // Wait for all promises to resolve
+    Promise.all(fetchPromises)
+        .then(function () {
+
+            document.getElementById("taglieDisponibiliTh").colSpan = colSpanTaglie * 2;
+
+            // Seleziona tutti gli elementi <input> con la classe "numArticoliTaglia"
+            const inputList = document.querySelectorAll('.numArticoliTaglia');
+            const scontoList= document.querySelectorAll('.scontoApplicato');
+
+            // Aggiungere un listener agli input per l'evento di cambiamento
+            for (let i = 0; i < inputList.length; i++) {
+                inputList[i].addEventListener("change",calcolaTotale)
+            }
+
+            for (let i = 0; i < scontoList.length; i++) {
+                //scontoList[i].addEventListener("change",calcolaTotale)
+            }
+
+            function calcolaTotale() {
+                //console.log(this.name);
+                //console.log(this.value);
+                
+                articleId=extractIdFromString(this.name);
+
+                var inputsQtaTaglie=document.getElementsByName(this.name);
+
+                var totaleQta=0;
+
+                for(let i=0;i<inputsQtaTaglie.length;i++){
+                    //console.log(inputs[i].name+":"+inputs[i].value)
+                    if(inputsQtaTaglie[i].value<0){
+                        inputsQtaTaglie[i].value=0;
+                    }
+                    if(inputsQtaTaglie[i].value){
+                        totaleQta+=parseInt(inputsQtaTaglie[i].value);
+                    }
+                }
+
+                prezzoArticolo=parseFloat(document.getElementById(articleId+"_Prezzo").textContent)
+                scontoArticolo=parseFloat(document.getElementById(articleId+"_ScontoApplicato").value)
+                scontoArticolo=scontoArticolo*prezzoArticolo/100;
+
+                document.getElementById(articleId+"_Totale").textContent=(Math.round(totaleQta*(prezzoArticolo-scontoArticolo)*100))/100+"€";
+                console.log(totaleQta*prezzoArticolo)
+
+                
+            }
+        });
 
 
 }
@@ -209,16 +253,6 @@ function populateArticoli(article) {
     console.log("populate");
 
     const productTable = document.getElementById("productTable");
-
-    //const row = document.createElement("tr");
-    /*row.innerHTML = `
-            <td rowspan="${article.coloriDisponibili.length}">
-                ${article.nome}
-            </td>
-            <td rowspan="${article.coloriDisponibili.length}">
-                ${article.descrizione}
-            </td>
-            `*/
 
     // Creazione delle righe per ogni colore e taglia disponibile
     var isFirst = true;
@@ -231,27 +265,32 @@ function populateArticoli(article) {
             <td rowspan="${article.coloriDisponibili.length}">
                 ${article.nome}
             </td>
+
             <td rowspan="${article.coloriDisponibili.length}">
                 ${article.descrizione}
-            </td>
+            </td>     
+
+            <td rowspan="${article.coloriDisponibili.length}" id="${article._id}_Prezzo">${article.prezzo}</td>
+
+            <td rowspan="${article.coloriDisponibili.length}"> <input type="number" class="scontoApplicato" id="${article._id}_ScontoApplicato" name="${article._id}_ScontoApplicatonto" step="1" value="0" min="0" max="100"> </td>
+            
+            <td rowspan="${article.coloriDisponibili.length}">${article.barCodes.join(", ")} </td>
+            
+            <td rowspan="${article.coloriDisponibili.length}" class="totaleTh" id="${article._id}_Totale" ">0</td>
+
             `
 
             isFirst = false;
         }
 
-        row.innerHTML += ` <td>${color}</td>`
-
-        if (article.taglieDisponibili.length > colSpanTaglie) {
-            colSpanTaglie = article.taglieDisponibili.length;
-        }
-
+        row.innerHTML += ` <td>${color}</td>`;
 
         for (var i = 0; i < colSpanTaglie; i++) {
             if (i < article.taglieDisponibili.length) {
                 row.innerHTML += `
                     <td>${article.taglieDisponibili[i]}</td>
                     <td>
-                        <input type="number" class="numArticoliTaglia" id="${article._id}_Taglia${article.taglieDisponibili[i]}" name="${article._id}_Taglia${article.taglieDisponibili[i]}" step="1">
+                        <input type="number" class="numArticoliTaglia" id="${article._id}_Color${color}_Qta" name="${article._id}_Qta" step="1">
                     </td>
                 
                 `;
@@ -266,52 +305,19 @@ function populateArticoli(article) {
             }
         };
 
-        row.innerHTML +=
-            `
-                <td>
-                    ${article.scontoApplicato}
-                </td>
-                <td>
-                    ${article.prezzo}
-                </td>
-                <td>
-                    ${article.barCodes.join(", ")}
-                </td>
-
-                <td id="${article._id}_Totale">0</td>
-            `
+        
         productTable.appendChild(row);
-    });
-
-    document.getElementById("taglieDisponibiliTh").colSpan = colSpanTaglie * 2;
-
-    // Seleziona tutti gli elementi <input> con la classe "numArticoliTaglia"
-    const inputElements = document.querySelectorAll('.numArticoliTaglia');
-
-    // Aggiungi un listener a ciascun elemento <input>
-    inputElements.forEach(inputElement => {
-        inputElement.addEventListener('input', function () {
-            // Funzione da eseguire quando l'input viene modificato
-            const id = extractIdFromString(inputElement.name);
-    
-            var totaleElement = document.getElementById(id + '_Totale');
-            var totaleValue = parseInt(totaleElement.textContent);
-            totaleValue += 1;
-            totaleElement.textContent = totaleValue.toString();
-
-            // Esegui altre azioni necessarie qui
-        });
     });
 
 }
 
 function extractIdFromString(string) {
-    const idPattern = /(.+)_Taglia/;
+    const idPattern = `(.+)_Qta`;
     const match = string.match(idPattern);
   
     if (match && match.length > 1) {
-      return match[1];
+        return match[1];
     }
   
-    return null; // Ritorna null se non viene trovato alcun ID valido
-  }
+    return null; // Return null if no valid ID is found
+}
