@@ -65,7 +65,7 @@ function creaOrdine() {
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) { // Here you get the data to modify as you please
             console.log(data);
-
+            localStorage.setItem("ordineAttivo", JSON.stringify(data.createdOrdine.risultato));
             redirectToGetAllAziende();
         })
         .catch(error => console.error(error)); // If there is any error, you will catch them here*/
@@ -203,11 +203,13 @@ function getAllArticoli() {
 
             // Seleziona tutti gli elementi <input> con la classe "numArticoliTaglia"
             const inputList = document.querySelectorAll('.numArticoliTaglia');
-            const scontoList= document.querySelectorAll('.scontoApplicato');
+            const scontoList = document.querySelectorAll('.scontoApplicato');
 
             // Aggiungere un listener agli input per l'evento di cambiamento
             for (let i = 0; i < inputList.length; i++) {
                 inputList[i].addEventListener("change",calcolaTotale)
+                inputList[i].addEventListener("change",aggiornaOrdine)
+                inputList[i].addEventListener("change",autoSave)
             }
 
             for (let i = 0; i < scontoList.length; i++) {
@@ -217,32 +219,130 @@ function getAllArticoli() {
             function calcolaTotale() {
                 //console.log(this.name);
                 //console.log(this.value);
-                
-                articleId=extractIdFromString(this.name);
 
-                var inputsQtaTaglie=document.getElementsByName(this.name);
+                articleId = extractIdFromString(this.name);
 
-                var totaleQta=0;
+                var inputsQtaTaglie = document.getElementsByName(this.name);
 
-                for(let i=0;i<inputsQtaTaglie.length;i++){
+                var totaleQta = 0;
+
+                for (let i = 0; i < inputsQtaTaglie.length; i++) {
                     //console.log(inputs[i].name+":"+inputs[i].value)
-                    if(inputsQtaTaglie[i].value<0){
-                        inputsQtaTaglie[i].value=0;
+                    if (inputsQtaTaglie[i].value < 0) {
+                        inputsQtaTaglie[i].value = 0;
                     }
-                    if(inputsQtaTaglie[i].value){
-                        totaleQta+=parseInt(inputsQtaTaglie[i].value);
+                    if (inputsQtaTaglie[i].value) {
+                        totaleQta += parseInt(inputsQtaTaglie[i].value);
                     }
                 }
 
-                prezzoArticolo=parseFloat(document.getElementById(articleId+"_Prezzo").textContent)
-                scontoArticolo=parseFloat(document.getElementById(articleId+"_ScontoApplicato").value)
-                scontoArticolo=scontoArticolo*prezzoArticolo/100;
+                prezzoArticolo = parseFloat(document.getElementById(articleId + "_Prezzo").textContent)
+                scontoArticolo = parseFloat(document.getElementById(articleId + "_ScontoApplicato").value)
+                scontoArticolo = scontoArticolo * prezzoArticolo / 100;
 
-                document.getElementById(articleId+"_Totale").textContent=(Math.round(totaleQta*(prezzoArticolo-scontoArticolo)*100))/100+"€";
-                console.log(totaleQta*prezzoArticolo)
-
-                
+                document.getElementById(articleId + "_Totale").textContent = (Math.round(totaleQta * (prezzoArticolo - scontoArticolo) * 100)) / 100 + "€";
+                console.log(totaleQta * prezzoArticolo)
             }
+
+            function aggiornaOrdine() {
+
+                var ordineAttivo = JSON.parse(localStorage.getItem("ordineAttivo"));
+
+                var inputString = this.id;
+
+                // Divide la stringa in base al carattere di separazione "_"
+                var splitted = inputString.split("_");
+
+                // Mappa gli elementi divisi per ottenere solo i valori dopo "$"
+                var result = splitted.map(function (item) {
+                    return item.split("$")[1];
+                });
+
+                // Assegna i valori alle variabili "id", "colore" e "taglia"
+                var id = result[0];
+                var colore = result[1];
+                var taglia = result[2];
+
+                console.log("Id:", id);
+                console.log("Colore:", colore);
+                console.log("Taglia:", taglia);
+                console.log("Qta:", this.value);
+
+                var newObject = {
+                    "id": id,
+                    "colore": colore,
+                    "taglia": taglia,
+                    "qta": this.value
+                };
+
+                var index = ordineAttivo.listaArticoli.findIndex(function (item) {
+                    return (
+                        item.id === newObject.id &&
+                        item.colore === newObject.colore &&
+                        item.taglia === newObject.taglia
+                    );
+                });
+
+                if (index === -1) {
+                    ordineAttivo.listaArticoli.push(newObject);
+                } else {
+                    if(this.value==0){
+                        ordineAttivo.listaArticoli.splice(index,1);
+                    }else{
+                        ordineAttivo.listaArticoli[index] = newObject;
+                    }
+                    
+                }
+
+                localStorage.setItem("ordineAttivo", JSON.stringify(ordineAttivo));
+            }
+
+            /**
+             * Inizio ambiente auto save
+             */
+
+            var listenerEseguito = false;
+            var interval;
+            var tempoLimite = 5000; // Tempo limite in millisecondi (5 secondi)
+
+            function azionePeriodica() {
+                if (listenerEseguito) {
+                    
+                    let ordineAttivo=JSON.parse(localStorage.getItem("ordineAttivo"));
+
+                    fetch('../ordini/' + ordineAttivo._id, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-access-token': token
+                        },
+                        body: JSON.stringify(ordineAttivo)
+                    })
+                        .then((resp) => resp.json()) // Transform the data into json
+                        .then(function (data) { // Here you get the data to modify as you please
+                            console.log(data);
+                        })
+                        .catch(error => console.error(error)); // If there is any error, you will catch them here
+                        
+                    listenerEseguito = false;
+                } else {
+                    console.log("Listener non eseguito entro il tempo limite");
+                    clearInterval(interval); // Interrompe il timer
+                }
+            }
+
+            function autoSave() {
+                console.log("Listener eseguito");
+                listenerEseguito = true;
+                
+                // Esegue l'azione periodica
+                interval = setInterval(azionePeriodica, tempoLimite);
+            }
+
+            /**
+             * Fine ambiente auto save
+             */
+
         });
 
 
@@ -290,7 +390,7 @@ function populateArticoli(article) {
                 row.innerHTML += `
                     <td>${article.taglieDisponibili[i]}</td>
                     <td>
-                        <input type="number" class="numArticoliTaglia" id="${article._id}_Color${color}_Qta" name="${article._id}_Qta" step="1">
+                        <input type="number" class="numArticoliTaglia" id="Id$${article._id}_Color$${color}_Taglia$${article.taglieDisponibili[i]}" name="${article._id}_Qta" step="1">
                     </td>
                 
                 `;
@@ -305,7 +405,7 @@ function populateArticoli(article) {
             }
         };
 
-        
+
         productTable.appendChild(row);
     });
 
@@ -314,10 +414,10 @@ function populateArticoli(article) {
 function extractIdFromString(string) {
     const idPattern = `(.+)_Qta`;
     const match = string.match(idPattern);
-  
+
     if (match && match.length > 1) {
         return match[1];
     }
-  
+
     return null; // Return null if no valid ID is found
 }
