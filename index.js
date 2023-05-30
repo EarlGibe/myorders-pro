@@ -25,6 +25,17 @@ const dbhost = 'maincluster.yx3zxsu.mongodb.net'
 const dbparams = 'retryWrites=true&w=majority'
 const dbURL = `mongodb+srv://${dbuser}:${dbpassword}@${dbhost}/${dbname}?${dbparams}`;
 
+// Show our logo
+console.log("  __  __        ____          _                  ______            ");
+console.log(" |  \\/  |      / __ \\        | |                 |  __ \\           ");
+console.log(" | \\  / |_   _| |  | |_ __ __| | ___ _ __ ___    | |__) | __ ___   ");
+console.log(" | |\\/| | | | | |  | | '__/ _` |/ _ \\ '__/ __|   |  ___/ '__/ _ \\  ");
+console.log(" | |  | | |_| | |__| | | | (_| |  __/ |  \\__ \\   | |   | | | (_) | ");
+console.log(" |_|  |_|\\__, |\\____/|_|  \\__,_|\\___|_|  |___/   |_|   |_|  \\___/  ");
+console.log("          __/ |                                                    ");
+console.log("         |___/                                                     ");
+console.log("                                                                   ");
+
 // Connection to database and server start
 console.log("Attempt to connect to database...");
 
