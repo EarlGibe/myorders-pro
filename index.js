@@ -1,64 +1,52 @@
+// Servers start flags
+const HTTP_START = true;
+const HTTPS_START = true;
 
-//const https = require("node:https");
-//const fs = require("fs");
-
-
-// const express = require("express");
-
+// HTTP section
 const app = require('./app/app.js');
-const mongoose=require('mongoose');
-
-//const secureApp = express();
-
-
+const mongoose = require('mongoose');
 const port = process.env.PORT || 3000;
-//const securePort = 4000;
 
-const user = 'Group19';
-const password = 'BDqYxCkjxOx5lWA0';
-const dbname='myorders_pro';
+// HTTPS section
+const https = require("node:https");
+const fs = require("fs");
+const securePort = process.env.SECURE_PORT || 4000;
 
-const URL = `mongodb+srv://${user}:${password}@maincluster.yx3zxsu.mongodb.net/${dbname}?retryWrites=true&w=majority`;
+var https_options = {
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./cert.pem')
+};
 
-app.locals.db = mongoose.connect(URL, {useNewUrlParser: true, useUnifiedTopology: true})
+// Database section
+const dbuser = 'Group19';
+const dbpassword = 'BDqYxCkjxOx5lWA0';
+const dbname = 'myorders_pro';
+const dbhost = 'maincluster.yx3zxsu.mongodb.net'
+const dbparams = 'retryWrites=true&w=majority'
+const dbURL = `mongodb+srv://${dbuser}:${dbpassword}@${dbhost}/${dbname}?${dbparams}`;
+
+// Connection to database and server start
+console.log("Attempt to connect to database...");
+
+app.locals.db = mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopology: true})
 .then ( () => {
     
-    console.log("Connected to Database");
+    console.log("... connected to Database!");
+
+    if (HTTP_START) {
+
+        app.listen(port, () => {
+            console.log(`Server HTTP listening on port ${port}`);
+        });
+    } 
+
+    if (HTTPS_START) {
+
+        https.createServer(https_options, app).listen(securePort, ()=>{
+            console.log(`Secure server HTTPS listening on port ${securePort}`);
+        })
+    }
     
-    app.listen(port, () => {
-        console.log(`Server listening on port ${port}`);
-    });
-    
 });
-
-
-// HTTPS CRUD
-
-/*
-
-https.createServer({
-    key: fs.readFileSync("key.pem"),
-    cert: fs.readFileSync("cert.pem"),
-}, secureApp).listen(securePort, ()=>{
-    console.log("Secure server running on port ", securePort);
-})
-
-secureApp.get('/', (req, res) => {
-    res.send('get secure');
-});
-
-secureApp.post('/', (req, res) => {
-    res.send('post secure');
-});
-
-secureApp.put('/', (req, res) => {
-    res.send('put secure');
-});
-
-secureApp.delete('/', (req, res) => {
-    res.send('delete secure');
-});
-
-*/
 
 module.exports=app;
