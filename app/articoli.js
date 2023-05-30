@@ -8,6 +8,7 @@ const multer = require('multer');
 
 const Articolo = require('./models/articolo.js');
 
+// GET generico
 router.get('', async(req,res)=>{
     try{
          const arrayArticoliDB= await Articolo.find();
@@ -24,6 +25,7 @@ router.get('', async(req,res)=>{
     }
 })
 
+// GET con ID specifico
 router.get('/:id', async (req, res) => {
     try {
       const id = req.params.id;
@@ -58,8 +60,6 @@ router.post('', async (req, res) => {
       res.status(400).json({ errore: err.message });
     }
   });
-
-
 
 // PUT generale
 router.put('', async (req, res) => {
@@ -141,6 +141,5 @@ async function insertRecordToMongoDB(record) {
     console.error('Error inserting record:', error);
   }
 }
-
 
 module.exports = router;

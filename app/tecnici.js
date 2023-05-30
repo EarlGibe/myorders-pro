@@ -50,7 +50,7 @@ router.post('', async (req, res) => {
   }
 });
 
-// PUT
+// PUT generale
 router.put('', async (req, res) => {
   try {
     const updatedTecnici = await Tecnico.updateMany({}, req.body);
@@ -60,7 +60,7 @@ router.put('', async (req, res) => {
   }
 });
 
-// PUT (id)
+// PUT con ID specifico
 router.put('/:id', async (req, res) => {
   try {
     const idTecnico = req.params.id;
@@ -72,7 +72,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE
+// DELETE generale
 router.delete('', async (req, res) => {
   try {
     const deletedTecnici = await Tecnici.deleteMany({});
@@ -82,7 +82,7 @@ router.delete('', async (req, res) => {
   }
 });
 
-// DELETE (id)
+// DELETE con ID specifico
 router.delete('/:id', async (req, res) => {
   try {
     const idTecnico = req.params.id;

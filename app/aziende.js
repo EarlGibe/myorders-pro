@@ -3,7 +3,7 @@ const router = express.Router();
 
 const Azienda = require('./models/azienda')
 
-// GET /aziende
+// GET aziende generico
 router.get('', async(req,res)=>{
     try{
         const arrayAziendeDB = await Azienda.find();
@@ -16,7 +16,7 @@ router.get('', async(req,res)=>{
     }
 })
 
-// GET /aziende/:id
+// GET azienda con ID specifico
 router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
@@ -50,7 +50,7 @@ router.post('', async (req, res) => {
   }
 });
 
-// PUT
+// PUT generico
 router.put('', async (req, res) => {
   try {
     const updatedAzienda = await Azienda.updateMany({}, req.body);
@@ -60,7 +60,7 @@ router.put('', async (req, res) => {
   }
 });
 
-// PUT (id)
+// PUT con ID specifico
 router.put('/:id', async (req, res) => {
   try {
     const idAzienda = req.params.id;
@@ -82,7 +82,7 @@ router.delete('', async (req, res) => {
   }
 });
 
-// DELETE (id)
+// DELETE con ID specifico
 router.delete('/aziende/:id', async (req, res) => {
   try {
     const idAzienda = req.params.id;

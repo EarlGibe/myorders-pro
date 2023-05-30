@@ -3,6 +3,7 @@ const router = express.Router();
 
 const User = require('./models/user.js');
 
+// GET generale
 router.get('', async(req,res)=>{
     try{
          const arrayUsersDB= await User.find();
@@ -14,6 +15,7 @@ router.get('', async(req,res)=>{
     }
 })
 
+// GET con ID specifico
 router.get('/:id', async (req, res) => {
     try {
       const id = req.params.id;

@@ -60,7 +60,7 @@ router.put('', async (req, res) => {
   }
 });
 
-// PUT (id)
+// PUT con ID specifico
 router.put('/:id', async (req, res) => {
   try {
     const idDipendente = req.params.id;
@@ -82,7 +82,7 @@ router.delete('', async (req, res) => {
   }
 });
 
-// DELETE (id)
+// DELETE con ID specifico
 router.delete('/:id', async (req, res) => {
   try {
     const idDipendente = req.params.id;

@@ -21,6 +21,7 @@ router.get('/:nome', async(req,res)=>{
   }
 })
 
+// GET generale
 router.get('', async(req,res)=>{
     try{
          const arrayChiaviDB= await Chiave.find();
@@ -37,6 +38,7 @@ router.get('', async(req,res)=>{
     }
 })
 
+// GET con ID specifico
 router.get('/:id', async (req, res) => {
     try {
       const id = req.params.id;
@@ -72,8 +74,6 @@ router.post('', async (req, res) => {
     }
   });
 
-
-
 // PUT generale
 router.put('', async (req, res) => {
   try {
@@ -107,7 +107,6 @@ router.delete('', async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
-
 
 // DELETE con ID specifico
 router.delete('/:id', async (req, res) => {

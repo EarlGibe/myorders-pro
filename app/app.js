@@ -4,9 +4,7 @@ const app = express();
 const authentication = require('./authentication.js');
 const tokenChecker = require('./tokenChecker.js');
 
-
 const share = require('./share.js');
-
 const users = require('./users.js');
 const articoli = require('./articoli.js');
 const aziende = require('./aziende.js');
@@ -25,7 +23,7 @@ const Chiave = require('./models/chiave.js');
  */
 const setOnceMiddleware = async(req, res, next) => {
     if (!req.app.locals.isSet) {
-      // Esegui l'azione che vuoi eseguire solo una volta
+      // Esegui l'azione che vuoi, eseguire solo una volta
 
             try{
                 arrayChiaviDB= await Chiave.find();
@@ -46,8 +44,8 @@ const setOnceMiddleware = async(req, res, next) => {
     next();
   };
   
-  // Usa il middleware personalizzato
-  app.use(setOnceMiddleware);
+// Usa il middleware personalizzato
+app.use(setOnceMiddleware);
 
 /**
  * Configure Express.js parsing middleware

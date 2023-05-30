@@ -89,6 +89,7 @@ router.delete('', async (req, res) => {
   }
 });
 
+// DELETE con ID specifico
 router.delete('/ordini/:id', async (req, res) => {
   try {
     const idOrdine = req.params.id;
