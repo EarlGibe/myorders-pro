@@ -29,9 +29,25 @@ router.get('/:id', async (req, res) => {
       console.error(error);
       res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'user.' });
     }
-  });
+});
 
-   // Gestore per la richiesta POST /users
+// GET con username
+router.get('/username/:username', async (req, res) => {
+  try {
+    const username = req.params.username;
+    const user = await User.findOne({ username: username } );
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ error: 'L\'user richiesto non è stato trovato.' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'user.' });
+  }
+});
+
+// Gestore per la richiesta POST /users
 router.post('', async (req, res) => {
   try {
     const nuovouser = new User(req.body);
@@ -64,8 +80,8 @@ router.put('', async (req, res) => {
 // PUT con ID specifico
 router.put('/:id', async (req, res) => {
   try {
-    console.log(req.body);
-    console.log(res.body);
+    //console.log(req.body);
+    //console.log(res.body);
 
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,

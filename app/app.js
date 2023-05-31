@@ -80,6 +80,8 @@ app.use('/authentications', authentication);
 // No resources are available without authentication.
 //app.use('', tokenChecker);
 
+
+// Da commentare se non vogliamo usare il token
 app.use('/users', tokenChecker);
 app.use('/articoli', tokenChecker);
 app.use('/aziende', tokenChecker);
@@ -89,7 +91,7 @@ app.use('/dipendenti', tokenChecker);
 app.use('/ordini', tokenChecker);
 app.use('/subagenti', tokenChecker);
 app.use('/tecnici', tokenChecker);
-
+app.use('/reimpostaPassword', tokenChecker);
 
 /**
  * Resource routing

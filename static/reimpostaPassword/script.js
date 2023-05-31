@@ -1,5 +1,5 @@
-const token = localStorage.getItem("token");
-const userId = localStorage.getItem("userId");
+//const token = localStorage.getItem("token");
+//const userId = localStorage.getItem("userId");
 
 function onLoadIndex(){
     document.getElementById("richiediOTPButton").addEventListener("click", function(event){
@@ -20,14 +20,27 @@ function richiediOTP(){
     var username = document.getElementById("username").value;
     var email = document.getElementById("email").value;
 
-    const OTPResolution = 10000000;
+    const OTPResolution = 1000000;
     var randomOTP = Math.floor( Math.random() * OTPResolution );
 
-    localStorage.setItem('OTP',randomOTP);
+    localStorage.setItem('OTP', randomOTP);
+    localStorage.setItem('username', username);
+
+    fetch('../authentications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify( { username: username, email: email } ),
+    })
+    .then((resp) => resp.json())
+    .then(function(data) { 
+        localStorage.setItem('token', data.token);
+    });
+
+    var token = localStorage.getItem('token');
 
     fetch('../reimpostaPassword',{
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-access-token': token },
         body: JSON.stringify( { username: username, email: email, OTP: randomOTP} ),
     })
     .then((resp) => resp.json()) // Transform the data into json
@@ -42,18 +55,20 @@ function richiediOTP(){
         }
         
     })
-
    
 }
 
 function resetPassword(){
+    var username = localStorage.getItem('username');
+    var otpGenerato = localStorage.getItem('OTP');
+    var otpInserito = document.getElementById("OTP").value;
+    var nuovaPassword = document.getElementById("nuovaPassword").value;
+    var confermaPassword = document.getElementById("confermaPassword").value;
 
-    var vecchia_password=document.getElementById("vecchia_password").value;
-    var nuova_password = document.getElementById("nuova_password").value;
-    var conferma_password = document.getElementById("conferma_password").value;
+    let token = localStorage.getItem('token');
 
-    if(nuova_password && conferma_password && vecchia_password){
-        fetch('../users/'+userId,{
+    if(nuovaPassword && confermaPassword){
+        fetch('../users/username/' + username ,{
             method: 'GET',
             headers: {
                 'x-access-token': token
@@ -61,38 +76,39 @@ function resetPassword(){
         })
         .then((resp) => resp.json()) // Transform the data into json
         .then(function(data) { // Here you get the data to modify as you please
+            console.log("Username: ", username);
             
-            if(data.password==vecchia_password){
-                if(nuova_password!=vecchia_password){
-                    if(nuova_password==conferma_password){
-                        console.log(nuova_password);
-                
-                 
-                        fetch('../users/'+userId,{
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'x-access-token': token
-                            },
-                            body: JSON.stringify({ password: nuova_password, isFirstAccess: false })
-                        })
-                        .then((resp) => resp.json()) // Transform the data into json
-                        .then(function(data) { // Here you get the data to modify as you please
-                            
-                            window.location.href = "../home";
-                            
-                        })
-                        .catch( error => console.error(error) );// If there is any error you will catch them here
+            if(otpInserito == otpGenerato){
+                console.log("OTP corretto");
+
+                if(nuovaPassword == confermaPassword){
+
+                    fetch('../users/' + data._id,{
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-access-token': token
+                        },
+                        body: JSON.stringify({ password: nuovaPassword, isFirstAccess: false })
+                    })
+                    .then((resp) => resp.json()) // Transform the data into json
+                    .then(function(data) { // Here you get the data to modify as you please
+
+                        document.getElementById("warningMessage").textContent="";
+
+                        document.getElementById("returnToLogin").textContent="Password reimpostata correttamente! Tra 3 secondi tornerai alla pagina di login";
+                        setTimeout(() => {
+                            window.location.href = "../login";
+                        }, 3000);
                         
-                    }else{
-                        document.getElementById("warningMessage").textContent="Le password non coincidono";
-                    }
+                    })
+                    .catch( error => console.error(error) );// If there is any error you will catch them here
+                    
                 }else{
-                    document.getElementById("warningMessage").textContent="La nuova password non può essere uguale a quella vecchia";
+                    document.getElementById("warningMessage").textContent="Le password non coincidono";
                 }
-                
             }else{
-                document.getElementById("warningMessage").textContent="La vecchia password non è corretta";
+                document.getElementById("warningMessage").textContent="OTP non corretto";
             }
             
         })

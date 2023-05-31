@@ -12,11 +12,25 @@ router.post('', async function(req, res) {
 	let user = await User.findOne({
 		username: req.body.username
 	}).exec();
-	
-	// user not found or password doesn't match
-	if (!(user) || user.password != req.body.password) {
-		res.json({ success: false, message: 'Authentication failed. User or password not found.' });
-		return;
+
+	if(user){
+		if(req.body.password!=null){
+			if (user.password != req.body.password) {
+				res.json({ success: false, message: 'Authentication failed. User or password not found.' });
+				return;
+			}
+		}else{
+			if(req.body.email!=null){
+				if (user.email != req.body.email) {
+					res.json({ success: false, message: 'Authentication failed. User or email not found.' });
+					return;
+				}
+			}else{
+				res.json({ success: false, message: 'Authentication failed.' });
+			}
+		}
+	}else{
+		res.json({ success: false, message: 'Authentication failed. User not found' });
 	}
 	
 	// if user is found and password is right create a token

@@ -1,5 +1,5 @@
 // Servers start flags
-const HTTP_START = false;
+const HTTP_START = true;
 const HTTPS_START = true;
 
 // HTTP section
