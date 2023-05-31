@@ -2,16 +2,21 @@ const express = require('express');
 const router = express.Router();
 
 const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-
 const User = require('./models/user.js');
 
 // API to find a specific user by its username
 router.post('', async (req, res) => {
+
+  console.log("Entro in reimposta password API");
+
+  var SGMailToken = req.app.get('arrayChiaviDB')[1].valore;
+  sgMail.setApiKey(SGMailToken);
+
+  console.log("SG token: " + SGMailToken);
+
     try {
 
       // find the user
-
       console.log(req.body.username);
       console.log(req.body.email);
 
