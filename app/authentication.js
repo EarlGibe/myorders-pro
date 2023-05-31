@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 // ---------------------------------------------------------
 router.post('', async function(req, res) {
 
-	var superKey = req.app.get('arrayChiaviDB')[2].valore;
+	var superKey = req.app.get('superKey');
 
 	console.log("Entro in autentication");
 	

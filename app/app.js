@@ -18,31 +18,38 @@ const reimpostaPassword = require('./reimpostaPassword.js');
 const Chiave = require('./models/chiave.js');
 
 /**
- * Get all the keys from DB
+ * Get the keys from DB
  */
 const setOnceMiddleware = async(req, res, next) => {
-    if (!req.app.locals.isSet) {
-      // Esegui l'azione che vuoi, eseguire solo una volta
+  if (!req.app.locals.isSet) {
+    // Esegui l'azione che vuoi, eseguire solo una volta
 
-            try{
-                arrayChiaviDB= await Chiave.find();
-                app.set('arrayChiaviDB', arrayChiaviDB);
-                console.log(arrayChiaviDB);
-                
-            }catch(error){
-                console.log(error);
-                res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiavi.' });
-            }
-     
+          try{
+              superKey = (await Chiave.findOne({ nome: 'SUPER_SECRET' })).valore;
+              app.set('superKey', superKey);
+              console.log("Chiave super segreta: " + superKey);
+              
+          }catch(error){
+              console.log(error);
+              res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiave super segreta.' });
+          }
 
-        console.log("setOnceMiddleware");
+          try{
+            SGMailToken = (await Chiave.findOne({ nome: 'SENDGRID_API_KEY' })).valore;
+            app.set('SGMailToken', SGMailToken);
+            console.log("Token SG email: " + SGMailToken);
+            
+          }catch(error){
+              console.log(error);
+              res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del token SG email.' });
+          }
 
-      req.app.locals.isSet = true; // Imposta la flag isSet a true dopo aver eseguito app.set() una volta
-    
-    }
-    next();
-  };
+    req.app.locals.isSet = true; // Imposta la flag isSet a true dopo aver eseguito app.set() una volta
   
+  }
+  next();
+};
+
 // Usa il middleware personalizzato
 app.use(setOnceMiddleware);
 

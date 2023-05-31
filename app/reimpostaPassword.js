@@ -9,7 +9,7 @@ router.post('', async (req, res) => {
 
   console.log("Entro in reimposta password API");
 
-  var SGMailToken = req.app.get('arrayChiaviDB')[1].valore;
+  var SGMailToken = req.app.get('SGMailToken');
   sgMail.setApiKey(SGMailToken);
 
   console.log("SG token: " + SGMailToken);

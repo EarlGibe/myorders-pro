@@ -1,21 +1,16 @@
 // Servers start flags
 const HTTP_START = false;
-const HTTPS_START = true;
+const SECURE_START = true;
 
 // HTTP section
 const app = require('./app/app.js');
 const mongoose = require('mongoose');
-const port = process.env.PORT || 3000;
+const port = process.env.HTTP_PORT || 3000;
 
 // HTTPS section
 const https = require("node:https");
 const fs = require("fs");
 const securePort = process.env.SECURE_PORT || 4000;
-
-var https_options = {
-    key: fs.readFileSync('./key.pem'),
-    cert: fs.readFileSync('./cert.pem')
-};
 
 // Database section
 const dbuser = 'Group19';
@@ -24,6 +19,8 @@ const dbname = 'myorders_pro';
 const dbhost = 'maincluster.yx3zxsu.mongodb.net'
 const dbparams = 'retryWrites=true&w=majority'
 const dbURL = `mongodb+srv://${dbuser}:${dbpassword}@${dbhost}/${dbname}?${dbparams}`;
+
+const Chiave = require('./app/models/chiave.js');
 
 // Show our logo
 console.log("  __  __        ____          _                  ______            ");
@@ -40,21 +37,33 @@ console.log("                                                                   
 console.log("Attempt to connect to database...");
 
 app.locals.db = mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopology: true})
-.then ( () => {
+.then ( async () => {
     
     console.log("... connected to Database!");
 
     if (HTTP_START) {
 
         app.listen(port, () => {
-            console.log(`Server HTTP listening on port ${port}`);
+            console.log(`Server HTTP listening on port ${port} \n`);
         });
     } 
 
-    if (HTTPS_START) {
+    if (SECURE_START) {
 
-        https.createServer(https_options, app).listen(securePort, ()=>{
-            console.log(`Secure server HTTPS listening on port ${securePort}`);
+        console.log("Downloading the HTTPS private key...");
+
+        try{
+            httpsKey = (await Chiave.findOne({ nome: 'key.pem' })).valore;
+            app.set('httpsKey', httpsKey);
+            console.log("... HTTPS private key acquired!");
+            
+        }catch(error){
+            console.log(error);
+            res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiave https.' });
+        }
+
+        https.createServer({key: httpsKey, cert: fs.readFileSync('./cert.pem')}, app).listen(securePort, () => {
+            console.log(`Secure server HTTPS listening on port ${securePort} \n`);
         })
     }
     
