@@ -68,7 +68,6 @@ app.use((req,res,next) => {
     next()
 })
 
-
 /**
  * Authentication routing and middleware
  */
@@ -80,9 +79,9 @@ app.use('/authentications', authentication);
 // No resources are available without authentication.
 //app.use('', tokenChecker);
 
-
-// Da commentare se non vogliamo usare il token
-app.use('/users', tokenChecker);
+// Da commentare le righe dove vogliamo disattivare il token checker
+// -----------------------------------------------------------------
+// app.use('/users', tokenChecker);
 app.use('/articoli', tokenChecker);
 app.use('/aziende', tokenChecker);
 app.use('/cataloghi', tokenChecker);
@@ -109,7 +108,6 @@ app.use('/ordini', ordini);
 app.use('/subagenti', subagenti);
 app.use('/tecnici', tecnici);
 app.use('/reimpostaPassword', reimpostaPassword);
-
 
 /* Default 404 handler */
 app.use((req, res) => {

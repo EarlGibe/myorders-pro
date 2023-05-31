@@ -7,6 +7,10 @@ const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 // route to authenticate and get a new token
 // ---------------------------------------------------------
 router.post('', async function(req, res) {
+
+	var superKey = req.app.get('arrayChiaviDB')[2].valore;
+
+	console.log("Entro in autentication");
 	
 	// find the user
 	let user = await User.findOne({
@@ -26,7 +30,7 @@ router.post('', async function(req, res) {
 					return;
 				}
 			}else{
-				res.json({ success: false, message: 'Authentication failed.' });
+				res.json({ success: false, message: 'Authentication failed. Email not found' });
 			}
 		}
 	}else{
@@ -39,10 +43,12 @@ router.post('', async function(req, res) {
 		id: user._id
 		// other data encrypted in the token	
 	}
+	
 	var options = {
 		expiresIn: 86400 // expires in 24 hours
 	}
-	var token = jwt.sign(payload, process.env.SUPER_SECRET, options);
+
+	var token = jwt.sign(payload, superKey, options);
 
 	res.json({
 		success: true,
