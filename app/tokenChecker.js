@@ -26,7 +26,7 @@ const tokenChecker = function(req, res, next) {
 			});		
 		} else {
 			// if everything is good, save to request for use in other routes
-      console.log("From token checker, this is decoded: \n" + decoded.id);
+      console.log("From token checker, this is decoded: " + decoded.id);
 			req.loggedUser = decoded;
 			next();
 		}

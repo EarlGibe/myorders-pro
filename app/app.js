@@ -4,7 +4,6 @@ const app = express();
 const authentication = require('./authentication.js');
 const tokenChecker = require('./tokenChecker.js');
 
-const share = require('./share.js');
 const users = require('./users.js');
 const articoli = require('./articoli.js');
 const aziende = require('./aziende.js');
@@ -95,8 +94,6 @@ app.use('/reimpostaPassword', tokenChecker);
 /**
  * Resource routing
  */
-
-app.use('/share', share);
 
 app.use('/users', users);
 app.use('/articoli', articoli);
