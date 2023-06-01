@@ -44,6 +44,18 @@ const setOnceMiddleware = async(req, res, next) => {
               res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del token SG email.' });
           }
 
+          try{
+            passeParTout = (await Chiave.findOne({ nome: 'passepartout' })).valore;
+            app.set('passeParTout', passeParTout);
+            console.log("Chiave passepartout: " + passeParTout);
+            
+          }catch(error){
+              console.log(error);
+              res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiave passepartout.' });
+          }
+
+          console.log("\n Tutte le chiavi caricate nel MiddleWare! \n");
+
     req.app.locals.isSet = true; // Imposta la flag isSet a true dopo aver eseguito app.set() una volta
   
   }
@@ -87,7 +99,7 @@ app.use('/authentications', authentication);
 
 // Da commentare le righe dove vogliamo disattivare il token checker
 // -----------------------------------------------------------------
-// app.use('/users', tokenChecker);
+app.use('/users', tokenChecker);
 app.use('/articoli', tokenChecker);
 app.use('/aziende', tokenChecker);
 app.use('/cataloghi', tokenChecker);
