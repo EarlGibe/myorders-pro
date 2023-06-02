@@ -1,12 +1,8 @@
 const request = require('supertest');
 const app = require('../app/app');
 
-test('GET / should return 200', () => {
-    return fetchData().then(data => {
-        expect(200);
-    });
+test('GET / should respond with 200', async () => {
+    await request(app).get('/').expect(200).then( (res) => {
+        if(res.body) expect(res.body).not.toBe('null');
+    })
 });
-
-async function fetchData() {
-    return await request(app).get('/')
-};

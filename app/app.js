@@ -99,11 +99,11 @@ app.use('/authentications', authentication);
 
 // Da commentare le righe dove vogliamo disattivare il token checker
 // -----------------------------------------------------------------
-app.use('/users', tokenChecker);
+// app.use('/users', tokenChecker);
 app.use('/articoli', tokenChecker);
 app.use('/aziende', tokenChecker);
 app.use('/cataloghi', tokenChecker);
-app.use('/clienti', tokenChecker);
+// app.use('/clienti', tokenChecker);
 app.use('/dipendenti', tokenChecker);
 app.use('/ordini', tokenChecker);
 app.use('/subagenti', tokenChecker);

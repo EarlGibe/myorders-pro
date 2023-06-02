@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1685579408794" clover="3.2.0">
-  <project timestamp="1685579408794" name="All files">
-    <metrics statements="658" coveredstatements="218" conditionals="63" coveredconditionals="3" methods="77" coveredmethods="1" elements="798" coveredelements="222" complexity="0" loc="658" ncloc="658" packages="2" files="23" classes="23"/>
+<coverage generated="1685697768840" clover="3.2.0">
+  <project timestamp="1685697768840" name="All files">
+    <metrics statements="656" coveredstatements="216" conditionals="63" coveredconditionals="3" methods="77" coveredmethods="1" elements="796" coveredelements="220" complexity="0" loc="656" ncloc="656" packages="2" files="23" classes="23"/>
     <package name="app">
-      <metrics statements="608" coveredstatements="168" conditionals="63" coveredconditionals="3" methods="77" coveredmethods="1"/>
+      <metrics statements="606" coveredstatements="166" conditionals="63" coveredconditionals="3" methods="77" coveredmethods="1"/>
       <file name="app.js" path="/home/utente/myorders-pro/app/app.js">
-        <metrics statements="71" coveredstatements="48" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="1"/>
+        <metrics statements="69" coveredstatements="46" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -53,11 +53,9 @@
         <line num="85" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
         <line num="92" count="1" type="stmt"/>
-        <line num="102" count="1" type="stmt"/>
         <line num="103" count="1" type="stmt"/>
         <line num="104" count="1" type="stmt"/>
         <line num="105" count="1" type="stmt"/>
-        <line num="106" count="1" type="stmt"/>
         <line num="107" count="1" type="stmt"/>
         <line num="108" count="1" type="stmt"/>
         <line num="109" count="1" type="stmt"/>
