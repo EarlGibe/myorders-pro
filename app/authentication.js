@@ -10,7 +10,7 @@ router.post('', async function(req, res) {
 
 	var superKey = req.app.get('superKey');
 
-	console.log("Entro in autentication");
+	if(process.env.VERBOSE_LOG == '1') console.log("Entro in autentication");
 	
 	// find the user
 	let user = await User.findOne({

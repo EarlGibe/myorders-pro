@@ -15,7 +15,7 @@ router.get('', async(req,res)=>{
               res.status(404).json({ error: 'La lista clienti è vuota.' });
             }
     }catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei clienti.' });
     }
 })
@@ -31,7 +31,7 @@ router.get('/:id', async (req, res) => {
             res.status(404).json({ error: 'Il cliente richiesto non è stato trovato.' });
         }
     } catch (error) {
-        console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del cliente.' });
     }
 });
@@ -39,7 +39,7 @@ router.get('/:id', async (req, res) => {
  // Gestore per la richiesta POST /clienti
 router.post('', async (req, res) => {
   try {
-    console.log(req.body);
+    if(process.env.VERBOSE_LOG == '1') console.log(req.body);
     const nuovoCliente = new Cliente(req.body);
     const risultato = await nuovoCliente.save();
     res.json({

@@ -15,7 +15,7 @@ router.get('', async(req,res)=>{
         }
         
     }catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca degli ordini.' });
     }
 })
@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
             res.status(404).json({ error: 'L\'ordine richiesto non è stato trovato.' });
         }
     } catch (error) {
-        console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'ordine.' });
     }
 });
@@ -90,7 +90,7 @@ router.delete('', async (req, res) => {
 });
 
 // DELETE con ID specifico
-router.delete('/ordini/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const idOrdine = req.params.id;
     const risultato = await Ordine.findByIdAndDelete(idOrdine);

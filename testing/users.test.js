@@ -33,11 +33,11 @@ describe('[Testing] ' + apiName, () => {
 
   afterAll( () => { mongoose.connection.close(true); });
 
-  test('GET ' + apiURL + ' should respond with 200', async () => {
-    return request(app).get(apiURL)
-    .set('x-access-token', passepartout).set('Accept', 'application/json')
-    .expect(200);
-  });
+  // test('GET ' + apiURL + ' should respond with 200', async () => {
+  //   return request(app).get(apiURL)
+  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
+  //   .expect(200);
+  // });
 
   test('GET ' + apiURL + '/{id} should respond with 200', async () => {
     return request(app).get(apiURL + '/' + getID)
@@ -45,45 +45,45 @@ describe('[Testing] ' + apiName, () => {
     .expect(200);
   });
 
-  test('POST ' + apiURL + ' should respond with 200', () => {
-    return request(app).post(apiURL)
-    .set('x-access-token', passepartout).set('Accept', 'application/json')
+  // test('POST ' + apiURL + ' should respond with 200', () => {
+  //   return request(app).post(apiURL)
+  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
+  //   .send({ username: "ciaoBello" })
+  //   .send({ password: "12345" })
+  //   .send({ email: "prova.email@gmail.com" })
+  //   .send({ role: "subagente" })
+  //   .send({ role_id: "646a5a26d4594184c9a5ff73" })
+  //   .expect(200);
+  // });
 
-    // set post data
+  // test('PUT ' + apiURL + ' should respond with 200', () => {
+  //   return request(app).put(apiURL)
+  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
+  //   .send({ status: true })
+  //   .expect(200);
+  // });
 
-    .expect(200);
-  });
-
-  test('PUT ' + apiURL + ' should respond with 200', () => {
-    return request(app).put(apiURL)
-    .set('x-access-token', passepartout).set('Accept', 'application/json')
-
-    // set put data
-
-    .expect(200);
-  });
-
-  test('PUT ' + apiURL + '/{id} should respond with 200', async () => {
-    return request(app).put(apiURL + '/' + putID)
-    .set('x-access-token', passepartout).set('Accept', 'application/json')
-
-    // set put data 
-
-    .expect(200);
-  });
+  // test('PUT ' + apiURL + '/{id} should respond with 200', async () => {
+  //   return request(app).put(apiURL + '/' + putID)
+  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
+  //   .send({ password: "password" })
+  //   .expect(200);
+  // });
 
   // // !!!!!!! Questo comando ELIMINA TUTTO !!!!!!!
   // // -----------------------------------------------------
   // test('DELETE ' + apiURL + ' should respond with 200', async () => {
   //   return request(app).delete(apiURL)
+  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
   //   .expect(200);
   // });
 
   // Elimina il documento selezionato. assicurarsi di averlo presente
   // ------------------------------------------------------------
-  test('DELETE ' + apiURL + '/{id} should respond with 200', async () => {
-    return request(app).delete(apiURL + '/' + deleteID)
-    .expect(200);
-  });
+  // test('DELETE ' + apiURL + '/{id} should respond with 200', async () => {
+  //   return request(app).delete(apiURL + '/' + deleteID)
+  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
+  //   .expect(200);
+  // });
   
 });

@@ -14,7 +14,7 @@ router.get('', async(req,res)=>{
               res.status(404).json({ error: 'La lista cataloghi è vuota.' });
             }            
     }catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei cataloghi.' });
     }
 })
@@ -31,7 +31,7 @@ router.get('/:id', async (req, res) => {
             res.status(404).json({ error: 'Il catalogo richiesto non è stato trovato.' });
         }
     } catch (error) {
-        console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del catalogo.' });
     }
 });

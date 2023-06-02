@@ -8,7 +8,7 @@ router.get('/:nome', async(req,res)=>{
   try{
        const nome = req.params.nome;
        const arrayChiaviDB= await Chiave.findOne(nome);
-       console.log(arrayChiaviDB);
+       if(process.env.VERBOSE_LOG == '1') console.log(arrayChiaviDB);
        if(!arrayChiaviDB){
         res.status(404).send("Error: chiave desiderata non trovata");
        }else{
@@ -16,7 +16,7 @@ router.get('/:nome', async(req,res)=>{
        }
        
   }catch(error){
-      console.log(error);
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
       res.status(500).json({ error: 'Si è verificato un errore durante la ricerca della chiave desiderata.' });
   }
 })
@@ -25,7 +25,7 @@ router.get('/:nome', async(req,res)=>{
 router.get('', async(req,res)=>{
     try{
          const arrayChiaviDB= await Chiave.find();
-         console.log(arrayChiaviDB);
+         if(process.env.VERBOSE_LOG == '1') console.log(arrayChiaviDB);
          if(!arrayChiaviDB){
           res.status(404).send("Error: chiavi non trovate");
          }else{
@@ -33,7 +33,7 @@ router.get('', async(req,res)=>{
          }
          
     }catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiavi.' });
     }
 })
@@ -49,7 +49,7 @@ router.get('/:id', async (req, res) => {
         res.status(404).json({ error: 'La chiave richiesta non è stata trovata.' });
       }
     } catch (error) {
-      console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
       res.status(500).json({ error: 'Si è verificato un errore durante la ricerca della chiave.' });
     }
   });

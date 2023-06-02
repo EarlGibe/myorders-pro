@@ -8,13 +8,13 @@ router.get('', async(req,res)=>{
     try{
         const arraySubagentiDB = await Subagente.find();
 
-            if (arraySubagentiDB) {
-              res.json(arraySubagentiDB);
-            } else {
-              res.status(404).json({ error: 'La lista dei Subagenti è vuota.' });
-            }
-    }catch(error){
-        console.log(error);
+          if (arraySubagentiDB) {
+            res.json(arraySubagentiDB);
+          } else {
+            res.status(404).json({ error: 'La lista dei Subagenti è vuota.' });
+          }
+    } catch(error){
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei Subagenti.' });
     }
 })
@@ -31,7 +31,7 @@ router.get('/:id', async (req, res) => {
             res.status(404).json({ error: 'Il subagente richiesto non è stato trovato.' });
         }
     } catch (error) {
-        console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del subagente.' });
     }
 });

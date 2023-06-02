@@ -34,12 +34,12 @@ console.log("         |___/                                                     
 console.log("                                                                   ");
 
 // Connection to database and server start
-console.log("Attempt to connect to database...");
+if(process.env.VERBOSE_LOG == '1') console.log("Attempt to connect to database...");
 
 app.locals.db = mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopology: true})
 .then ( async () => {
     
-    console.log("... connected to Database!");
+    if(process.env.VERBOSE_LOG == '1') console.log("... connected to Database!");
 
     if (HTTP_START) {
 
@@ -50,15 +50,15 @@ app.locals.db = mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopolo
 
     if (SECURE_START) {
 
-        console.log("Downloading the HTTPS private key...");
+        if(process.env.VERBOSE_LOG == '1') console.log("Downloading the HTTPS private key...");
 
         try{
             httpsKey = (await Chiave.findOne({ nome: 'key.pem' })).valore;
             app.set('httpsKey', httpsKey);
-            console.log("... HTTPS private key acquired!");
+            if(process.env.VERBOSE_LOG == '1') console.log("... HTTPS private key acquired!");
             
         }catch(error){
-            console.log(error);
+            if(process.env.VERBOSE_LOG == '1') console.log(error);
             res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiave https.' });
         }
 

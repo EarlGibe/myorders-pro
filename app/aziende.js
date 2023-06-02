@@ -11,7 +11,7 @@ router.get('', async(req,res)=>{
         if(arrayAziendeDB) res.json(arrayAziendeDB);
         else res.status(404).json( { error: "La lista aziende è vuota." });
     }catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle aziende.' });
     }
 })
@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
         if (azienda) res.json(azienda);
         else res.status(404).json({ error: 'L\'azienda richiesta non è stata trovata.' });
     } catch (error) {
-        console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'azienda.' });
     }
 });
@@ -83,7 +83,7 @@ router.delete('', async (req, res) => {
 });
 
 // DELETE con ID specifico
-router.delete('/aziende/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const idAzienda = req.params.id;
     const risultato = await Azienda.findByIdAndDelete(idAzienda);

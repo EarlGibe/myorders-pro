@@ -7,18 +7,18 @@ const User = require('./models/user.js');
 // API to find a specific user by its username
 router.post('', async (req, res) => {
 
-  console.log("Entro in reimposta password API");
+  if(process.env.VERBOSE_LOG == '1') console.log("Entro in reimposta password API");
 
   var SGMailToken = req.app.get('SGMailToken');
   sgMail.setApiKey(SGMailToken);
 
-  console.log("SG token: " + SGMailToken);
+  if(process.env.VERBOSE_LOG == '1') console.log("SG token: " + SGMailToken);
 
     try {
 
       // find the user
-      console.log(req.body.username);
-      console.log(req.body.email);
+      if(process.env.VERBOSE_LOG == '1') console.log(req.body.username);
+      if(process.env.VERBOSE_LOG == '1') console.log(req.body.email);
 
       let user = await User.findOne({
         username: req.body.username,
@@ -35,12 +35,12 @@ router.post('', async (req, res) => {
           }
           
           sgMail.send(msg).then((response) => {
-              console.log(response[0].statusCode)
-              console.log(response[0].headers)
+            if(process.env.VERBOSE_LOG == '1') console.log(response[0].statusCode)
+            if(process.env.VERBOSE_LOG == '1') console.log(response[0].headers)
               res.json(user);
           })
             .catch((error) => {
-              console.error(error)
+              if(process.env.VERBOSE_LOG == '1') console.error(error)
           });
           
         } else {
@@ -51,7 +51,7 @@ router.post('', async (req, res) => {
         res.status(404).json({ error: 'User e email non coincidono' });
         
       }} catch (error) {
-        console.error(error);
+        if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'user.' });
       }
     });

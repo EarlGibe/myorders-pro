@@ -5,7 +5,7 @@ const tokenChecker = function(req, res, next) {
 	var superKey = req.app.get('superKey');
 	var passeParTout = req.app.get('passeParTout'); // token per fare i test
 
-	console.log("Entro in token checker");
+	if(process.env.VERBOSE_LOG == '1') console.log("Entro in token checker");
 	
 	// check header or url parameters or post parameters for token
 	var token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -20,7 +20,7 @@ const tokenChecker = function(req, res, next) {
 
 	if (token == passeParTout) {
 
-		console.log("Inserita la chiave passepartout!");
+		if(process.env.VERBOSE_LOG == '1') console.log("Inserita la chiave passepartout!");
 		req.loggedUser = passeParTout;
 		next();
 
@@ -35,7 +35,7 @@ const tokenChecker = function(req, res, next) {
 				});		
 			} else {
 				// if everything is good, save to request for use in other routes
-				console.log("From token checker, this is decoded: " + decoded.id);
+				if(process.env.VERBOSE_LOG == '1') console.log("From token checker, this is decoded: " + decoded.id);
 				req.loggedUser = decoded;
 				next();
 			}

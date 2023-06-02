@@ -15,16 +15,16 @@ const dbURL = `mongodb+srv://${dbuser}:${dbpassword}@${dbhost}/${dbname}?${dbpar
 const passepartout = 'supercalifragilistichespiralitoso';
 
 // API url
-const apiName = 'cataloghi';
+const apiName = 'aziende';
 const apiURL = '/' + apiName;
 
 // settings
 const timeout = 8000;
 
 // documents IDs
-const getID = '646a20c4d322a15436346aa0';
-const putID = '646a20c4d322a15436346aa0';
-const deleteID = '6479d378cf6294b91cc9fd72';
+const getID = '6469f1899cc45fcbd7f072e0';
+const putID = '6469f1899cc45fcbd7f072e0';
+const deleteID = '6479e8d1eca6babb1c5b1414';
 
 describe('[Testing] ' + apiName, () => {
   beforeAll( async () => { jest.setTimeout(timeout);
@@ -48,8 +48,7 @@ describe('[Testing] ' + apiName, () => {
   // test('POST ' + apiURL + ' should respond with 200', () => {
   //   return request(app).post(apiURL)
   //   .set('x-access-token', passepartout).set('Accept', 'application/json')
-  //   .send( { nome: "Catalogo" })
-  //   .send( { listaArticoli: [] })
+  //   .send({ dati: [] })
   //   .expect(200);
   // });
 

@@ -12,7 +12,7 @@ const Articolo = require('./models/articolo.js');
 router.get('', async(req,res)=>{
     try{
          const arrayArticoliDB= await Articolo.find();
-         console.log(arrayArticoliDB);
+         if(process.env.VERBOSE_LOG == '1') console.log(arrayArticoliDB);
          if(!arrayArticoliDB){
           res.status(404).send("Error: articoli non trovati");
          }else{
@@ -20,7 +20,7 @@ router.get('', async(req,res)=>{
          }
          
     }catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca degli articoli.' });
     }
 })
@@ -36,7 +36,7 @@ router.get('/:id', async (req, res) => {
         res.status(404).json({ error: 'L\'articolo richiesto non è stato trovato.' });
       }
     } catch (error) {
-      console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
       res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'articolo.' });
     }
   });
@@ -120,11 +120,11 @@ router.post('/upload', upload.single('csvFile'), (req, res) => {
         insertRecordToMongoDB(data);
       })
       .on('end', () => {
-        console.log('CSV data imported successfully');
+        if(process.env.VERBOSE_LOG == '1') console.log('CSV data imported successfully');
         res.redirect('/home');
       });
   } catch (error) {
-    console.error('Error processing CSV file', error);
+    if(process.env.VERBOSE_LOG == '1') console.error('Error processing CSV file', error);
     res.status(500).send('Internal Server Error');
   }
 });
@@ -136,9 +136,9 @@ async function insertRecordToMongoDB(record) {
     record.barCodes=record.barCodes.split(',');
     
     Articolo.create(record);
-    console.log('Record inserted successfully:', record);
+    if(process.env.VERBOSE_LOG == '1') console.log('Record inserted successfully:', record);
   } catch (error) {
-    console.error('Error inserting record:', error);
+    if(process.env.VERBOSE_LOG == '1') console.error('Error inserting record:', error);
   }
 }
 

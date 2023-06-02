@@ -7,10 +7,10 @@ const User = require('./models/user.js');
 router.get('', async(req,res)=>{
     try{
          const arrayUsersDB= await User.find();
-         console.log(arrayUsersDB)
+         if(process.env.VERBOSE_LOG == '1') console.log(arrayUsersDB)
          res.status(200).json(arrayUsersDB);
     }catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'utente.' });
     }
 })
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
         res.status(404).json({ error: 'L\'user richiesto non è stato trovato.' });
       }
     } catch (error) {
-      console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
       res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'user.' });
     }
 });
@@ -42,7 +42,7 @@ router.get('/username/:username', async (req, res) => {
       res.status(404).json({ error: 'L\'user richiesto non è stato trovato.' });
     }
   } catch (error) {
-    console.error(error);
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
     res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'user.' });
   }
 });
@@ -80,8 +80,8 @@ router.put('', async (req, res) => {
 // PUT con ID specifico
 router.put('/:id', async (req, res) => {
   try {
-    //console.log(req.body);
-    //console.log(res.body);
+    if(process.env.VERBOSE_LOG == '1') console.log(req.body);
+    if(process.env.VERBOSE_LOG == '1') console.log(res.body);
 
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,

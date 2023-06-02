@@ -6,12 +6,11 @@ const Dipendente = require('./models/dipendente');
 // GET /dipendenti
 router.get('', async(req,res)=>{
     try{
-      const arrayDipendentiDB = await Dipendenti.find().populate('anagrafica');
-            
+      const arrayDipendentiDB = await Dipendenti.find().populate('anagrafica');            
       if (arrayDipendentiDB) res.json(arrayDipendentiDB);
       else res.status(404).json({ error: 'La lista dipendenti è vuota.' });           
     } catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei dipendenti.' });
     }
 })
@@ -25,7 +24,7 @@ router.get('/:id', async (req, res) => {
         if (cliente) res.json(cliente);
         else res.status(404).json({ error: 'Il dipendente richiesto non è stato trovato.' });
     } catch (error) {
-        console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del dipendente.' });
     }
 });

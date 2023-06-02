@@ -11,7 +11,7 @@ router.get('', async(req,res)=>{
       if (arrayTecniciDB) res.json(arrayTecniciDB);
       else res.status(404).json({ error: 'La lista tecnici è vuota.' });           
     } catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei tecnici.' });
     }
 })
@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
       if (tecnico) res.json(tecnico);
       else res.status(404).json({ error: 'Il tecnico richiesto non è stato trovato.' });
     } catch (error) {
-        console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del tecnico.' });
     }
 });

@@ -27,34 +27,34 @@ const setOnceMiddleware = async(req, res, next) => {
           try{
               superKey = (await Chiave.findOne({ nome: 'SUPER_SECRET' })).valore;
               app.set('superKey', superKey);
-              console.log("Chiave super segreta: " + superKey);
+              if(process.env.VERBOSE_LOG == '1') console.log("Chiave super segreta: " + superKey);
               
           }catch(error){
-              console.log(error);
+            if(process.env.VERBOSE_LOG == '1') console.log(error);
               res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiave super segreta.' });
           }
 
           try{
             SGMailToken = (await Chiave.findOne({ nome: 'SENDGRID_API_KEY' })).valore;
             app.set('SGMailToken', SGMailToken);
-            console.log("Token SG email: " + SGMailToken);
+            if(process.env.VERBOSE_LOG == '1') console.log("Token SG email: " + SGMailToken);
             
           }catch(error){
-              console.log(error);
+            if(process.env.VERBOSE_LOG == '1') console.log(error);
               res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del token SG email.' });
           }
 
           try{
             passeParTout = (await Chiave.findOne({ nome: 'passepartout' })).valore;
             app.set('passeParTout', passeParTout);
-            console.log("Chiave passepartout: " + passeParTout);
+            if(process.env.VERBOSE_LOG == '1') console.log("Chiave passepartout: " + passeParTout);
             
           }catch(error){
-              console.log(error);
+            if(process.env.VERBOSE_LOG == '1') console.log(error);
               res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiave passepartout.' });
           }
 
-          console.log("\n Tutte le chiavi caricate nel MiddleWare! \n");
+          if(process.env.VERBOSE_LOG == '1') console.log("\n Tutte le chiavi caricate nel MiddleWare! \n");
 
     req.app.locals.isSet = true; // Imposta la flag isSet a true dopo aver eseguito app.set() una volta
   
@@ -82,7 +82,7 @@ app.use('/', express.static('static')); // expose also this folder
  * Print on console the request
  */
 app.use((req,res,next) => {
-    console.log(req.method + ' ' + req.url)
+  if(process.env.VERBOSE_LOG == '1') console.log(req.method + ' ' + req.url)
     next()
 })
 
