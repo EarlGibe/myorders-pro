@@ -15,16 +15,16 @@ const dbURL = `mongodb+srv://${dbuser}:${dbpassword}@${dbhost}/${dbname}?${dbpar
 const passepartout = 'supercalifragilistichespiralitoso';
 
 // API url
-const apiName = 'users';
+const apiName = 'clienti';
 const apiURL = '/' + apiName;
 
 // settings
 const timeout = 8000;
 
 // documents IDs
-const getID = '64776deb362c8813b703b829';
-const putID = '64776deb362c8813b703b829';
-const deleteID = '6479bd3e2c5000e3da081642';
+const getID = '6469655dec90cea82d4e5295';
+const putID = '6469655dec90cea82d4e5295';
+const deleteID = '6479d031cf6294b91cc9fd71';
 
 describe('[Testing] ' + apiName, () => {
   beforeAll( async () => { jest.setTimeout(timeout);

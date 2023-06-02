@@ -11,7 +11,7 @@ const dbparams = 'retryWrites=true&w=majority'
 const dbURL = `mongodb+srv://${dbuser}:${dbpassword}@${dbhost}/${dbname}?${dbparams}`;
 
 describe('[Testing] app', () => {
-    beforeAll( async () => { jest.setTimeout(8000);
+    beforeAll( async () => { jest.setTimeout(9999);
 
     app.locals.db = await mongoose.connect(dbURL); });
 
