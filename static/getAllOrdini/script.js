@@ -3,25 +3,34 @@ const token = localStorage.getItem("token");
 var queryString = window.location.search;
 var parametri = new URLSearchParams(queryString);
 // Ottenere l'ID del cliente dalla query string o da altre fonti
-const clienteId = parametri.get("clienteId"); 
+const clienteId = parametri.get("clienteId");
 
+function getAllOrdini() {
+    // Effettua una richiesta GET ai dati dei ordini dal server
+    fetch('../ordini/filtered/' + clienteId, {
+        method: 'GET',
+        headers: {
+            'x-access-token': token
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            var ordiniList = document.getElementById('ordiniList');
+            
+            // Itera attraverso i dati dei ordini e crea gli elementi della lista
+            data.forEach(ordine => {
+                populateOrdini(ordine, ordiniList);
+            });
+        })
+        .catch(error => {
+            console.log('Si è verificato un errore:', error);
+        });
+}
 
-// Effettua una richiesta GET ai dati dei ordini dal server
-fetch('../ordini',{
-method: 'GET',
-headers: {
-    'x-access-token': token
-},
-})
-.then(response => response.json())
-.then(data => {
-const ordiniList = document.getElementById('ordiniList');
-
-// Itera attraverso i dati dei ordini e crea gli elementi della lista
-data.forEach(ordine => {
+function populateOrdini(ordine, ordiniList) {
     console.log(ordine)
-    if(ordine.cliente==clienteId || !clienteId){
-        const listItem = document.createElement('li');
+
+    const listItem = document.createElement('li');
     const nomeOrdine = document.createElement('span');
     const viewButton = document.createElement('button');
 
@@ -35,18 +44,13 @@ data.forEach(ordine => {
     viewButton.textContent = 'Visualizza';
 
     // Aggiungi un gestore di eventi al pulsante per reindirizzare alla pagina del ordine
-    viewButton.addEventListener('click', function() {
-    const ordineId = this.getAttribute('data-id');
-    window.location.href = '/ordini/id=' + ordineId;
+    viewButton.addEventListener('click', function () {
+        const ordineId = this.getAttribute('data-id');
+        window.location.href = '/ordini/id=' + ordineId;
     });
 
     // Aggiungi gli elementi al DOM
     listItem.appendChild(nomeOrdine);
     listItem.appendChild(viewButton);
     ordiniList.appendChild(listItem);
-    }
-});
-})
-.catch(error => {
-console.log('Si è verificato un errore:', error);
-});
+}

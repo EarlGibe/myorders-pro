@@ -36,6 +36,22 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.get('/filtered/:azienda', async(req,res)=>{
+  try{
+    const azienda = req.params.azienda;
+      const arrayCataloghiDB = await Catalogo.find({azienda:azienda})
+        
+          if (arrayCataloghiDB) {
+            res.json(arrayCataloghiDB);
+          } else {
+            res.status(404).json({ error: 'La lista cataloghi è vuota.' });
+          }            
+  }catch(error){
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
+      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei cataloghi filtrati.' });
+  }
+})
+
  // Gestore per la richiesta POST /cataloghi
 router.post('', async (req, res) => {
   try {

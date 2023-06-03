@@ -1,52 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cataloghi Disponibili</title>
-  <link rel="stylesheet" href="./style.css">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="../includes/css/normalize.css">
   <script src="../includes/js/favicon.js"></script>
 </head>
 <body onload="loadPage()">
-  <h1>Cataloghi Disponibili</h1>
-  <ul id="cataloghiList"></ul>
+    <h1>Product Details</h1>
+    
+    <table id="productTable">
+      <tr>
+        <th>Nome</th>
+        <th>Descrizione</th>
+        <th>Prezzo(€)</th>
+        <th>Sconto <br> Applicato (%)</th>
+        <th>Codici a barre</th>
+        <th>Colori Disponibili</th>
+        <th>Taglie Disponibili</th>
+    </tr>
+   </table>
 
-
-  <div id="buttons">
-    <a href="../getAllAziende"><button>Indietro</button></a>
-    <button id="openModalButton">Nuovo catalogo...</button>
+   <div id="buttons">
+    <a href="../getAllCataloghi"><button>Indietro</button></a>
+    <button id="openModalButton">Aggiungi articoli...</button>
   </div>
-  
+   
 
   <div id="modal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <h2>Crea catalogo</h2>
-
-        <label for="name">Nome:</label>
-        <input type="text" id="nameCatalogo" name="nameCatalogo" required>
-        
+      <h2>Aggiungi articoli</h2>
         
         <form id="uploadForm" action="../articoli/upload" method="post" enctype="multipart/form-data">
-          <label>Inserisci articoli:</label>
           <input type="file" name="csvFile" accept=".csv" required>
         </form>
 
-        <button type="submit" onclick="catalogoPOST()">Invia</button>
+        <button type="submit" onclick="uploadArticoli()">Invia</button>
 
         <span id="successoArticoli" class="infoMessageSpan"></span>
         <span id="warningArticoli" class="infoMessageSpan"></span>
         <span id="erroreArticoli" class="infoMessageSpan"></span>
-        
-        <span id="successoCatalogo" class="infoMessageSpan"></span>
-        <span id="erroreCatalogo" class="infoMessageSpan"></span>
     </div>
   </div>
 
-  
 </body>
-<script>
-
-
-</script>
 <script src="./script.js"></script>
 </html>

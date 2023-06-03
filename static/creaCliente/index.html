@@ -8,7 +8,7 @@
 </head>
 <body>
   <h1>Creazione Cliente</h1>
-  <form action="salva_cliente.php" method="post">
+  <form method="post">
     <h2>Anagrafica</h2>
     <label for="nome">Nome:</label>
     <input type="text" id="nome" name="nome[]"><br>
@@ -20,11 +20,8 @@
     <input type="text" id="codiceFiscale" name="codiceFiscale[]"><br>
 
     <label for="residenza">Residenza:</label>
-    <select id="residenza" name="residenza">
-      <option value="address1">Address 1</option>
-      <option value="address2">Address 2</option>
-      <option value="address3">Address 3</option>
-    </select><br>
+    <input type="text" id="residenza" name="residenza[]"><br>
+
 
     <label for="telefono">Telefono:</label>
     <input type="text" id="telefono" name="telefono" required><br>
@@ -39,11 +36,8 @@
     <input type="text" id="pIVA" name="pIVA[]"><br>
 
     <label for="sede">Sede:</label>
-    <select id="sede" name="sede">
-      <option value="address1">Address 1</option>
-      <option value="address2">Address 2</option>
-      <option value="address3">Address 3</option>
-    </select><br>
+    <input type="text" id="sede" name="sede[]"><br>
+ 
 
     <label for="codSDI">Codice SDI:</label>
     <input type="text" id="codSDI" name="codSDI[]"><br>
@@ -51,7 +45,7 @@
     <label for="pec">PEC:</label>
     <input type="text" id="pec" name="pec[]"><br>
 
-    <input type="submit" value="Salva">
+    <input type="submit" value="Salva" onclick="registerCliente()">
   </form>
 </body>
 <script src="./script.js"></script> 

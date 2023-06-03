@@ -8,9 +8,10 @@
 </head>
 <body>
   <h1>CSV Upload</h1>
-  <form action="../articoli/upload" method="post" enctype="multipart/form-data">
+  <form id="uploadForm" action="../articoli/upload" method="post" enctype="multipart/form-data">
     <input type="file" name="csvFile" accept=".csv" required>
     <button type="submit">Upload</button>
   </form>
 </body>
+<script src="./script.js"></script> 
 </html>

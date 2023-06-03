@@ -37,6 +37,24 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Gestore per la richiesta GET /ordini/:id
+router.get('/filtered/:cliente', async (req, res) => {
+  try {
+      const cliente = req.params.cliente;
+      const ordine = await Ordine.find({cliente:cliente})
+        
+      if (ordine) {
+          res.json(ordine);
+      } else {
+          res.status(404).json({ error: 'L\'ordine richiesto non è stato trovato.' });
+      }
+  } catch (error) {
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
+      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'ordine.' });
+  }
+});
+
+
  // Gestore per la richiesta POST /ordini
 router.post('', async (req, res) => {
   try {

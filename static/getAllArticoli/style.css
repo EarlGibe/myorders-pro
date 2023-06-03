@@ -1,84 +1,60 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
-  margin: 0;
-  padding: 20px;
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 20px;
 }
 
-form {
-  background-color: #ffffff;
-  width: 300px;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-label {
-  display: block;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-select,
-input[type="submit"] {
+table {
   width: 100%;
-  padding: 10px;
+  border-collapse: collapse;
   margin-bottom: 20px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+input[type="number"] {
+  width: 60px;
+}
+
+a{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
 }
 
 #buttons {
   display: flex;
   justify-content: space-between;
-}
-
-/* Cataloghi disponibili */
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding: 0 20px;
 }
 
 button {
-  padding: 8px 12px;
-  border: none;
+  padding: 10px 20px;
   background-color: #333;
   color: #fff;
-  border-radius: 5px;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+  text-decoration: none; /* Remove underline for link */
 }
 
 button:hover {
   background-color: #555;
-}
-
-@media (max-width: 768px) {
-  li {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  button {
-    margin-top: 10px;
-  }
 }
 
 
@@ -151,8 +127,8 @@ button[type="submit"]:hover {
   background-color: #555;
 }
 
-
-#successoAzienda
+#successoArticoli,
+#successoCatalogo
  {
   display: block;
   margin-top: 10px;
@@ -161,12 +137,19 @@ button[type="submit"]:hover {
 }
 
 
+#warningArticoli{
+  display: block;
+  margin-top: 10px;
+  color: rgb(255, 145, 0);
+  font-weight: bold;
+}
 
 
-
-#erroreAzienda {
+#erroreArticoli,
+#erroreCatalogo {
   display: block;
   margin-top: 10px;
   color: red;
   font-weight: bold;
 }
+

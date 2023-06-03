@@ -1,9 +1,11 @@
+const { ObjectId } = require('mongodb');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const articoloSchema = new Schema({
     nome: { type: String, required: true},
     descrizione: {type: String},
+    catalogo:{type: Schema.Types.ObjectId, required:true},
     coloriDisponibili: { type: Array },
     taglieDisponibili: { type: Array },
     scontoApplicato: { type: Number, default: 0},

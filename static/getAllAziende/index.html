@@ -1,15 +1,41 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Lista Aziende</title>
+  <title>Aziende Disponibili</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="../includes/css/normalize.css">
   <script src="../includes/js/favicon.js"></script>
 </head>
-<body>
-  <h1>Lista Aziende</h1>
+
+<body onload="loadPage()">
+  <h1>Aziende Disponibili</h1>
   <ul id="aziendeList"></ul>
 
-  <script src="./script.js"></script> 
+
+
+  <div id="buttons">
+    <a href="../home"><button>Indietro</button></a>
+    <button id="openModalButton">Nuova azienda...</button>
+  </div>
+  
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Crea azienda</h2>
+
+        <label for="name">Nome:</label>
+        <input type="text" id="nameAzienda" name="nameAzienda" required>
+
+        <button type="submit" onclick="aziendaPOST()">Invia</button>
+ 
+        <span id="successoAzienda" class="infoMessageSpan"></span>
+        <span id="erroreAzienda" class="infoMessageSpan"></span>
+    </div>
+  </div>
+
 </body>
+<script src="./script.js"></script>
+
 </html>

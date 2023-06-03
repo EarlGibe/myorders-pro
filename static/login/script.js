@@ -5,7 +5,7 @@ document.getElementById("loginButton").addEventListener("click", function(event)
 /**
  * This variable stores the logged in user
  */
-var loggedUser = {};
+
 
 /**
  * This functions is fired when the user clicks the login button.
@@ -31,14 +31,7 @@ function login() {
         //console.log(data);
 
         if(data.success){
-            loggedUser.token = data.token;
-            loggedUser.username = data.username;
-            loggedUser.id = data.id;
-            loggedUser.isActive=data.isActive;
-            loggedUser.self = data.self;
-            // loggedUser.id = loggedUser.self.substring(loggedUser.self.lastIndexOf('/') + 1);
-            redirect();
-        
+            redirect(data.id,data.token);
         }else{
             document.getElementById("warningMessage").textContent="Username o password errati";
         }
@@ -54,22 +47,24 @@ function login() {
  * home: if the account is activate yet.
  * activateAccount: if not.
  */
-function redirect() {
+function redirect(id,token) {
 
-    fetch('../users/' + loggedUser.id,{
+    fetch('../users/' + id,{
         method: 'GET',
-        headers: {'x-access-token': loggedUser.token}
+        headers: {'x-access-token': token}
     })
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data to modify as you please
         
-        localStorage.setItem('token', loggedUser.token);
-        localStorage.setItem('userId', loggedUser.id);
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', id);
+        localStorage.setItem('roleId', data.role_id);
+        localStorage.setItem('role', data.role);
 
         console.log(data);
         
         if(!data.isFirstAccess){
-            window.location.href = "../home";
+                window.location.href = "../home";
         }else{
             window.location.href = "../activateAccount/index.html";
         }

@@ -1,5 +1,14 @@
 var token = localStorage.getItem("token");
 var userId = localStorage.getItem("userId");
+var role = localStorage.getItem("role");
+
+function redirect(){
+  if(role=="subagente"){
+    window.location.href = "../home/index-subagente.html";
+  }else{
+    window.location.href = "../home/index.html";
+  } 
+}
 
 fetch('../users/'+userId, {
   method: 'GET',

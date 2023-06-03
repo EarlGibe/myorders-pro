@@ -1,7 +1,8 @@
-var queryString = window.location.search;
-var parametri = new URLSearchParams(queryString);
-var token = parametri.get("token");
-var userId = parametri.get("id");
+var token = localStorage.getItem("token");
+var userId = localStorage.getItem("userId");
+var userData= localStorage.userData("subagente")
+var role=localStorage.getItem("role");
+
 
 function registerCliente(){
 
@@ -42,6 +43,10 @@ function registerCliente(){
           .then(function(data) { // Here you get the data to modify as you please
             // Elaboro la risposta del server
             console.log('Dati salvati:', data);
+
+            if(role=="subagente"){
+              associaClienteASubagente(data._id);
+            }
             // Esegui altre azioni o reindirizzamento alla pagina desiderata
             window.location.href='../home';
           })
@@ -55,3 +60,21 @@ function registerCliente(){
     
 }
 
+function associaClienteASubagente(clienteId){
+  fetch('../subagenti/addCliente'+userData._id, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token
+    },
+    body: JSON.stringify({cliente:clienteId})
+  })
+    .then((resp) => resp.json()) // Transform the data into json
+    .then(function(data) { // Here you get the data to modify as you please
+      // Elaboro la risposta del server
+      console.log('Dati salvati:', data);
+    })
+    .catch(error => {
+      console.error('Errore durante la richiesta:', error);
+    });
+}

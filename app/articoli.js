@@ -41,6 +41,22 @@ router.get('/:id', async (req, res) => {
     }
   });
 
+  router.get('/filtered/:catalogo', async(req,res)=>{
+    try{
+      const catalogo = req.params.catalogo;
+        const arrayCataloghiDB = await Articolo.find({catalogo:catalogo})
+          
+            if (arrayCataloghiDB) {
+              res.json(arrayCataloghiDB);
+            } else {
+              res.status(404).json({ error: 'La lista cataloghi è vuota.' });
+            }            
+    }catch(error){
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
+        res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei cataloghi filtrati.' });
+    }
+  })
+
  // Gestore per la richiesta POST /articoli
 router.post('', async (req, res) => {
     try {
@@ -117,11 +133,15 @@ router.post('/upload', upload.single('csvFile'), (req, res) => {
     fs.createReadStream(file.path)
       .pipe(csv({ separator: ',' })) // Specify the semicolon as the delimiter
       .on('data', (data) => {
-        insertRecordToMongoDB(data);
+        if(data.nome){
+          insertRecordToMongoDB(data,req.body.catalogo);
+        }
+        
       })
       .on('end', () => {
-        if(process.env.VERBOSE_LOG == '1') console.log('CSV data imported successfully');
-        res.redirect('/home');
+        console.log("Fatto");
+        res.send('CSV data imported successfully');
+        //res.redirect('/home');
       });
   } catch (error) {
     if(process.env.VERBOSE_LOG == '1') console.error('Error processing CSV file', error);
@@ -129,13 +149,14 @@ router.post('/upload', upload.single('csvFile'), (req, res) => {
   }
 });
 
-async function insertRecordToMongoDB(record) {
+async function insertRecordToMongoDB(record,catalogo) {
   try {
     record.coloriDisponibili=record.coloriDisponibili.split(',');
     record.taglieDisponibili=record.taglieDisponibili.split(',');
     record.barCodes=record.barCodes.split(',');
+    record.catalogo=catalogo;
     
-    Articolo.create(record);
+    await Articolo.create(record);
     if(process.env.VERBOSE_LOG == '1') console.log('Record inserted successfully:', record);
   } catch (error) {
     if(process.env.VERBOSE_LOG == '1') console.error('Error inserting record:', error);

@@ -78,6 +78,21 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// PUT con ID specifico
+router.put('/addCliente/:id', async (req, res) => {
+  try {
+    const idsubagente = req.params.id;
+    const nuovoCliente = req.body.cliente;
+    const risultato = await Subagente.updateOne(
+      { _id: idsubagente},
+      { $push: { listaClienti: nuovoCliente } }
+   );
+    res.status(200).json(risultato);
+  } catch (err) {
+    res.status(400).json({ errore: err.message });
+  }
+});
+
 // DELETE generale
 router.delete('', async (req, res) => {
   try {

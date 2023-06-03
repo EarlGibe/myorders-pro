@@ -1,43 +1,111 @@
 const token = localStorage.getItem("token");
+var subagente = JSON.parse(localStorage.getItem("subagente"));
+var role = JSON.parse(localStorage.getItem("role"));
 
-// Effettua una richiesta GET ai dati dei aziende dal server
-fetch('../aziende',{
-    method: 'GET',
-    headers: {
-        'x-access-token': token
-    },
-})
-.then(response => response.json())
-.then(data => {
-    const aziendeList = document.getElementById('aziendeList');
 
-    // Itera attraverso i dati dei aziende e crea gli elementi della lista
-    data.forEach(azienda => {
-        const listItem = document.createElement('li');
-        const nomeAzienda = document.createElement('span');
-        const viewButton = document.createElement('button');
+function loadPage() {
+    var modal=document.getElementById("openModalButton");
 
-        // Imposta il nome del azienda
-        nomeAzienda.textContent = azienda.dati.nome;
+    if(role!="dipendente"){
+        modal.style.display="none";
+    }else{
+        configureModal()
+    }
+    
+    getAllAziende();
+    
+}
 
-        // Imposta l'ID del azienda come attributo del pulsante
-        viewButton.setAttribute('data-id', azienda._id);
+function getAllAziende() {
 
-        // Aggiungi il testo al pulsante
-        viewButton.textContent = 'Visualizza';
 
-        // Aggiungi un gestore di eventi al pulsante per reindirizzare alla pagina del azienda
-        viewButton.addEventListener('click', function() {
-        const aziendaId = this.getAttribute('data-id');
-        window.location.href = '/aziende/' + aziendaId;
-        });
+    fetch('../aziende', {
+        method: 'GET',
+        headers: {
+            'x-access-token': token
+        }
+    })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+            console.log(data);
+            populateAziende(data);
+        })
+        .catch(error => console.error(error)); // If there is any error, you will catch them here
+}
 
-        // Aggiungi gli elementi al DOM
-        listItem.appendChild(nomeAzienda);
-        listItem.appendChild(viewButton);
-        aziendeList.appendChild(listItem);
+
+function populateAziende(aziende) {
+    const aziendeList = document.getElementById("aziendeList");
+    // Popolamento dell'elenco delle aziende
+    aziende.forEach(azienda => {
+        if (subagente.listaAziende.includes(azienda._id)) {
+            const listItem = document.createElement("li");
+            listItem.textContent = azienda.dati.nome;
+
+            const selectButton = document.createElement("button");
+            selectButton.textContent = "Seleziona";
+            selectButton.addEventListener("click", () => {
+                // Logica per gestire la selezione dell'azienda
+                console.log("Azienda selezionata:", azienda._id);
+                localStorage.setItem("aziendaSelezionata", JSON.stringify(azienda))
+                window.location.href = '../getAllCataloghi';
+
+            });
+
+            listItem.appendChild(selectButton);
+            aziendeList.appendChild(listItem);
+        }
+
     });
-})
-.catch(error => {
-console.log('Si è verificato un errore:', error);
-});
+}
+
+function configureModal() {
+    var modal = document.getElementById("modal");
+    var openModalButton = document.getElementById("openModalButton");
+    var closeButton = document.getElementsByClassName("close")[0];
+
+    openModalButton.addEventListener("click", function () {
+        modal.style.display = "block";
+    });
+
+    closeButton.addEventListener("click", function () {
+        modal.style.display = "none";
+    });
+}
+
+function aziendaPOST() {
+
+    var infoMessage = document.getElementsByClassName("infoMessageSpan");
+
+    Array.from(infoMessage).forEach(span => {
+        span.textContent = "";
+    });
+
+    var nome = document.getElementById("nameAzienda").value;
+
+    if (nome == "") {
+        document.getElementById("erroreAzienda").textContent = "Nome è un campo obbligatorio!"
+    } else {
+        fetch('../aziende', {
+            method: 'POST',
+            headers: {
+                'x-access-token': token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nome: nome }),
+        })
+            .then((resp) => resp.json()) // Transform the data into json
+            .then(function (data) { // Here you get the data to modify as you please
+                document.getElementById("successoAzienda").textContent = "Azienda creata con successo!"
+
+                setTimeout(()=>{window.location.href="./"},1750)
+            })
+            .catch(function (error) {
+                document.getElementById("erroreAzienda").textContent = "Errore creazione azienda"
+                console.error(error);
+            }); // If there is any error, you will catch them here*/
+
+    }
+
+
+}
