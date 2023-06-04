@@ -78,7 +78,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// PUT con ID specifico
+// PUT per aggiungere cliente alla lista
 router.put('/addCliente/:id', async (req, res) => {
   try {
     const idsubagente = req.params.id;

@@ -12,6 +12,7 @@ function loadPage() {
         configureModal()
     }
     
+    
     getAllAziende();
     
 }

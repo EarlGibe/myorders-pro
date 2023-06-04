@@ -23,7 +23,6 @@ let colSpanTaglie = 6;
 function getAllArticoli() {
 
     console.log(catalogo);
-    console.log("ho iniziato");
 
     // Create an array of promises for each fetch request
 
@@ -43,7 +42,6 @@ function getAllArticoli() {
 
 function populateArticoli(article) {
 
-    console.log("populate");
 
     const productTable = document.getElementById("productTable");
 

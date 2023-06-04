@@ -1,6 +1,6 @@
 var token = localStorage.getItem("token");
 var userId = localStorage.getItem("userId");
-var userData= localStorage.userData("subagente")
+var userData = JSON.parse(localStorage.getItem("subagente"));
 var role=localStorage.getItem("role");
 
 
@@ -45,7 +45,7 @@ function registerCliente(){
             console.log('Dati salvati:', data);
 
             if(role=="subagente"){
-              associaClienteASubagente(data._id);
+              associaClienteASubagente(data.createdCliente.risultato._id);
             }
             // Esegui altre azioni o reindirizzamento alla pagina desiderata
             window.location.href='../home';
@@ -53,15 +53,11 @@ function registerCliente(){
           .catch(error => {
             console.error('Errore durante la richiesta:', error);
           });
-      //} else {
-        // Visualizzo eventuali messaggi di errore o effettuo altre azioni di validazione
-      //  console.log('Campi incompleti');
-      //}
     
 }
 
 function associaClienteASubagente(clienteId){
-  fetch('../subagenti/addCliente'+userData._id, {
+  fetch('../subagenti/addCliente/'+userData._id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

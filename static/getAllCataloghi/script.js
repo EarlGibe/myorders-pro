@@ -19,7 +19,6 @@ function getAllCataloghi() {
 
     console.log(azienda);
 
-
     fetch('../cataloghi/filtered/' + azienda._id, {
         method: 'GET',
         headers: {
@@ -35,9 +34,6 @@ function getAllCataloghi() {
 
         })
         .catch(error => console.error(error)); // If there is any error, you will catch them here
-
-
-
 
 }
 
