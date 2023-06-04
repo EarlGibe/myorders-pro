@@ -6,7 +6,7 @@ const Dipendente = require('./models/dipendente');
 // GET /dipendenti
 router.get('', async(req,res)=>{
     try{
-      const arrayDipendentiDB = await Dipendenti.find().populate('anagrafica');            
+      const arrayDipendentiDB = await Dipendente.find();            
       if (arrayDipendentiDB) res.json(arrayDipendentiDB);
       else res.status(404).json({ error: 'La lista dipendenti è vuota.' });           
     } catch(error){
@@ -19,7 +19,7 @@ router.get('', async(req,res)=>{
 router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const cliente = await Dipendente.findById(id).populate('anagrafica');
+        const cliente = await Dipendente.findById(id);
 
         if (cliente) res.json(cliente);
         else res.status(404).json({ error: 'Il dipendente richiesto non è stato trovato.' });

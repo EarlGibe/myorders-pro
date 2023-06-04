@@ -15,17 +15,16 @@ const dbURL = `mongodb+srv://${dbuser}:${dbpassword}@${dbhost}/${dbname}?${dbpar
 const passepartout = 'supercalifragilistichespiralitoso';
 
 // API url
-const apiName = 'cataloghi';
+const apiName = 'tecnici';
 const apiURL = '/' + apiName;
 
 // settings
 const timeout = 8000;
 
 // documents IDs
-const getID = '646a20c4d322a15436346aa0';
-const putID = '646a20c4d322a15436346aa0';
-const deleteID = '6479d378cf6294b91cc9fd72';
-const getAzienda = '6469f19a9cc45fcbd7f072e2';
+const getID = '64776a48129aaa5a693b284b';
+const putID = '64776a48129aaa5a693b284b';
+const deleteID = '647c56e039ce6060ec73a1da';
 
 describe('[Testing] ' + apiName, () => {
   beforeAll( async () => { jest.setTimeout(timeout);
@@ -46,31 +45,25 @@ describe('[Testing] ' + apiName, () => {
     .expect(200);
   });
 
-  // test('GET ' + apiURL + '/filtered/{azienda} should respond with 200', async () => {
-  //   return request(app).get(apiURL + '/filtered/' + getAzienda)
-  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
-  //   .expect(200);
-  // });
-
   // test('POST ' + apiURL + ' should respond with 200', () => {
   //   return request(app).post(apiURL)
   //   .set('x-access-token', passepartout).set('Accept', 'application/json')
-  //   .send( { nome: "Catalogo" })
-  //   .send( { listaArticoli: [] })
+  //   .send({ codiceFiscale: "TBRGRL00T28L78Y" })
+  //   .send({ dataInserimento: "2023-06-04" })
   //   .expect(200);
   // });
 
   // test('PUT ' + apiURL + ' should respond with 200', () => {
   //   return request(app).put(apiURL)
   //   .set('x-access-token', passepartout).set('Accept', 'application/json')
-  //   .send({ status: true })
+  //   .send({ dataInserimento: "2023-06-05" })
   //   .expect(200);
   // });
 
   // test('PUT ' + apiURL + '/{id} should respond with 200', async () => {
   //   return request(app).put(apiURL + '/' + putID)
   //   .set('x-access-token', passepartout).set('Accept', 'application/json')
-  //   .send({ dataInserimento: "2023-06-03" })
+  //   .send({ codiceFiscale: "TBRGRL00T28L378X" })
   //   .expect(200);
   // });
 

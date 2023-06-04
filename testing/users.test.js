@@ -25,6 +25,7 @@ const timeout = 8000;
 const getID = '64776deb362c8813b703b829';
 const putID = '64776deb362c8813b703b829';
 const deleteID = '6479bd3e2c5000e3da081642';
+const getUsername = 'tecnicoGabri';
 
 describe('[Testing] ' + apiName, () => {
   beforeAll( async () => { jest.setTimeout(timeout);
@@ -44,6 +45,12 @@ describe('[Testing] ' + apiName, () => {
     .set('x-access-token', passepartout).set('Accept', 'application/json')
     .expect(200);
   });
+
+  // test('GET ' + apiURL + '/username/{username} should respond with 200', async () => {
+  //   return request(app).get(apiURL + '/username/' + getUsername)
+  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
+  //   .expect(200);
+  // });
 
   // test('POST ' + apiURL + ' should respond with 200', () => {
   //   return request(app).post(apiURL)

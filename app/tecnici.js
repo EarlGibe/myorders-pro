@@ -6,7 +6,7 @@ const Tecnico = require('./models/tecnico');
 // GET /tecnici
 router.get('', async(req,res)=>{
     try{
-      const arrayTecniciDB = await Tecnici.find();
+      const arrayTecniciDB = await Tecnico.find();
             
       if (arrayTecniciDB) res.json(arrayTecniciDB);
       else res.status(404).json({ error: 'La lista tecnici è vuota.' });           
@@ -20,7 +20,7 @@ router.get('', async(req,res)=>{
 router.get('/:id', async (req, res) => {
     try {
       const id = req.params.id;
-      const tecnico = await tecnico.findById(id);
+      const tecnico = await Tecnico.findById(id);
 
       if (tecnico) res.json(tecnico);
       else res.status(404).json({ error: 'Il tecnico richiesto non è stato trovato.' });

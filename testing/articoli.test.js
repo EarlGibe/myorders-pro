@@ -22,9 +22,10 @@ const apiURL = '/' + apiName;
 const timeout = 8000;
 
 // documents IDs
-const getID = '6479e56a022fd374d9d663b5';
-const putID = '6479e56a022fd374d9d663b5';
+const getID = '647b50f7fcfaae5ccd0c3d6b';
+const putID = '647b50f7fcfaae5ccd0c3d6b';
 const deleteID = '6479e3ba3ca23122500c7c75';
+const getCatalogo = '647b50f7fcfaae5ccd0c3d69';
 
 describe('[Testing] ' + apiName, () => {
   beforeAll( async () => { jest.setTimeout(timeout);
@@ -44,6 +45,12 @@ describe('[Testing] ' + apiName, () => {
     .set('x-access-token', passepartout).set('Accept', 'application/json')
     .expect(200);
   });
+
+  // test('GET ' + apiURL + '/filtered/{catalogo} should respond with 200', async () => {
+  //   return request(app).get(apiURL + '/filtered/' + getCatalogo)
+  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
+  //   .expect(200);
+  // });
 
   // test('POST ' + apiURL + ' should respond with 200', () => {
   //   return request(app).post(apiURL)

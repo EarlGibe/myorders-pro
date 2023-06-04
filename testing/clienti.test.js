@@ -33,17 +33,17 @@ describe('[Testing] ' + apiName, () => {
 
   afterAll( () => { mongoose.connection.close(true); });
 
-  // test('GET ' + apiURL + ' should respond with 200', async () => {
-  //   return request(app).get(apiURL)
-  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
-  //   .expect(200);
-  // });
-
-  test('GET ' + apiURL + '/{id} should respond with 200', async () => {
-    return request(app).get(apiURL + '/' + getID)
+  test('GET ' + apiURL + ' should respond with 200', async () => {
+    return request(app).get(apiURL)
     .set('x-access-token', passepartout).set('Accept', 'application/json')
     .expect(200);
   });
+
+  // test('GET ' + apiURL + '/{id} should respond with 200', async () => {
+  //   return request(app).get(apiURL + '/' + getID)
+  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
+  //   .expect(200);
+  // });
 
   // test('POST ' + apiURL + ' should respond with 200', () => {
   //   return request(app).post(apiURL)
