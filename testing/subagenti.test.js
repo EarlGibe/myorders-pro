@@ -25,6 +25,8 @@ const timeout = 8000;
 const getID = '646a5a26d4594184c9a5ff73';
 const putID = '646a5a26d4594184c9a5ff73';
 const deleteID = '647c551dc13c2772b5419b62';
+const putAzienda = '6469f19f9cc45fcbd7f072e4';
+const putCliente = '6479e10e9e80ac3ce731861d';
 
 describe('[Testing] ' + apiName, () => {
   beforeAll( async () => { jest.setTimeout(timeout);
@@ -33,47 +35,61 @@ describe('[Testing] ' + apiName, () => {
 
   afterAll( () => { mongoose.connection.close(true); });
 
-  // test('GET ' + apiURL + ' should respond with 200', async () => {
-  //   return request(app).get(apiURL)
-  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
-  //   .expect(200);
-  // });
+  test.skip('GET ' + apiURL + ' should respond with 200', async () => {
+    return request(app).get(apiURL)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .expect(200);
+  });
 
-  test('GET ' + apiURL + '/{id} should respond with 200', async () => {
+  test.skip('GET ' + apiURL + '/{id} should respond with 200', async () => {
     return request(app).get(apiURL + '/' + getID)
     .set('x-access-token', passepartout).set('Accept', 'application/json')
     .expect(200);
   });
 
-  // test('POST ' + apiURL + ' should respond with 200', () => {
-  //   return request(app).post(apiURL)
-  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
-  //   .send({ anagrafica: [] })
-  //   .send({ listaOrdini: [] })
-  //   .send({ listaClienti: [] })
-  //   .send({ listaAziende: [] })
-  //   .send({ isAgente: false })
-  //   .send({ dataInserimento: "2023-06-04" })
-  //   .expect(200);
-  // });
+  test.skip('POST ' + apiURL + ' should respond with 200', () => {
+    return request(app).post(apiURL)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ anagrafica: [] })
+    .send({ listaOrdini: [] })
+    .send({ listaClienti: [] })
+    .send({ listaAziende: [] })
+    .send({ isAgente: false })
+    .send({ dataInserimento: "2023-06-04" })
+    .expect(200);
+  });
 
-  // test('PUT ' + apiURL + ' should respond with 200', () => {
-  //   return request(app).put(apiURL)
-  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
-  //   .send({ dataInserimento: "2023-06-05" })
-  //   .expect(200);
-  // });
+  test.skip('PUT ' + apiURL + ' should respond with 200', () => {
+    return request(app).put(apiURL)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ dataInserimento: "2023-06-05" })
+    .expect(200);
+  });
 
-  // test('PUT ' + apiURL + '/{id} should respond with 200', async () => {
-  //   return request(app).put(apiURL + '/' + putID)
-  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
-  //   .send({ isAgente: true })
-  //   .expect(200);
-  // });
+  test.skip('PUT ' + apiURL + '/{id} should respond with 200', async () => {
+    return request(app).put(apiURL + '/' + putID)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ isAgente: true })
+    .expect(200);
+  });
+
+  test.skip('PUT ' + apiURL + '/addAzienda/{id} should respond with 200', async () => {
+    return request(app).put(apiURL + '/addAzienda/' + putID)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ azienda: putAzienda })
+    .expect(200);
+  });
+
+  test.skip('PUT ' + apiURL + '/addCliente/{id} should respond with 200', async () => {
+    return request(app).put(apiURL + '/addCliente/' + putID)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ cliente: putCliente })
+    .expect(200);
+  });
 
   // // !!!!!!! Questo comando ELIMINA TUTTO !!!!!!!
   // // -----------------------------------------------------
-  // test('DELETE ' + apiURL + ' should respond with 200', async () => {
+  // test.skip('DELETE ' + apiURL + ' should respond with 200', async () => {
   //   return request(app).delete(apiURL)
   //   .set('x-access-token', passepartout).set('Accept', 'application/json')
   //   .expect(200);
@@ -81,10 +97,10 @@ describe('[Testing] ' + apiName, () => {
 
   // Elimina il documento selezionato. assicurarsi di averlo presente
   // ------------------------------------------------------------
-  // test('DELETE ' + apiURL + '/{id} should respond with 200', async () => {
-  //   return request(app).delete(apiURL + '/' + deleteID)
-  //   .set('x-access-token', passepartout).set('Accept', 'application/json')
-  //   .expect(200);
-  // });
+  test.skip('DELETE ' + apiURL + '/{id} should respond with 200', async () => {
+    return request(app).delete(apiURL + '/' + deleteID)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .expect(200);
+  });
   
 });

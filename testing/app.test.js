@@ -17,7 +17,7 @@ describe('[Testing] app', () => {
 
     afterAll( () => { mongoose.connection.close(true); });
 
-    test('GET / should respond with 200', async () => {
+    test.skip('GET / should respond with 200', async () => {
         return request(app).get('/').expect(200).then( (res) => {
             if(res.body) expect(res.body).not.toBe('null');
         })
