@@ -35,7 +35,7 @@ function populateClienti(cliente) {
     const viewButton = document.createElement('button');
 
     // Imposta il nome del cliente
-    nomeCliente.textContent = cliente.anagrafica.nome;
+    nomeCliente.textContent = cliente.anagrafica.nome + " " + cliente.anagrafica.cognome;
 
     // Imposta l'ID del cliente come attributo del pulsante
     viewButton.setAttribute('data-id', cliente._id);

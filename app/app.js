@@ -14,6 +14,7 @@ const ordini = require('./ordini.js');
 const subagenti = require('./subagenti.js');
 const tecnici = require('./tecnici.js');
 const reimpostaPassword = require('./reimpostaPassword.js');
+const exportPDF = require('./exportPDF.js');
 
 const Chiave = require('./models/chiave.js');
 
@@ -109,6 +110,7 @@ app.use('/ordini', tokenChecker);
 app.use('/subagenti', tokenChecker);
 app.use('/tecnici', tokenChecker);
 app.use('/reimpostaPassword', tokenChecker);
+app.use('/exportPDF', tokenChecker);
 
 /**
  * Resource routing
@@ -124,6 +126,7 @@ app.use('/ordini', ordini);
 app.use('/subagenti', subagenti);
 app.use('/tecnici', tecnici);
 app.use('/reimpostaPassword', reimpostaPassword);
+app.use('/exportPDF', exportPDF);
 
 /* Default 404 handler */
 app.use((req, res) => {

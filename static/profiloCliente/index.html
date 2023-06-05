@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="../includes/css/normalize.css">
   <script src="../../includes/js/favicon.js"></script>
 </head>
-<body>
+<body onload="getClientData()">
   <h1>Profilo Cliente</h1>
 
   <div class="profile-container">
@@ -26,8 +26,20 @@
     </div>
   </div>
 
-  <button onclick="getAllOrdini()">Vedi ordini</button>
+  <div id="buttons">
+    <button id="openModalButton" onclick="openModal()">Vedi ordini</button>
+    <a href="../getAllClienti"><button>Indietro</button></a>
+  </div>
 
-  <script src="script.js"></script>
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="script.js"></script>
 </html>

@@ -8,6 +8,7 @@ const ordineSchema = new Schema({
   listaArticoli: [{ type: Schema.Types.Object, required: true }],
   indirizzoSpedizione: { type: Object },
   indirizzoFatturazione: { type: Object },
+  isEvaso:{type: Boolean, default:false},
   status: { type: Boolean, default: true },
   dataInserimento: { type: Date, default: Date.now }
 },

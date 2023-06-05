@@ -93,6 +93,21 @@ router.put('/addCliente/:id', async (req, res) => {
   }
 });
 
+// PUT per aggiungere azienda alla lista
+router.put('/addAzienda/:id', async (req, res) => {
+  try {
+    const idsubagente = req.params.id;
+    const nuovaAzienda = req.body.azienda;
+    const risultato = await Subagente.updateOne(
+      { _id: idsubagente},
+      { $push: { listaAziende: nuovaAzienda } }
+   );
+    res.status(200).json(risultato);
+  } catch (err) {
+    res.status(400).json({ errore: err.message });
+  }
+});
+
 // DELETE generale
 router.delete('', async (req, res) => {
   try {

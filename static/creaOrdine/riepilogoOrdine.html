@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Riepilogo ordine </title>
+    <link rel="stylesheet" href="./styleRiepilogoOrdine.css">
+  <link rel="stylesheet" href="../includes/css/normalize.css">
+  <script src="../includes/js/favicon.js"></script>
+</head>
+<body onload="getArticoliInOrdine()">
+    <h1>Riepilogo ordine</h1>
+    
+  <section id="ordineTotale">
+    <div id="tables">
+
+    </div>
+ 
+    <span id="totaleOrdine">Totale ordine:</span>
+  </section>
+  
+   <br>
+
+   <div id="buttons">
+    <a href="./articoliDisponibili.html"><button>Indietro</button></a>
+    <button onclick="createPDFFromJSON()">Concludi ordine</button>
+  </div>
+
+
+
+</body>
+<script src="./script.js"></script>
+</html>

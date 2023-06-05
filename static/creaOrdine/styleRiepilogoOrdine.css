@@ -1,9 +1,14 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f7f7f7;
+  margin: 0;
+  padding: 20px;
 }
 
 h1 {
   text-align: center;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 table {
@@ -13,21 +18,26 @@ table {
 }
 
 th, td {
-  padding: 8px;
+  padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
 
 th {
   background-color: #f2f2f2;
+  color: #333;
 }
 
-tr:nth-child(even) {
-  background-color: #f9f9f9;
+td {
+  color: #555;
 }
 
-input[type="number"] {
-  width: 60px;
+#totaleOrdine {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
 }
 
 a{
@@ -55,4 +65,9 @@ button {
 
 button:hover {
   background-color: #5C534A;
+}
+
+.nameCatalogo{
+  color: #de6800 !important;;
+  font-style: italic;
 }

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Product Details</title>
+    <title>Articoli disponibili</title>
     <link rel="stylesheet" href="./styleArticoliDisponibili.css">
   <link rel="stylesheet" href="../includes/css/normalize.css">
   <script src="../includes/js/favicon.js"></script>
 </head>
 <body onload="getAllArticoli()">
-    <h1>Product Details</h1>
+    <h1>Articoli disponibili</h1>
     
     <table id="productTable">
       <tr>
@@ -16,18 +16,21 @@
         <th>Prezzo</th>
         <th>Sconto <br> Applicato</th>
         <th>Codici a barre</th>
-        <th>Totale</th>
+        <th>Qta Totale</th>
+        <th>Totale(€)</th>
         <th>Colori Disponibili</th>
         <th id="taglieDisponibiliTh">Taglie Disponibili</th>
         
     </tr>
    </table>
 
-   <a href="./cataloghiDisponibili.html"><button>Cambia azienda</button></a>
+   <div id="buttons">
+    <a href="./cataloghiDisponibili.html"><button>Indietro</button></a>
+    <a href="./riepilogoOrdine.html"><button>Riepilogo Ordine</button></a>
+  </div>
 
-   <button>Riepilgo Ordine</button>
+   
 
-   <button>Concludi Ordine</button>
 </body>
 <script src="./script.js"></script>
 </html>
