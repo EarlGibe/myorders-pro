@@ -11,7 +11,7 @@ const Articolo = require('./models/articolo.js');
 // GET generico
 router.get('', async(req,res)=>{
     try{
-         const arrayArticoliDB= await Articolo.find();
+         const arrayArticoliDB= await Articolo.find().sort({nome: 1});
          if(process.env.VERBOSE_LOG == '1') console.log(arrayArticoliDB);
          if(!arrayArticoliDB){
           res.status(404).send("Error: articoli non trovati");
@@ -44,7 +44,41 @@ router.get('/:id', async (req, res) => {
   router.get('/filtered/:catalogo', async(req,res)=>{
     try{
       const catalogo = req.params.catalogo;
-        const arrayCataloghiDB = await Articolo.find({catalogo:catalogo})
+        const arrayCataloghiDB = await Articolo.find({catalogo:catalogo}).sort({nome: 1});
+          
+            if (arrayCataloghiDB) {
+              res.json(arrayCataloghiDB);
+            } else {
+              res.status(404).json({ error: 'La lista cataloghi è vuota.' });
+            }            
+    }catch(error){
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
+        res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei cataloghi filtrati.' });
+    }
+  })
+
+  router.get('/filtered/:catalogo/queryBarcode/:barcode', async(req,res)=>{
+    try{
+      const catalogo = req.params.catalogo;
+      const barcode = req.params.barcode;
+        const arrayCataloghiDB = await Articolo.find({catalogo:catalogo, barCodes: {$regex: barcode, $options: 'i'}}).sort({nome: 1});
+          
+            if (arrayCataloghiDB) {
+              res.json(arrayCataloghiDB);
+            } else {
+              res.status(404).json({ error: 'La lista cataloghi è vuota.' });
+            }            
+    }catch(error){
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
+        res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei cataloghi filtrati.' });
+    }
+  })
+
+  router.get('/filtered/:catalogo/queryNome/:nome', async(req,res)=>{
+    try{
+      const catalogo = req.params.catalogo;
+      const nome = req.params.nome;
+        const arrayCataloghiDB = await Articolo.find({catalogo:catalogo, nome: {$regex: nome, $options: 'i'}}).sort({nome: 1});
           
             if (arrayCataloghiDB) {
               res.json(arrayCataloghiDB);

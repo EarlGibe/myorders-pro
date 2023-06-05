@@ -1,18 +1,18 @@
 const token = localStorage.getItem("token");
 var azienda = JSON.parse(localStorage.getItem("aziendaSelezionata"));
-var role = JSON.parse(localStorage.getItem("role"));
+var role = localStorage.getItem("role");
 
 function loadPage() {
-    var modal=document.getElementById("openModalButton");
+    var modal = document.getElementById("openModalButton");
 
-    if(role!="dipendente"){
-        modal.style.display="none";
-    }else{
+    if (role != "dipendente") {
+        modal.style.display = "none";
+    } else {
         configureModal()
     }
 
     getAllCataloghi();
-    
+
 }
 
 function getAllCataloghi() {
@@ -35,6 +35,31 @@ function getAllCataloghi() {
         })
         .catch(error => console.error(error)); // If there is any error, you will catch them here
 
+}
+
+function handleSearch() {
+    document.getElementById("seachbarForm").addEventListener("click", function (event) {
+        event.preventDefault()
+    })
+
+    var query = document.getElementsByName("query")[0].value;
+
+    document.getElementById("cataloghiList").textContent="";
+
+    return fetch('../cataloghi/filtered/' + azienda._id + '/queryNome/' + query, {
+        method: 'GET',
+        headers: {
+            'x-access-token': token
+        }
+    })
+        .then(resp => resp.json())
+        .then(function (data) {
+            console.log(data);
+            data.forEach(catalogo => {
+                populateCataloghi(catalogo);
+            })
+        })
+        .catch(error => console.error(error));
 }
 
 function populateCataloghi(catalogo) {
@@ -104,8 +129,8 @@ function catalogoPOST() {
                 } else {
                     uploadArticoli(data.createdCatalogo.risultato._id)
                 }
-                setTimeout(()=>{window.location.href="./"},1750)
-                
+                setTimeout(() => { window.location.href = "./" }, 1750)
+
             })
             .catch(function (error) {
                 document.getElementById("erroreCatalogo").textContent = "Errore creazione catalogo"

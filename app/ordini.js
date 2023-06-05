@@ -6,7 +6,7 @@ const Ordine = require('./models/ordine');
 // Gestore per la richiesta GET /ordini
 router.get('', async(req,res)=>{
     try{
-        const arrayOrdiniDB = await Ordine.find()
+        const arrayOrdiniDB = await Ordine.find().sort({dataInserimento: -1})
             
         if(!arrayOrdiniDB){
           res.status(404).send("Error: ordini non trovati");
@@ -41,7 +41,7 @@ router.get('/:id', async (req, res) => {
 router.get('/filteredByCliente/:cliente', async (req, res) => {
   try {
       const cliente = req.params.cliente;
-      const ordine = await Ordine.find({cliente:cliente})
+      const ordine = await Ordine.find({cliente:cliente}).sort({dataInserimento: -1})
         
       if (ordine) {
           res.json(ordine);
@@ -58,7 +58,7 @@ router.get('/filteredByCliente/:cliente', async (req, res) => {
 router.get('/filteredBySubagente/:subagente', async (req, res) => {
   try {
       const subagente = req.params.subagente;
-      const ordine = await Ordine.find({subagente:subagente})
+      const ordine = await Ordine.find({subagente:subagente}).sort({dataInserimento: -1})
         
       if (ordine) {
           res.json(ordine);

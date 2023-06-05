@@ -6,7 +6,7 @@ const Azienda = require('./models/azienda')
 // GET aziende generico
 router.get('', async(req,res)=>{
     try{
-        const arrayAziendeDB = await Azienda.find();
+        const arrayAziendeDB = await Azienda.find().sort({dati: 1});
 
         if(arrayAziendeDB) res.json(arrayAziendeDB);
         else res.status(404).json( { error: "La lista aziende è vuota." });

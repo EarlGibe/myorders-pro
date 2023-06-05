@@ -40,6 +40,65 @@ function getAllArticoli() {
         .catch(error => console.error(error));
 }
 
+function handleSearch(){
+    document.getElementById("seachbarForm").addEventListener("click", function(event){
+        event.preventDefault()
+      })
+
+    var query=document.getElementsByName("query")[0].value;
+
+    var articoli=document.getElementsByTagName("tr");
+
+    Array.from(articoli).forEach(articolo=>{
+        if(articolo.id!="intestazione"){
+            articolo.textContent=""
+        }
+    })
+
+    var searchTypes = document.getElementsByName("searchType");
+      var selectedSearchType;
+
+      for (var i = 0; i < searchTypes.length; i++) {
+        if (searchTypes[i].checked) {
+          selectedSearchType = searchTypes[i].value;
+          break;
+        }
+      }
+
+    if( selectedSearchType=="barcode"){
+        return fetch('../articoli/filtered/'+catalogo._id+'/queryBarcode/' + query, {
+            method: 'GET',
+            headers: {
+                'x-access-token': token
+            }
+        })
+            .then(resp => resp.json())
+            .then(function (data) {
+                console.log(data);
+                data.forEach(articolo => populateArticoli(articolo));
+            })
+            .catch(error => console.error(error));
+    }else{
+        if(selectedSearchType=="nome"){
+            return fetch('../articoli/filtered/'+catalogo._id+'/queryNome/' + query, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': token
+                }
+            })
+                .then(resp => resp.json())
+                .then(function (data) {
+                    console.log(data);
+                    data.forEach(articolo => populateArticoli(articolo));
+                })
+                .catch(error => console.error(error));
+        }
+    }
+
+    
+
+}
+
 function populateArticoli(article) {
 
 

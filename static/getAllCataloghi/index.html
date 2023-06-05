@@ -8,6 +8,17 @@
 </head>
 <body onload="loadPage()">
   <h1>Cataloghi Disponibili</h1>
+
+  <section class="search-form">
+    
+    <form id="seachbarForm">
+
+      <input type="text" name="query" placeholder="Cerca catalogo..." />
+      <input type="submit" value="Cerca" onclick="handleSearch()"/>
+    
+    </form>
+  </section>
+
   <ul id="cataloghiList"></ul>
 
 

@@ -6,7 +6,7 @@ const Catalogo = require('./models/catalogo');
 // Gestore per la richiesta GET /cataloghi
 router.get('', async(req,res)=>{
     try{
-        const arrayCataloghiDB = await Catalogo.find()
+        const arrayCataloghiDB = await Catalogo.find().sort({nome: 1})
           
             if (arrayCataloghiDB) {
               res.json(arrayCataloghiDB);
@@ -39,7 +39,24 @@ router.get('/:id', async (req, res) => {
 router.get('/filtered/:azienda', async(req,res)=>{
   try{
     const azienda = req.params.azienda;
-      const arrayCataloghiDB = await Catalogo.find({azienda:azienda})
+      const arrayCataloghiDB = await Catalogo.find({azienda:azienda}).sort({nome: 1})
+        
+          if (arrayCataloghiDB) {
+            res.json(arrayCataloghiDB);
+          } else {
+            res.status(404).json({ error: 'La lista cataloghi è vuota.' });
+          }            
+  }catch(error){
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
+      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei cataloghi filtrati.' });
+  }
+})
+
+router.get('/filtered/:azienda/queryNome/:nome', async(req,res)=>{
+  try{
+    const azienda = req.params.azienda;
+    const nome = req.params.nome;
+      const arrayCataloghiDB = await Catalogo.find({azienda:azienda, nome: {$regex: nome, $options: 'i'}}).sort({nome: 1});
         
           if (arrayCataloghiDB) {
             res.json(arrayCataloghiDB);

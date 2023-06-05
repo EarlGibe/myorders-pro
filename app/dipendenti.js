@@ -6,7 +6,7 @@ const Dipendente = require('./models/dipendente');
 // GET /dipendenti
 router.get('', async(req,res)=>{
     try{
-      const arrayDipendentiDB = await Dipendente.find();            
+      const arrayDipendentiDB = await Dipendente.find().sort({anagrafica: 1});            
       if (arrayDipendentiDB) res.json(arrayDipendentiDB);
       else res.status(404).json({ error: 'La lista dipendenti è vuota.' });           
     } catch(error){

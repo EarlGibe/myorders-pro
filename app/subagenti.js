@@ -6,7 +6,7 @@ const Subagente = require('./models/subagente');
 // Gestore per la richiesta GET /Subagenti
 router.get('', async(req,res)=>{
     try{
-        const arraySubagentiDB = await Subagente.find();
+        const arraySubagentiDB = await Subagente.find().sort({anagrafica: 1});
 
           if (arraySubagentiDB) {
             res.json(arraySubagentiDB);

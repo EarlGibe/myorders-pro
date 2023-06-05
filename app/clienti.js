@@ -7,7 +7,7 @@ const Cliente = require('./models/cliente');
 router.get('', async(req,res)=>{
     try{
       
-        const arrayClientiDB = await Cliente.find()
+        const arrayClientiDB = await Cliente.find().sort({anagrafica: 1})
 
             if (arrayClientiDB) {
               res.json(arrayClientiDB);
