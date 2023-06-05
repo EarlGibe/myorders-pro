@@ -10,10 +10,13 @@ const dbhost = 'maincluster.yx3zxsu.mongodb.net'
 const dbparams = 'retryWrites=true&w=majority'
 const dbURL = `mongodb+srv://${dbuser}:${dbpassword}@${dbhost}/${dbname}?${dbparams}`;
 
-describe('[Testing] app', () => {
-    beforeAll( async () => { jest.setTimeout(9999);
+const timeout = 10000;
 
-    app.locals.db = await mongoose.connect(dbURL); });
+describe('[Testing] app', () => {
+    beforeAll( async () => {
+        jest.setTimeout(timeout);
+        app.locals.db = await mongoose.connect(dbURL);
+    });
 
     afterAll( () => { mongoose.connection.close(true); });
 

@@ -10,13 +10,14 @@ const aziende = require('./aziende.js');
 const cataloghi = require('./cataloghi.js');
 const clienti = require('./clienti.js');
 const dipendenti = require('./dipendenti.js');
+const exportPDF = require('./exportPDF.js');
 const ordini = require('./ordini.js');
 const subagenti = require('./subagenti.js');
 const tecnici = require('./tecnici.js');
 const reimpostaPassword = require('./reimpostaPassword.js');
-const exportPDF = require('./exportPDF.js');
 
-const Chiave = require('./models/chiave.js');
+//modello
+const chiavi = require('../app/models/chiave.js');
 
 /**
  * Get the keys from DB
@@ -26,7 +27,7 @@ const setOnceMiddleware = async(req, res, next) => {
     // Esegui l'azione che vuoi, eseguire solo una volta
 
           try{
-              superKey = (await Chiave.findOne({ nome: 'SUPER_SECRET' })).valore;
+              superKey = (await chiavi.findOne({ nome: 'SUPER_SECRET' })).valore;
               app.set('superKey', superKey);
               if(process.env.VERBOSE_LOG == '1') console.log("Chiave super segreta: " + superKey);
               
@@ -36,7 +37,7 @@ const setOnceMiddleware = async(req, res, next) => {
           }
 
           try{
-            SGMailToken = (await Chiave.findOne({ nome: 'SENDGRID_API_KEY' })).valore;
+            SGMailToken = (await chiavi.findOne({ nome: 'SENDGRID_API_KEY' })).valore;
             app.set('SGMailToken', SGMailToken);
             if(process.env.VERBOSE_LOG == '1') console.log("Token SG email: " + SGMailToken);
             
@@ -46,7 +47,7 @@ const setOnceMiddleware = async(req, res, next) => {
           }
 
           try{
-            passeParTout = (await Chiave.findOne({ nome: 'passepartout' })).valore;
+            passeParTout = (await chiavi.findOne({ nome: 'passepartout' })).valore;
             app.set('passeParTout', passeParTout);
             if(process.env.VERBOSE_LOG == '1') console.log("Chiave passepartout: " + passeParTout);
             

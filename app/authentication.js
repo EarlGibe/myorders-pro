@@ -20,44 +20,45 @@ router.post('', async function(req, res) {
 	if(user){
 		if(req.body.password!=null){
 			if (user.password != req.body.password) {
-				res.json({ success: false, message: 'Authentication failed. User or password not found.' });
+				res.status(401).json({ success: false, message: 'Authentication failed. User or password not found.' });
 				return;
 			}
 		}else{
 			if(req.body.email!=null){
 				if (user.email != req.body.email) {
-					res.json({ success: false, message: 'Authentication failed. User or email not found.' });
+					res.status(401).json({ success: false, message: 'Authentication failed. User or email not found.' });
 					return;
 				}
 			}else{
-				res.json({ success: false, message: 'Authentication failed. Email not found' });
+				res.status(401).json({ success: false, message: 'Authentication failed. Email not found' });
 			}
 		}
-	}else{
-		res.json({ success: false, message: 'Authentication failed. User not found' });
-	}
-	
-	// if user is found and password is right create a token
-	var payload = {
-		username: user.username,
-		id: user._id
-		// other data encrypted in the token	
-	}
-	
-	var options = {
-		expiresIn: 86400 // expires in 24 hours
-	}
 
-	var token = jwt.sign(payload, superKey, options);
+		// if user is found and password is right create a token
+		var payload = {
+			username: user.username,
+			id: user._id
+			// other data encrypted in the token	
+		}
+		
+		var options = {
+			expiresIn: 86400 // expires in 24 hours
+		}
 
-	res.json({
-		success: true,
-		message: 'Enjoy your token!',
-		token: token,
-		username: user.username,
-		id: user._id,
-		self: "users/" + user._id
-	});
+		var token = jwt.sign(payload, superKey, options);
+
+		res.status(200).json({
+			success: true,
+			message: 'Enjoy your token!',
+			token: token,
+			username: user.username,
+			id: user._id,
+			self: "users/" + user._id
+		});
+
+	} else {
+		res.status(401).json({ success: false, message: 'Authentication failed. User not found' });
+	}
 
 });
 
