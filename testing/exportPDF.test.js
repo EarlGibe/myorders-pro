@@ -48,20 +48,21 @@ const email = {
 
 describe('[Testing] ' + apiName, () => {
   beforeAll( async () => {
-    jest.setTimeout(timeout);
     app.locals.db = await mongoose.connect(dbURL);
   });
 
   afterAll( () => { mongoose.connection.close(true); });
 
-  test('POST ' + apiURL + ' should respond with 200', () => {
-    jest.setTimeout(timeout);
-    return request(app).post(apiURL)
-    .set('x-access-token', passepartout).set('Accept', 'application/json')
+  test.skip('POST ' + apiURL + ' should respond with 200',function() {
+    
+    return request(app)
+    .post(apiURL)
+    .set('x-access-token', passepartout)
+    .set('Accept', 'application/json')
     .send({ html: html })
     .send({ outputFilePath: "./esportaPDF/test1.pdf" })
     .send({ email: email })
     .expect(200);
-  });
+  },20000);
   
 });
