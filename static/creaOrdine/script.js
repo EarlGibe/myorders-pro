@@ -1,13 +1,12 @@
 var token = localStorage.getItem("token");
 var userId = localStorage.getItem("userId");
 var userData = JSON.parse(localStorage.getItem("subagente"));
+var userEmail = localStorage.getItem("userEmail");
 
 
 function onLoadCreaOrdineIndex() {
     // Code to be executed when the page loads
     getAllClienti();
-    // Get all the anchor elements within the 'buttons' div
-    var links = document.querySelectorAll('.button-container a');
 };
 
 
@@ -169,6 +168,8 @@ function populateCataloghi(catalogo) {
 
 }
 
+/*mostra articoli*/
+
 let colSpanTaglie = 6;
 
 function getAllArticoli() {
@@ -207,10 +208,10 @@ function populateArticoli(article) {
 
         const item = ordine.find(item => item.colore.toLowerCase() === color.toLowerCase() && item.id === article._id);
         if (item) {
-                scontoApplicato= item.scontoApplicato
-                console.log("vero");
+            scontoApplicato = item.scontoApplicato
+            console.log("vero");
         } else {
-                scontoApplicato= 0
+            scontoApplicato = 0
         }
 
 
@@ -245,14 +246,14 @@ function populateArticoli(article) {
         for (var i = 0; i < colSpanTaglie; i++) {
             if (i < article.taglieDisponibili.length) {
 
-            var qta;
+                var qta;
 
-            const item = ordine.find(item => item.colore.toLowerCase() === color.toLowerCase() && item.taglia.toLowerCase() === article.taglieDisponibili[i].toLowerCase() && item.id === article._id)
-             if (item) {
-                        qta= item.qta
-                        console.log("vero");
+                const item = ordine.find(item => item.colore.toLowerCase() === color.toLowerCase() && item.taglia.toLowerCase() === article.taglieDisponibili[i].toLowerCase() && item.id === article._id)
+                if (item) {
+                    qta = item.qta
+                    console.log("vero");
                 } else {
-                        qta= 0
+                    qta = 0
                 }
 
                 row.innerHTML += `
@@ -290,6 +291,8 @@ function extractIdFromString(string) {
     return null; // Return null if no valid ID is found
 }
 
+/*salva articoli in locale e in database remoto*/
+
 function autoUpdate() {
 
     document.getElementById("taglieDisponibiliTh").colSpan = colSpanTaglie * 2;
@@ -302,17 +305,16 @@ function autoUpdate() {
     for (let i = 0; i < inputList.length; i++) {
         inputList[i].addEventListener("change", calcolaTotale)
         inputList[i].addEventListener("change", aggiornaOrdine)
-        inputList[i].addEventListener("change", autoSave)
     }
 
     for (let i = 0; i < scontoList.length; i++) {
-        scontoList[i].addEventListener("change", aggiornaTotale);     
+        scontoList[i].addEventListener("change", aggiornaTotale);
 
         //Genero un evento per aggiornare tutti i totali automaticamente nel caso in cui l'ordine sia già esistente
-        scontoList[i].dispatchEvent(new Event('change')) 
+        scontoList[i].dispatchEvent(new Event('change'))
     }
 
-    function aggiornaTotale(){
+    function aggiornaTotale() {
 
         const idPattern = `(.+)_ScontoApplicato`;
         const match = this.name.match(idPattern);
@@ -324,11 +326,11 @@ function autoUpdate() {
             if (this.value < 0) this.value = 0
 
             // Seleziona l'elemento di input
-            const inputElement = document.getElementsByName(articleId+'_Qta');
+            const inputElement = document.getElementsByName(articleId + '_Qta');
 
-            inputElement.forEach(element=>{
-                console.log("value:"+element.value)
-                if(element.value!=0){
+            inputElement.forEach(element => {
+                console.log("value:" + element.value)
+                if (element.value != 0) {
 
                     console.log(inputElement.value)
                     // Crea un nuovo evento di input
@@ -338,7 +340,7 @@ function autoUpdate() {
                     element.dispatchEvent(inputEvent);
                 }
             })
-            
+
         }
     }
 
@@ -377,6 +379,7 @@ function autoUpdate() {
         console.log(totaleQta * prezzoArticolo)
     }
 
+    //Aggiorna il local storage dell'ordine
     function aggiornaOrdine() {
 
         var ordineAttivo = JSON.parse(localStorage.getItem("ordineAttivo"));
@@ -433,27 +436,19 @@ function autoUpdate() {
         }
 
         localStorage.setItem("ordineAttivo", JSON.stringify(ordineAttivo));
+
+        save();
     }
 
     /**
      * Inizio ambiente auto save
      */
 
-    var listenerEseguito = false;
-    var interval;
-    var tempoLimite = 5000; // Tempo limite in millisecondi (5 secondi)
 
-    function autoSave() {
-        console.log("Listener eseguito");
-        listenerEseguito = true;
 
-        // Esegue l'azione periodica
-        interval = setInterval(azionePeriodica, tempoLimite);
-    }
+  
 
-    function azionePeriodica() {
-        if (listenerEseguito) {
-
+    function save() {
             let ordineAttivo = JSON.parse(localStorage.getItem("ordineAttivo"));
 
             fetch('../ordini/' + ordineAttivo._id, {
@@ -469,12 +464,7 @@ function autoUpdate() {
                     console.log(data);
                 })
                 .catch(error => console.error(error)); // If there is any error, you will catch them here
-
-            listenerEseguito = false;
-        } else {
-            console.log("Listener non eseguito entro il tempo limite");
-            clearInterval(interval); // Interrompe il timer
-        }
+       
     }
 
     /**
@@ -483,84 +473,93 @@ function autoUpdate() {
 
 };
 
-var totaleOrdine=0;
+/*Riepilogo ordine*/
 
+function loadRiepilogoOrdine() {
+    getArticoliInOrdine();
+    configureModal()
+}
+
+var totaleOrdine = 0;
 
 function getArticoliInOrdine() {
     var ordine = JSON.parse(localStorage.getItem("ordineAttivo"));
+
+    document.getElementById("numeroOrdine").textContent = ordine._id;
 
     // Loop through the articles and populate them in the summary
     const promises = ordine.listaArticoli.map(articolo =>
         populateArticoliInRiepilogo(articolo)
     );
-    
+
     Promise.all(promises).then(() => {
-        document.getElementById("totaleOrdine").textContent+=Math.round(totaleOrdine*100)/100+"€";
+        document.getElementById("totaleOrdine").textContent += Math.round(totaleOrdine * 100) / 100 + "€";
     });
 }
 
-var aziendaMap=new Map();
-var catalogoMap=new Map();
-var totaleOrdinePerCatalogoMap=new Map();
+var aziendaMap = new Map();
+var catalogoMap = new Map();
+var totaleOrdinePerCatalogoMap = new Map();
 function populateArticoliInRiepilogo(article) {
     const productTable = document.getElementById("tables");
-  
+
     // Effettua una richiesta per ottenere i dettagli dell'articolo
     return fetch('../articoli/' + article.id, {
-      method: 'GET',
-      headers: {
-        'x-access-token': token
-      }
+        method: 'GET',
+        headers: {
+            'x-access-token': token
+        }
     })
-      .then(resp => resp.json())
-      .then(async function (data) {
-        // Effettua una richiesta per ottenere i dettagli del catalogo
-        const catalogoResponse = await fetch('../cataloghi/' + data.catalogo, {
-          method: 'GET',
-          headers: {
-            'x-access-token': token
-          }
-        });
-        const catalogo = await catalogoResponse.json();
-  
-        // Effettua una richiesta per ottenere i dettagli dell'azienda associata
-        const aziendaResponse = await fetch('../aziende/' + catalogo.azienda, {
-          method: 'GET',
-          headers: {
-            'x-access-token': token
-          }
-        });
+        .then(resp => resp.json())
+        .then(async function (data) {
+            // Effettua una richiesta per ottenere i dettagli del catalogo
+            const catalogoResponse = await fetch('../cataloghi/' + data.catalogo, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': token
+                }
+            });
+            const catalogo = await catalogoResponse.json();
 
-        const azienda = await aziendaResponse.json();
+            // Effettua una richiesta per ottenere i dettagli dell'azienda associata
+            const aziendaResponse = await fetch('../aziende/' + catalogo.azienda, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': token
+                }
+            });
 
-        // Controlla se il catalogo è già presente nella mappa dei cataloghi
-        if (!aziendaMap.has(catalogo.azienda)) {
-            // Se il catalogo non è presente, crea una nuova tabella per il catalogo
-            const aziendaSpan = document.createElement("span");
-            aziendaSpan.className="aziendaTable";
+            const azienda = await aziendaResponse.json();
 
-            var nameAzienda=document.createElement("h3");
-            nameAzienda.textContent=azienda.dati.nome;
-            nameAzienda.className="nameAzienda";
+            // Controlla se il catalogo è già presente nella mappa dei cataloghi
+            if (!aziendaMap.has(catalogo.azienda)) {
+                // Se il catalogo non è presente, crea una nuova tabella per il catalogo
+                const aziendaSpan = document.createElement("span");
+                aziendaSpan.className = "aziendaTable";
 
-            aziendaSpan.appendChild(nameAzienda);
-    
-            // Aggiungi la nuova tabella del catalogo alla mappa dei cataloghi
-            aziendaMap.set(catalogo.azienda, aziendaSpan);
-    
-            // Aggiungi la nuova tabella al riepilogo dei prodotti
-            productTable.appendChild(aziendaSpan);
-          }
+                var nameAzienda = document.createElement("h3");
+                nameAzienda.textContent = azienda.dati.nome;
+                nameAzienda.className = "nameAzienda";
+                nameAzienda.id = azienda._id;
+
+                aziendaSpan.appendChild(nameAzienda);
+
+                // Aggiungi la nuova tabella del catalogo alla mappa dei cataloghi
+                aziendaMap.set(catalogo.azienda, aziendaSpan);
+
+                // Aggiungi la nuova tabella al riepilogo dei prodotti
+                productTable.appendChild(aziendaSpan);
+            }
 
 
-  
-        const nomeCatalogo = catalogo.nome;
-  
-        // Controlla se il catalogo è già presente nella mappa dei cataloghi
-        if (!catalogoMap.has(data.catalogo)) {
-          // Se il catalogo non è presente, crea una nuova tabella per il catalogo
-          const catalogoTable = document.createElement("table");
-          catalogoTable.innerHTML = `
+
+            const nomeCatalogo = catalogo.nome;
+
+            // Controlla se il catalogo è già presente nella mappa dei cataloghi
+            if (!catalogoMap.has(data.catalogo)) {
+                // Se il catalogo non è presente, crea una nuova tabella per il catalogo
+                const catalogoTable = document.createElement("table");
+                catalogoTable.innerHTML = `
             <td class="nameCatalogo" colspan="9" style="background-color: #f2f2f2; color: #333;">
               ${nomeCatalogo}
             </td>
@@ -568,56 +567,56 @@ function populateArticoliInRiepilogo(article) {
               <th>Nome</th>
               <th>Descrizione</th>
               <th>Prezzo(€)</th>
-              <th>Sconto <br> Applicato (%)</th>
-              <th>Codici a barre</th>
+              <th>Sconto (%)</th>
+              <th>EAN code</th>
               <th>Totale(€)</th>
-              <th>Colori Disponibili</th>
-              <th>Taglie Disponibili</th>
+              <th>Colore</th>
+              <th>Taglia</th>
               <th>Qta</th>
             </tr>
           `;
 
-          var spanTotale=document.createElement("span");
-          spanTotale.textContent="Totale per catalogo: ";
+                var spanTotale = document.createElement("span");
+                spanTotale.textContent = "Totale per catalogo: ";
 
-          var totaleCatalogo=document.createElement("span");
-          totaleCatalogo.className="totalePerCatalogo";
-          totaleCatalogo.textContent=0;
+                var totaleCatalogo = document.createElement("span");
+                totaleCatalogo.className = "totalePerCatalogo";
+                totaleCatalogo.textContent = 0;
 
-          // Aggiungi la nuova tabella del catalogo alla mappa dei cataloghi
-          catalogoMap.set(data.catalogo, catalogoTable);
+                // Aggiungi la nuova tabella del catalogo alla mappa dei cataloghi
+                catalogoMap.set(data.catalogo, catalogoTable);
 
-          totaleOrdinePerCatalogoMap.set(data.catalogo,totaleCatalogo)
-  
-          // Aggiungi la nuova tabella al riepilogo dei prodotti
-        
+                totaleOrdinePerCatalogoMap.set(data.catalogo, totaleCatalogo)
 
-          var catalogoSection=document.createElement("section");
-          catalogoSection.className="catalogoSection";
-
-          catalogoSection.appendChild(spanTotale);
-          catalogoSection.appendChild(totaleCatalogo);
+                // Aggiungi la nuova tabella al riepilogo dei prodotti
 
 
-          aziendaMap.get(catalogo.azienda).appendChild(catalogoSection);
+                var catalogoSection = document.createElement("section");
+                catalogoSection.className = "catalogoSection";
 
-          aziendaMap.get(catalogo.azienda).appendChild(catalogoTable);
-        }
-  
-        // Recupera la tabella del catalogo dalla mappa dei cataloghi
-        const catalogoTable = catalogoMap.get(data.catalogo);
-  
-        // Crea una nuova riga per l'articolo
-        const row = document.createElement("tr");
-  
-        const totale = Math.round(article.qta * (data.prezzo * (1 - article.scontoApplicato / 100)) * 100) / 100;
-        
-        totaleOrdinePerCatalogoMap.get(data.catalogo).textContent=Math.round((parseFloat(totaleOrdinePerCatalogoMap.get(data.catalogo).textContent)+totale)*100)/100;
-        
-        totaleOrdine += totale;
-  
-        // Popola i dettagli dell'articolo nella riga
-        row.innerHTML = `
+                catalogoSection.appendChild(spanTotale);
+                catalogoSection.appendChild(totaleCatalogo);
+
+
+                aziendaMap.get(catalogo.azienda).appendChild(catalogoSection);
+
+                aziendaMap.get(catalogo.azienda).appendChild(catalogoTable);
+            }
+
+            // Recupera la tabella del catalogo dalla mappa dei cataloghi
+            const catalogoTable = catalogoMap.get(data.catalogo);
+
+            // Crea una nuova riga per l'articolo
+            const row = document.createElement("tr");
+
+            const totale = Math.round(article.qta * (data.prezzo * (1 - article.scontoApplicato / 100)) * 100) / 100;
+
+            totaleOrdinePerCatalogoMap.get(data.catalogo).textContent = Math.round((parseFloat(totaleOrdinePerCatalogoMap.get(data.catalogo).textContent) + totale) * 100) / 100;
+
+            totaleOrdine += totale;
+
+            // Popola i dettagli dell'articolo nella riga
+            row.innerHTML = `
           <td>${data.nome}</td>
           <td>${data.descrizione}</td>
           <td>${data.prezzo}</td>
@@ -628,50 +627,191 @@ function populateArticoliInRiepilogo(article) {
           <td>${article.taglia}</td>
           <td>${article.qta}</td>
         `;
-  
-        // Aggiungi la riga dell'articolo alla tabella del catalogo corrispondente
-        catalogoTable.appendChild(row);
-      })
-      .catch(error => console.error(error));
-  }
-  
-  
-function createPDFFromJSON() {
+
+            // Aggiungi la riga dell'articolo alla tabella del catalogo corrispondente
+            catalogoTable.appendChild(row);
+        })
+        .catch(error => console.error(error));
+}
+
+/*Concludi ordine*/
+
+function configureModal() {
+    var modal = document.getElementById("modal");
+    var openModalButton = document.getElementById("openModalButton");
+    var closeButton = document.getElementsByClassName("close")[0];
+
+    openModalButton.addEventListener("click", function () {
+        modal.style.display = "block";
+    });
+
+    closeButton.addEventListener("click", function () {
+        modal.style.display = "none";
+    });
+}
+
+function concludiOrdine() {
+
+    let ordineAttivo = JSON.parse(localStorage.getItem("ordineAttivo"));
+
+    var indirizzoSpedizione = document.getElementById("indirizzoSpedizione").value;
+    var indirizzoFatturazione = document.getElementById("indirizzoFatturazione").value;
+
+    if (indirizzoSpedizione && indirizzoSpedizione) {
+        fetch('../ordini/' + ordineAttivo._id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': token
+            },
+            body: JSON.stringify({ isEvaso: true, indirizzoSpedizione: indirizzoSpedizione, indirizzoFatturazione: indirizzoFatturazione })
+        })
+            .then((resp) => resp.json()) // Transform the data into json
+            .then(function (data) { // Here you get the data to modify as you please
+
+                createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione)
+
+                document.getElementById("errore").textContent = ""
+                document.getElementById("successo").textContent = "Ordine salvato e inviato. \n Sarai reindirizzato alla home fra 3 secondi "
+
+                localStorage.removeItem("ordineAttivo");
+                
+                setTimeout(()=>window.location.href="../home",3000);
+
+            })
+            .catch(error => console.error(error)); // If there is any error, you will catch them here
+
+        //createPDFFromJSON();
+    } else {
+        document.getElementById("errore").textContent = "I campi sono obbligatori"
+    }
+
+
+}
+
+function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
     var ordineAttivo = JSON.parse(localStorage.getItem("ordineAttivo"));
 
     const aziende = document.getElementsByClassName("aziendaTable");
-    
-    Array.from(aziende).forEach(azienda => {
 
-        var totaleCatalogo=azienda.getElementsByClassName("totalePerCatalogo");
-        var totaleOrdineAzienda=0;
-        Array.from(totaleCatalogo).forEach(totaleSingle => {
-            totaleOrdineAzienda+=parseFloat(totaleSingle.textContent);
-        })
-        var totaleAziendaSpan=document.createElement("h3");
-        totaleAziendaSpan.textContent="Totale: "+totaleOrdineAzienda+"€";
-
-        html=azienda.innerHTML;
-        html+=totaleAziendaSpan.innerHTML;
-        var nomeAzienda=azienda.getElementsByClassName("nameAzienda")[0].textContent;
-
-
-        fetch('../exportPDF', {
-            method: 'POST',
-            headers: {
-                'x-access-token': token,
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify({html:html, outputFilePath : nomeAzienda+"_"+ordineAttivo._id+'.pdf'})
-        })
-            .then(resp => resp.json())
-            .then(function (data) {
-               
-                console.log(data);
-            })
-            .catch(error => console.error(error));
+    fetch('../clienti/' + ordineAttivo.cliente, {
+        method: 'GET',
+        headers: {
+            'x-access-token': token
+        }
     })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+            var anagraficaCliente = data.anagrafica;
 
-    
-      
+            Array.from(aziende).forEach(azienda => {
+
+                fetch('../aziende/' + azienda.getElementsByClassName("nameAzienda")[0].id, {
+                    method: 'GET',
+                    headers: {
+                        'x-access-token': token,
+                        'Content-Type': 'application/json'
+                    },
+                })
+                    .then(resp => resp.json())
+                    .then(async function (data) {
+
+                        html = "<h1> Ordine " + ordineAttivo._id + "</h1>";
+
+                        html += "<div id='dati'>"
+
+                        html += "<section id='datiClienteSection'>"
+
+                        html += "<h4> Dati cliente: </h4>";
+
+                        html += jsonToHTML(anagraficaCliente);
+
+                        html += "</section>"
+
+                        html += "<br>"
+
+                        html += "<section id='datiAziendaSection'>"
+
+                        html += "<h4> Dati azienda: </h4>";
+
+                        html += jsonToHTML(data.dati);
+
+                        html += "</section>"
+
+                        html += "</div>"
+
+                        html += "<br>"
+
+                        html += "<span><strong>Indirizzo spedizione: </strong>" + indirizzoSpedizione + "<span>"
+
+                        html += "<br>"
+
+                        html += "<span><strong>Indirizzo fatturazione: </strong>" + indirizzoFatturazione + "<span>"
+
+
+                        var totaleCatalogo = azienda.getElementsByClassName("totalePerCatalogo");
+                        var totaleOrdineAzienda = 0;
+
+                        Array.from(totaleCatalogo).forEach(totaleSingle => {
+                            totaleOrdineAzienda += parseFloat(totaleSingle.textContent);
+                        })
+
+                        var totaleAziendaSpan = document.createElement("h3");
+                        totaleAziendaSpan.textContent = "Totale: " + totaleOrdineAzienda + "€";
+
+                        html += azienda.innerHTML;
+                        html += totaleAziendaSpan.innerHTML;
+                        var nomeAzienda = azienda.getElementsByClassName("nameAzienda")[0].textContent;
+
+                        email={
+                            azienda:data.dati.email,
+                            ufficio:"email@ufficio.it",
+                            cliente:anagraficaCliente.email,
+                            subagente:userEmail
+                        }
+
+                        await fetch('../exportPDF', {
+                            method: 'POST',
+                            headers: {
+                                'x-access-token': token,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ email:email, html: html, outputFilePath: nomeAzienda + "_" + ordineAttivo._id + '.pdf' })
+                        })
+                            .then(resp => resp.json())
+                            .then(function (data) {
+                            })
+                            .catch(error => console.error(error));
+
+                    })
+                   
+
+
+            })
+        })
+
+        .catch(error => console.error(error)); // If there is any error, you will catch them here
+}
+
+// Function to recursively convert JSON to HTML
+function jsonToHTML(json) {
+    let html = '';
+
+    // Iterate over each property in the JSON object
+    for (let key in json) {
+        if (json.hasOwnProperty(key)) {
+            const value = json[key];
+
+            // Check if the value is an object (nested JSON)
+            if (typeof value === 'object' && value !== null) {
+                // Recursively convert nested JSON to HTML
+                const nestedHTML = jsonToHTML(value);
+                html += `<div><strong>${key}:</strong>${nestedHTML}</div>`;
+            } else {
+                // Convert simple key-value pair to HTML
+                html += `<div><strong>${key}:</strong> ${value}</div>`;
+            }
+        }
+    }
+    return html;
 }

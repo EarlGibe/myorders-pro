@@ -6,8 +6,9 @@
   <link rel="stylesheet" href="../includes/css/normalize.css">
   <script src="../includes/js/favicon.js"></script>
 </head>
-<body onload="getArticoliInOrdine()">
+<body onload="loadRiepilogoOrdine()">
     <h1>Riepilogo ordine</h1>
+    <h3 id="numeroOrdine"></h3>
     
   <section id="ordineTotale">
     <div id="tables">
@@ -21,7 +22,25 @@
 
    <div id="buttons">
     <a href="./articoliDisponibili.html"><button>Indietro</button></a>
-    <button onclick="createPDFFromJSON()">Concludi ordine</button>
+    <button id="openModalButton">Concludi ordine</button>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Concludi ordine</h2>
+
+        <label for="name">Indirizzo spedizione:</label>
+        <input type="text" id="indirizzoSpedizione" name="indirizzoSpedizione" required>
+
+        <label for="name">Indirizzo fatturazione:</label>
+        <input type="text" id="indirizzoFatturazione" name="indirizzoFatturazione" required>
+
+        <button type="submit" onclick="concludiOrdine()">Invia</button>
+ 
+        <span id="successo" class="infoMessageSpan"></span>
+        <span id="errore" class="infoMessageSpan"></span>
+    </div>
   </div>
 
 

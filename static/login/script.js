@@ -58,6 +58,7 @@ function redirect(id,token) {
         
         localStorage.setItem('token', token);
         localStorage.setItem('userId', id);
+        localStorage.setItem('userEmail', data.email);
         localStorage.setItem('roleId', data.role_id);
         localStorage.setItem('role', data.role);
 

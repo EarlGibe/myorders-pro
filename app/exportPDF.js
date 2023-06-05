@@ -5,7 +5,7 @@ const puppeteer = require('puppeteer');
 const sgMail = require('@sendgrid/mail')
 
 async function exportTableToPdf(html, outputFilePath) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({headless: 'new'});
   const page = await browser.newPage();
 
   // Set the content of the page to your HTML table
@@ -24,6 +24,15 @@ async function exportTableToPdf(html, outputFilePath) {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
+  }
+
+  #dati{
+    display:flex;
+    justify-content:space-between;
+  }
+
+  #datiAziendaSection{
+    text-align:right;
   }
   
   table {
@@ -92,7 +101,16 @@ async function exportTableToPdf(html, outputFilePath) {
   );
 
   // Generate the PDF with default options
-  await page.pdf({ path: outputFilePath });
+  await page.pdf({ 
+    path: outputFilePath,
+    format: 'A4',
+    margin: {
+        top: "10mm",
+        right: "10mm",
+        bottom: "10mm",
+        left: "10mm"
+    }
+  });
 
   // Close the browser
   await browser.close();
@@ -115,7 +133,7 @@ router.post('', async (req, res) => {
 
       // Construct the email message
       const msg = {
-        to: 'robertogiordano113@gmail.com', // Replace with the recipient's email address
+        to: [req.body.email.azienda,req.body.email.ufficio, req.body.email.cliente, req.body.email.subagente], // Replace with the recipient's email address
         from: 'app.myorderspro@gmail.com', // Replace with your email address
         subject: 'PDF Attachment',
         text: 'Please find the attached PDF file.',

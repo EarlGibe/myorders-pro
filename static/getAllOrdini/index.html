@@ -10,10 +10,22 @@
   <h1>Lista Ordini</h1>
   <ul id="ordiniList"></ul>
 
+  <span id="warning"></span>
 
-  <a href="../home"><button>Indietro</button></a>
+  <div id="buttons">
+    <a href="../home"><button>Indietro</button></a>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modal-content"></div>
+    </div>
+  </div>
 
 
-  <script src="./script.js"></script> 
+
 </body>
+<script src="./script.js"></script> 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </html>
