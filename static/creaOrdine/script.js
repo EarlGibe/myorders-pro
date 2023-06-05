@@ -757,7 +757,7 @@ function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
                         })
 
                         var totaleAziendaSpan = document.createElement("h3");
-                        totaleAziendaSpan.textContent = "Totale: " + totaleOrdineAzienda + "€";
+                        totaleAziendaSpan.textContent = "Totale: " + Math.round(totaleOrdineAzienda*100)/100 + "€";
 
                         html += azienda.innerHTML;
                         html += totaleAziendaSpan.innerHTML;
@@ -769,6 +769,9 @@ function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
                             cliente:anagraficaCliente.email,
                             subagente:userEmail
                         }
+                        
+                        html+="<br><br><p> Questo documento è stato inoltrato a: <p>"
+                        html+=jsonToHTML(email)
 
                         await fetch('../exportPDF', {
                             method: 'POST',
