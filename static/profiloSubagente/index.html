@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profilo Subagente</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="../includes/css/normalize.css">
+  <script src="../../includes/js/favicon.js"></script>
+</head>
+<body onload="getSubagenteData()">
+  <h1>Profilo Subagente</h1>
+
+  <div class="profile-container">
+    <div>
+      <h2>Anagrafica</h2>
+      <p><strong>Nome:</strong> <span id="nome"></span></p>
+      <p><strong>Cognome:</strong> <span id="cognome"></span></p>
+      <p><strong>Codice Fiscale:</strong> <span id="codiceFiscale"></span></p>
+      <p><strong>Residenza:</strong> <span id="residenza"></span></p>
+      <p><strong>Telefono:</strong> <span id="telefono"></span></p>
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>Ragione Sociale:</strong> <span id="ragioneSociale"></span></p>
+      <p><strong>Partita IVA:</strong> <span id="pIVA"></span></p>
+      <p><strong>Sede:</strong> <span id="sede"></span></p>
+      <p><strong>Codice SDI:</strong> <span id="codSDI"></span></p>
+      <p><strong>PEC:</strong> <span id="pec"></span></p>
+    </div>
+  </div>
+
+  <div id="buttons">
+    <button id="openModalButton" onclick="openModal()">Vedi ordini</button>
+    <a href="../getAllSubagenti"><button>Indietro</button></a>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="script.js"></script>
+</html>

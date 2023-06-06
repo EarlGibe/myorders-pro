@@ -1,16 +1,17 @@
 const token = localStorage.getItem("token");
 var catalogo = JSON.parse(localStorage.getItem("catalogoSelezionato"));
 var role = localStorage.getItem("role");
+var userData = JSON.parse(localStorage.getItem("userData"));
 
 
 function loadPage(){
 
     var modal=document.getElementById("openModalButton");
 
-    if(role!="dipendente"){
-        modal.style.display="none";
-    }else{
+    if(role=="dipendente" || userData.isAgente){
         configureModal()
+    }else{
+        modal.style.display="none";
     }
 
     getAllArticoli();
@@ -49,38 +50,28 @@ function handleSearch(){
 
     var articoli=document.getElementsByTagName("tr");
 
-    Array.from(articoli).forEach(articolo=>{
-        if(articolo.id!="intestazione"){
-            articolo.textContent=""
-        }
-    })
-
-    var searchTypes = document.getElementsByName("searchType");
-      var selectedSearchType;
-
-      for (var i = 0; i < searchTypes.length; i++) {
-        if (searchTypes[i].checked) {
-          selectedSearchType = searchTypes[i].value;
-          break;
-        }
-      }
-
-    if( selectedSearchType=="barcode"){
-        return fetch('../articoli/filtered/'+catalogo._id+'/queryBarcode/' + query, {
-            method: 'GET',
-            headers: {
-                'x-access-token': token
+        Array.from(articoli).forEach(articolo=>{
+            if(articolo.id!="intestazione"){
+                articolo.textContent=""
             }
         })
-            .then(resp => resp.json())
-            .then(function (data) {
-                console.log(data);
-                data.forEach(articolo => populateArticoli(articolo));
-            })
-            .catch(error => console.error(error));
+
+    if(query==""||query=="*"){
+        getAllCataloghi()
     }else{
-        if(selectedSearchType=="nome"){
-            return fetch('../articoli/filtered/'+catalogo._id+'/queryNome/' + query, {
+    
+        var searchTypes = document.getElementsByName("searchType");
+          var selectedSearchType;
+    
+          for (var i = 0; i < searchTypes.length; i++) {
+            if (searchTypes[i].checked) {
+              selectedSearchType = searchTypes[i].value;
+              break;
+            }
+          }
+    
+        if( selectedSearchType=="barcode"){
+            return fetch('../articoli/filtered/'+catalogo._id+'/queryBarcode/' + query, {
                 method: 'GET',
                 headers: {
                     'x-access-token': token
@@ -92,8 +83,25 @@ function handleSearch(){
                     data.forEach(articolo => populateArticoli(articolo));
                 })
                 .catch(error => console.error(error));
+        }else{
+            if(selectedSearchType=="nome"){
+                return fetch('../articoli/filtered/'+catalogo._id+'/queryNome/' + query, {
+                    method: 'GET',
+                    headers: {
+                        'x-access-token': token
+                    }
+                })
+                    .then(resp => resp.json())
+                    .then(function (data) {
+                        console.log(data);
+                        data.forEach(articolo => populateArticoli(articolo));
+                    })
+                    .catch(error => console.error(error));
+            }
         }
     }
+
+    
 
     
 

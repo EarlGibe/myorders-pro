@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Lista Clienti</title>
+  <title>Lista Subagenti</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="../includes/css/normalize.css">
   <script src="../includes/js/favicon.js"></script>
 </head>
 <body onload="loadPage()">
-  <h1>Lista Clienti</h1>
+  <h1>Lista Subagenti</h1>
 
   <section class="search-form">
     <form id="seachbarForm" >
 
-      <input type="text" name="query" placeholder="Cerca cliente..." />
+      <input type="text" name="query" placeholder="Cerca subagente..." />
       <input type="submit" value="Cerca" onclick="handleSearch()"/>
     
     </form>
   </section>
 
-  <ul id="clientiList"></ul>
+  <ul id="subagentiList"></ul>
 
   <div id="buttons">
     <a href="../home"><button>Indietro</button></a>
-    <button id="openModalButton" onclick="openModal()">Nuovo cliente...</button>
+    <button id="openModalButton" onclick="openModal()">Nuovo subagente...</button>
   </div>
 
   <div id="modal" class="modal">

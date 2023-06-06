@@ -3,11 +3,11 @@ var userData = JSON.parse(localStorage.getItem("userData"));
 var role = localStorage.getItem("role")
 
 function loadPage() {
-  getAllClienti()
+  getAllSubagenti()
 }
 
-function getAllClienti() {
-  fetch('../clienti', {
+function getAllSubagenti() {
+  fetch('../subagenti', {
     method: 'GET',
     headers: {
       'x-access-token': token
@@ -16,18 +16,7 @@ function getAllClienti() {
     .then((resp) => resp.json()) // Transform the data into json
     .then(function (data) { // Here you get the data to modify as you please
       console.log(data);
-      if(role=="dipendente" || userData.isAgente){
-        data.forEach(cliente=>{
-            populateClienti(cliente)
-        })
-      }else if(role=="subagente"){
-        data.forEach(cliente=>{
-          if (userData.listaClienti.includes(cliente._id)) {
-            populateClienti(cliente)
-          }
-        })
-      }
-        
+      data.forEach(subagente => populateSubagenti(subagente));
     })
     .catch(error => console.error(error)); // If there is any error, you will catch them here
 }
@@ -39,12 +28,12 @@ function handleSearch() {
 
   var query = document.getElementsByName("query")[0].value;
 
-  document.getElementById("clientiList").textContent = "";
+  document.getElementById("subagentiList").textContent = "";
 
   if (query == "" || query == "*") {
-    getAllClienti()
+    getAllSubagenti()
   } else {
-    return fetch('../clienti/filtered/queryNome/' + query, {
+    return fetch('../subagenti/filtered/queryNome/' + query, {
       method: 'GET',
       headers: {
         'x-access-token': token
@@ -53,22 +42,9 @@ function handleSearch() {
       .then(resp => resp.json())
       .then(function (data) {
         console.log(data);
-
-        if(role=="dipendente" || userData.isAgente){
-          data.forEach(cliente=>{
-          
-              populateClienti(cliente)
-         
-          })
-      }else if(role=="subagente"){
-        data.forEach(cliente=>{
-          if (userData.listaClienti.includes(cliente._id)) {
-            populateClienti(cliente)
-          }
+        data.forEach(subagente=>{
+            populateSubagenti(subagente)
         })
-      }
-
-        
         
       })
       .catch(error => console.error(error));
@@ -77,32 +53,32 @@ function handleSearch() {
 
 }
 
-function populateClienti(cliente) {
-    var clientiList = document.getElementById('clientiList');
+function populateSubagenti(subagente) {
+    var subagentiList = document.getElementById('subagentiList');
 
     const listItem = document.createElement('li');
-    const nomeCliente = document.createElement('span');
+    const nomeSubagente = document.createElement('span');
     const viewButton = document.createElement('button');
 
-    // Imposta il nome del cliente
-    nomeCliente.textContent = cliente.nome + " " + cliente.cognome;
+    // Imposta il nome del subagente
+    nomeSubagente.textContent = subagente.nome + " " + subagente.cognome;
 
-    // Imposta l'ID del cliente come attributo del pulsante
-    viewButton.setAttribute('data-id', cliente._id);
+    // Imposta l'ID del subagente come attributo del pulsante
+    viewButton.setAttribute('data-id', subagente._id);
 
     // Aggiungi il testo al pulsante
     viewButton.textContent = 'Visualizza';
 
-    // Aggiungi un gestore di eventi al pulsante per reindirizzare alla pagina del cliente
+    // Aggiungi un gestore di eventi al pulsante per reindirizzare alla pagina del subagente
     viewButton.addEventListener('click', function () {
-      const clienteId = this.getAttribute('data-id');
-      window.location.href = '../profiloCliente/index.html?clienteId=' + clienteId;
+      const subagenteId = this.getAttribute('data-id');
+      window.location.href = '../profiloSubagente/index.html?subagenteId=' + subagenteId;
     });
 
     // Aggiungi gli elementi al DOM
-    listItem.appendChild(nomeCliente);
+    listItem.appendChild(nomeSubagente);
     listItem.appendChild(viewButton);
-    clientiList.appendChild(listItem);
+    subagentiList.appendChild(listItem);
 
 }
 
@@ -114,7 +90,7 @@ function openModal() {
 
   // Effettua la chiamata AJAX per caricare il contenuto della pagina
   $.ajax({
-    url: "../creaCliente",
+    url: "../creaSubagente",
     success: function (data) {
       modalContent.innerHTML = data;
     },
@@ -132,9 +108,9 @@ function closeModal() {
   modalContent.innerHTML = "";
 }
 
-function registerCliente() {
+function registerSubagente() {
 
-  const form = document.getElementById('clienteForm');
+  const form = document.getElementById('subagenteForm');
 
   form.addEventListener("click", function (event) {
     event.preventDefault()
@@ -143,11 +119,11 @@ function registerCliente() {
 
   // Controllo la completezza dei campi
   //if (form.checkValidity()) {
-  // Raccolgo i dati del cliente
+  // Raccolgo i dati del subagente
   var nome = document.getElementById('nome').value;
   var cognome = document.getElementById('cognome').value;
 
-  const clienteData = {
+  const subagenteData = {
     codiceFiscale: document.getElementById('codiceFiscale').value,
     residenza: document.getElementById('residenza').value,
     telefono: document.getElementById('telefono').value,
@@ -160,25 +136,20 @@ function registerCliente() {
   };
 
   // Effettuo la richiesta POST per salvare i dati nel database
-  fetch('../clienti', {
+  fetch('../subagenti', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'x-access-token': token
     },
-    body: JSON.stringify({ nome: nome, cognome: cognome, anagrafica: clienteData })
+    body: JSON.stringify({ nome: nome, cognome: cognome, anagrafica: subagenteData })
   })
     .then((resp) => resp.json()) // Transform the data into json
     .then(function (data) { // Here you get the data to modify as you please
       // Elaboro la risposta del server
-      console.log(data.createdCliente.risultato);
-
-      if (role == "subagente") {
-        associaClienteASubagente(data.createdCliente.risultato._id);
-      }
-      // Esegui altre azioni o reindirizzamento alla pagina desiderata
+      console.log(data.createdSubagente.risultato);
         
-        populateClienti(data.createdCliente.risultato)
+        populateSubagenti(data.createdSubagente.risultato)
         closeModal()
 
     })
@@ -187,21 +158,3 @@ function registerCliente() {
     });
 }
 
-function associaClienteASubagente(clienteId) {
-  fetch('../subagenti/addCliente/' + userData._id, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-access-token': token
-    },
-    body: JSON.stringify({ cliente: clienteId })
-  })
-    .then((resp) => resp.json()) // Transform the data into json
-    .then(function (data) { // Here you get the data to modify as you please
-      // Elaboro la risposta del server
-      console.log('Dati salvati:', data);
-    })
-    .catch(error => {
-      console.error('Errore durante la richiesta:', error);
-    });
-}

@@ -4,42 +4,63 @@ const router = express.Router();
 const Cliente = require('./models/cliente');
 
 // Gestore per la richiesta GET /clienti
-router.get('', async(req,res)=>{
-    try{
-      
-        const arrayClientiDB = await Cliente.find().sort({anagrafica: 1})
+router.get('', async (req, res) => {
+  try {
 
-            if (arrayClientiDB) {
-              res.json(arrayClientiDB);
-            } else {
-              res.status(404).json({ error: 'La lista clienti è vuota.' });
-            }
-    }catch(error){
-      if(process.env.VERBOSE_LOG == '1') console.error(error);
-        res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei clienti.' });
+    const arrayClientiDB = await Cliente.find().sort({ cognome: 1, nome: 1 })
+
+    if (arrayClientiDB) {
+      res.json(arrayClientiDB);
+    } else {
+      res.status(404).json({ error: 'La lista clienti è vuota.' });
     }
+  } catch (error) {
+    if (process.env.VERBOSE_LOG == '1') console.error(error);
+    res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei clienti.' });
+  }
 })
 
 // Gestore per la richiesta GET /clienti/:id
 router.get('/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-        const cliente = await Cliente.findById(id)
-        if (cliente) {
-            res.json(cliente);
-        } else {
-            res.status(404).json({ error: 'Il cliente richiesto non è stato trovato.' });
-        }
-    } catch (error) {
-      if(process.env.VERBOSE_LOG == '1') console.error(error);
-        res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del cliente.' });
+  try {
+    const id = req.params.id;
+    const cliente = await Cliente.findById(id)
+    if (cliente) {
+      res.json(cliente);
+    } else {
+      res.status(404).json({ error: 'Il cliente richiesto non è stato trovato.' });
     }
+  } catch (error) {
+    if (process.env.VERBOSE_LOG == '1') console.error(error);
+    res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del cliente.' });
+  }
 });
 
- // Gestore per la richiesta POST /clienti
+router.get('/filtered/queryNome/:nome', async (req, res) => {
+  try {
+    const nome = req.params.nome;
+    const arrayDB = await Cliente.find({
+      $or: [
+        { nome: { $regex: nome, $options: 'i' } },
+        { cognome: { $regex: nome, $options: 'i' } }
+      ]
+    }).sort({ nome: 1, cognome: 1 });
+
+    if (arrayDB) {
+      res.json(arrayDB);
+    } else {
+      res.status(404).json({ error: 'La lista clienti è vuota.' });
+    }
+  } catch (error) {
+    if (process.env.VERBOSE_LOG == '1') console.error(error);
+    res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei clienti filtrati.' });
+  }
+})
+
+// Gestore per la richiesta POST /clienti
 router.post('', async (req, res) => {
   try {
-    if(process.env.VERBOSE_LOG == '1') console.log(req.body);
+    if (process.env.VERBOSE_LOG == '1') console.log(req.body);
     const nuovoCliente = new Cliente(req.body);
     const risultato = await nuovoCliente.save();
     res.json({
@@ -82,7 +103,7 @@ router.put('/:id', async (req, res) => {
 // DELETE generale
 router.delete('', async (req, res) => {
   try {
-    const deletedClienti = await Clienti.deleteMany({});
+    const deletedClienti = await Cliente.deleteMany({});
     res.status(200).json(deletedClienti);
   } catch (err) {
     res.status(400).json({ message: err.message });

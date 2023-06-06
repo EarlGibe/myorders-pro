@@ -10,9 +10,19 @@
 
 <body onload="loadPage()">
   <h1>Aziende Disponibili</h1>
+
+  <section class="search-form">
+    <form id="seachbarForm" >
+
+      <input type="text" name="query" placeholder="Cerca azienda..." />
+      <input type="submit" value="Cerca" onclick="handleSearch()"/>
+    
+    </form>
+  </section>
+  
+
+
   <ul id="aziendeList"></ul>
-
-
 
   <div id="buttons">
     <a href="../home"><button>Indietro</button></a>
@@ -25,9 +35,24 @@
       <span class="close">&times;</span>
       <h2>Crea azienda</h2>
 
-        <label for="name">Nome:</label>
+        <label for="name">Nome*:</label>
         <input type="text" id="nameAzienda" name="nameAzienda" required>
 
+        <label for="name">Indirizzo*:</label>
+        <input type="text" id="indirizzoAzienda" name="indirizzoAzienda" required>
+
+        <label for="name">Telefono*:</label>
+        <input type="text" id="telefonoAzienda" name="telefonoAzienda" required>
+
+        <label for="name">Email*:</label>
+        <input type="text" id="emailAzienda" name="emailAzienda" required>
+
+        <label for="name">Partita Iva*:</label>
+        <input type="text" id="pIvaAzienda" name="pIvaAzienda" required>
+
+        <label for="name">sito Web:</label>
+        <input type="text" id="websiteAzienda" name="websiteAzienda" >
+        <br>
         <button type="submit" onclick="aziendaPOST()">Invia</button>
  
         <span id="successoAzienda" class="infoMessageSpan"></span>

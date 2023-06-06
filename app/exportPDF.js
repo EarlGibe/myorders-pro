@@ -35,6 +35,10 @@ async function exportTableToPdf(html, outputFilePath) {
     text-align:right;
   }
   
+  .nameAzienda{
+    display:none;
+  }
+  
   table {
     width: 100%;
     border-collapse: collapse;

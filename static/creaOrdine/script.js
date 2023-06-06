@@ -1,6 +1,6 @@
 var token = localStorage.getItem("token");
 var userId = localStorage.getItem("userId");
-var userData = JSON.parse(localStorage.getItem("subagente"));
+var userData = JSON.parse(localStorage.getItem("userData"));
 var userEmail = localStorage.getItem("userEmail");
 
 
@@ -36,7 +36,7 @@ function populateClienti(clienti) {
         if (userData.listaClienti.includes(clienti[i]._id)) {
             var option = document.createElement("option");
             option.value = clienti[i]._id;
-            option.text = clienti[i].anagrafica.nome + " " + clienti[i].anagrafica.cognome; // Assuming the "nome" property holds the name of the cliente
+            option.text = clienti[i].nome + " " + clienti[i].cognome; // Assuming the "nome" property holds the name of the cliente
             selectCliente.appendChild(option);
         }
 
@@ -103,7 +103,7 @@ function populateAziende(aziende) {
     aziende.forEach(azienda => {
         if (userData.listaAziende.includes(azienda._id)) {
             const listItem = document.createElement("li");
-            listItem.textContent = azienda.dati.nome;
+            listItem.textContent = azienda.nome;
 
             const selectButton = document.createElement("button");
             selectButton.textContent = "Seleziona";
@@ -538,7 +538,7 @@ function populateArticoliInRiepilogo(article) {
                 aziendaSpan.className = "aziendaTable";
 
                 var nameAzienda = document.createElement("h3");
-                nameAzienda.textContent = azienda.dati.nome;
+                nameAzienda.textContent = azienda.nome;
                 nameAzienda.className = "nameAzienda";
                 nameAzienda.id = azienda._id;
 
@@ -716,6 +716,8 @@ function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
                     .then(resp => resp.json())
                     .then(async function (data) {
 
+                        var nomeAzienda = azienda.getElementsByClassName("nameAzienda")[0].textContent
+
                         html = "<h1> Ordine " + ordineAttivo._id + "</h1>";
 
                         html += "<div id='dati'>"
@@ -733,6 +735,8 @@ function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
                         html += "<section id='datiAziendaSection'>"
 
                         html += "<h4> Dati azienda: </h4>";
+
+                        html +=`<div><strong>Azienda:</strong> ${nomeAzienda}</div>`
 
                         html += jsonToHTML(data.dati);
 
@@ -761,7 +765,6 @@ function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
 
                         html += azienda.innerHTML;
                         html += totaleAziendaSpan.innerHTML;
-                        var nomeAzienda = azienda.getElementsByClassName("nameAzienda")[0].textContent;
 
                         email={
                             azienda:data.dati.email,

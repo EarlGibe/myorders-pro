@@ -1,14 +1,16 @@
 const token = localStorage.getItem("token");
 var azienda = JSON.parse(localStorage.getItem("aziendaSelezionata"));
 var role = localStorage.getItem("role");
+var userData = JSON.parse(localStorage.getItem("userData"));
+
 
 function loadPage() {
-    var modal = document.getElementById("openModalButton");
+    var modal=document.getElementById("openModalButton");
 
-    if (role != "dipendente") {
-        modal.style.display = "none";
-    } else {
+    if(role=="dipendente" || userData.isAgente){
         configureModal()
+    }else{
+        modal.style.display="none";
     }
 
     getAllCataloghi();
@@ -46,20 +48,26 @@ function handleSearch() {
 
     document.getElementById("cataloghiList").textContent="";
 
-    return fetch('../cataloghi/filtered/' + azienda._id + '/queryNome/' + query, {
-        method: 'GET',
-        headers: {
-            'x-access-token': token
-        }
-    })
-        .then(resp => resp.json())
-        .then(function (data) {
-            console.log(data);
-            data.forEach(catalogo => {
-                populateCataloghi(catalogo);
-            })
+    if(query==""||query=="*"){
+        getAllCataloghi()
+    }else{
+        return fetch('../cataloghi/filtered/' + azienda._id + '/queryNome/' + query, {
+            method: 'GET',
+            headers: {
+                'x-access-token': token
+            }
         })
-        .catch(error => console.error(error));
+            .then(resp => resp.json())
+            .then(function (data) {
+                console.log(data);
+                data.forEach(catalogo => {
+                    populateCataloghi(catalogo);
+                })
+            })
+            .catch(error => console.error(error));
+    }    
+
+    
 }
 
 function populateCataloghi(catalogo) {

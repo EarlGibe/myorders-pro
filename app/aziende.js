@@ -6,7 +6,7 @@ const Azienda = require('./models/azienda')
 // GET aziende generico
 router.get('', async(req,res)=>{
     try{
-        const arrayAziendeDB = await Azienda.find().sort({dati: 1});
+        const arrayAziendeDB = await Azienda.find().sort({nome: 1});
 
         if(arrayAziendeDB) res.json(arrayAziendeDB);
         else res.status(404).json( { error: "La lista aziende è vuota." });
@@ -29,6 +29,22 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'azienda.' });
     }
 });
+
+router.get('/filtered/queryNome/:nome', async(req,res)=>{
+  try{
+    const nome = req.params.nome;
+      const arrayCataloghiDB = await Azienda.find({nome: {$regex: nome, $options: 'i'}}).sort({nome: 1});
+        
+          if (arrayCataloghiDB) {
+            res.json(arrayCataloghiDB);
+          } else {
+            res.status(404).json({ error: 'La lista cataloghi è vuota.' });
+          }            
+  }catch(error){
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
+      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei cataloghi filtrati.' });
+  }
+})
 
  // POST /aziende
 router.post('', async (req, res) => {

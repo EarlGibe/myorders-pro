@@ -1,31 +1,59 @@
 const token = localStorage.getItem("token");
-const userData = JSON.parse(localStorage.getItem("subagente"));
+const userData = JSON.parse(localStorage.getItem("userData"));
+const role=localStorage.getItem("role");
 
 function getAllOrdini() {
   // Effettua una richiesta GET ai dati dei ordini dal server
-  fetch('../ordini/filteredBySubagente/' + userData._id, {
-    method: 'GET',
-    headers: {
-      'x-access-token': token
-    },
-  })
-    .then(response => response.json())
-    .then(data => {
-      var ordiniList = document.getElementById('ordiniList');
-
-      if (data) {
-        // Itera attraverso i dati dei ordini e crea gli elementi della lista
-        data.forEach(ordine => {
-          populateOrdini(ordine, ordiniList);
-        });
-      }else{
-        document.getElementById("warning").textContent="Non sono presenti ordini";
-      }
-
+  if(role=="dipendente" || userData.isAgente){
+    fetch('../ordini', {
+      method: 'GET',
+      headers: {
+        'x-access-token': token
+      },
     })
-    .catch(error => {
-      console.log('Si è verificato un errore:', error);
-    });
+      .then(response => response.json())
+      .then(data => {
+        var ordiniList = document.getElementById('ordiniList');
+  
+        if (data!="") {
+          // Itera attraverso i dati dei ordini e crea gli elementi della lista
+          data.forEach(ordine => {
+            populateOrdini(ordine, ordiniList);
+          });
+        }else{
+          document.getElementById("warning").textContent="Non sono presenti ordini";
+        }
+  
+      })
+      .catch(error => {
+        console.log('Si è verificato un errore:', error);
+      });
+  }else if(role=="subagente"){
+    fetch('../ordini/filteredBySubagente/' + userData._id, {
+      method: 'GET',
+      headers: {
+        'x-access-token': token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        var ordiniList = document.getElementById('ordiniList');
+  
+        if (data!="") {
+          // Itera attraverso i dati dei ordini e crea gli elementi della lista
+          data.forEach(ordine => {
+            populateOrdini(ordine, ordiniList);
+          });
+        }else{
+          document.getElementById("warning").textContent="Non sono presenti ordini";
+        }
+  
+      })
+      .catch(error => {
+        console.log('Si è verificato un errore:', error);
+      });
+  }
+  
 }
 
 function populateOrdini(ordine, ordiniList) {
@@ -45,7 +73,7 @@ function populateOrdini(ordine, ordiniList) {
   })
     .then(response => response.json())
     .then(data => {
-      nomeCliente = data.anagrafica.nome + "_" + data.anagrafica.cognome;
+      nomeCliente = data.nome + "_" + data.cognome;
       // Imposta il nome del ordine
       nomeOrdine.textContent = nomeCliente + "_" + new Date(ordine.dataInserimento).toLocaleString();
     })

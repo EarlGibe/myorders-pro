@@ -2,12 +2,12 @@ const token = localStorage.getItem("token");
 
 var queryString = window.location.search;
   var parametri = new URLSearchParams(queryString);
-  // Ottenere l'ID del cliente dalla query string o da altre fonti
-  const clienteId = parametri.get("clienteId"); 
+  // Ottenere l'ID del dipendente dalla query string o da altre fonti
+  const dipendenteId = parametri.get("dipendenteId"); 
 
-// Funzione per ottenere i dati del cliente dal server
-function getClientData() {
-    fetch(`/clienti/${clienteId}`,{
+// Funzione per ottenere i dati del dipendente dal server
+function getDipendenteData() {
+    fetch(`/dipendenti/${dipendenteId}`,{
       method: 'GET',
       headers: {'x-access-token': token}
     })
@@ -40,7 +40,7 @@ function getClientData() {
   
     // Effettua la chiamata AJAX per caricare il contenuto della pagina
     $.ajax({
-      url: "../getAllOrdini/index.html?clienteId="+clienteId,
+      url: "../getAllOrdini/index.html?dipendenteId="+dipendenteId,
       success: function (data) {
         modalContent.innerHTML = data;
         getAllOrdini()
@@ -61,7 +61,7 @@ function getClientData() {
 
   function getAllOrdini() {
     // Effettua una richiesta GET ai dati dei ordini dal server
-    fetch('../ordini/filteredByCliente/' + clienteId, {
+    fetch('../ordini/filteredByDipendente/' + dipendenteId, {
         method: 'GET',
         headers: {
             'x-access-token': token

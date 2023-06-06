@@ -36,6 +36,27 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.get('/filtered/queryNome/:nome', async(req,res)=>{
+  try{
+    const nome = req.params.nome;
+      const arrayDB = await Subagente.find({
+        $or: [
+          { nome: { $regex: nome, $options: 'i' } },
+          { cognome: { $regex: nome, $options: 'i' } }
+        ]
+      }).sort({ nome: 1, cognome: 1 });
+        
+          if (arrayDB) {
+            res.json(arrayDB);
+          } else {
+            res.status(404).json({ error: 'La lista subagenti è vuota.' });
+          }            
+  }catch(error){
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
+      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei subagenti filtrati.' });
+  }
+})
+
  // Gestore per la richiesta POST /subagenti
 router.post('', async (req, res) => {
   try {
