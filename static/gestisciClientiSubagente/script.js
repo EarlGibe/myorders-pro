@@ -1,6 +1,4 @@
 const token = localStorage.getItem("token");
-var userData = JSON.parse(localStorage.getItem("userData"));
-var role = localStorage.getItem("role")
 var modalActive=false;
 
 function loadPage() {
@@ -9,6 +7,8 @@ function loadPage() {
 }
 
 function getAllClienti() {
+  var subagente=JSON.parse(localStorage.getItem("subagente"));
+
   fetch('../clienti', {
     method: 'GET',
     headers: {
@@ -18,17 +18,19 @@ function getAllClienti() {
     .then((resp) => resp.json()) // Transform the data into json
     .then(function (data) { // Here you get the data to modify as you please
       console.log(data);
-      if(role=="dipendente" || userData.isAgente){
+
         data.forEach(cliente=>{
-            populateClienti(cliente)
-        })
-      }else if(role=="subagente"){
-        data.forEach(cliente=>{
-          if (userData.listaClienti.includes(cliente._id) && cliente.status) {
-            populateClienti(cliente)
+          if(modalActive){
+            if (!subagente.listaClienti.includes(cliente._id)) {
+              populateClienti(cliente)
+            }
+          }else{
+            if (subagente.listaClienti.includes(cliente._id) && cliente.status) {
+              populateClienti(cliente)
+            }
           }
+          
         })
-      }
         
     })
     .catch(error => console.error(error)); // If there is any error, you will catch them here
@@ -42,7 +44,7 @@ function selezionaPaese(){
   if(!modalActive){
     document.getElementById("paeseSearchbar").appendChild(emptyItem);
   }else{
-    document.getElementById("paeseCreaCliente").appendChild(emptyItem);
+    document.querySelector("#modal-content #paeseSearchbar").appendChild(emptyItem);
   }
   
 
@@ -63,7 +65,7 @@ function selezionaPaese(){
         if(!modalActive){
           document.getElementById("paeseSearchbar").appendChild(paeseItem);
         }else{
-          document.getElementById("paeseCreaCliente").appendChild(paeseItem);
+          document.querySelector("#modal-content #paeseSearchbar").appendChild(paeseItem);
         }
       })
     })
@@ -79,14 +81,14 @@ function selezionaRegione() {
   if(!modalActive){
     paese= document.getElementById("paeseSearchbar").value;
   }else{
-    paese= document.getElementById("paeseCreaCliente").value;
+    paese= document.querySelector("#modal-content #paeseSearchbar").value;
   }
 
 
   if(!modalActive){
     document.getElementById("regioneSearchbar").textContent = ""
   }else{
-    document.getElementById("regioneCreaCliente").textContent = ""
+    document.querySelector("#modal-content #regioneSearchbar").textContent = ""
   }
   
 
@@ -97,7 +99,7 @@ function selezionaRegione() {
     document.getElementById("regioneSearchbar").appendChild(emptyItem);
 
   }else{
-    document.getElementById("regioneCreaCliente").appendChild(emptyItem);
+    document.querySelector("#modal-content #regioneSearchbar").appendChild(emptyItem);
 
   }
   
@@ -118,7 +120,7 @@ function selezionaRegione() {
         if(!modalActive){
           document.getElementById("regioneSearchbar").appendChild(regioneItem);
         }else{
-          document.getElementById("regioneCreaCliente").appendChild(regioneItem);
+          document.querySelector("#modal-content #regioneSearchbar").appendChild(regioneItem);
         }
         
       })
@@ -134,7 +136,7 @@ function selezionaProvincia() {
   if(!modalActive){
     document.getElementById("provinciaSearchbar").textContent = ""
   }else{
-    document.getElementById("provinciaCreaCliente").textContent = ""
+    document.querySelector("#modal-content #provinciaSearchbar").textContent = ""
   }
   
 
@@ -144,7 +146,7 @@ function selezionaProvincia() {
   if(!modalActive){
     document.getElementById("provinciaSearchbar").appendChild(emptyItem);
   }else{
-    document.getElementById("provinciaCreaCliente").appendChild(emptyItem);
+    document.querySelector("#modal-content #provinciaSearchbar").appendChild(emptyItem);
   }
 
   var paese
@@ -153,13 +155,13 @@ function selezionaProvincia() {
   if(!modalActive){
     paese = document.getElementById("paeseSearchbar").value
   }else{
-    paese = document.getElementById("paeseCreaCliente").value
+    paese = document.querySelector("#modal-content #paeseSearchbar").value
   }
 
   if(!modalActive){
     regione = document.getElementById("regioneSearchbar").value
   }else{
-    regione = document.getElementById("regioneCreaCliente").value
+    regione = document.querySelector("#modal-content #regioneSearchbar").value
   }
   
 
@@ -181,7 +183,7 @@ function selezionaProvincia() {
         if(!modalActive){
           document.getElementById("provinciaSearchbar").appendChild(provinciaItem);
         }else{
-          document.getElementById("provinciaCreaCliente").appendChild(provinciaItem);
+          document.querySelector("#modal-content #provinciaSearchbar").appendChild(provinciaItem);
         }
         
       })
@@ -192,18 +194,41 @@ function selezionaProvincia() {
 }
 
 function handleSearch() {
-  document.getElementById("seachbarForm").addEventListener("click", function (event) {
-    event.preventDefault()
-  })
+  var subagente=JSON.parse(localStorage.getItem("subagente"));
 
-  var query = document.getElementsByName("query")[0].value;
-  var paese = document.getElementById("paeseSearchbar").value;
-  var regione = document.getElementById("regioneSearchbar").value;
-  var provincia = document.getElementById("provinciaSearchbar").value;
+  var query;
+    var paese;
+    var regione;
+    var provincia;
+    var clientiList;
+
+  if(modalActive){
+    document.querySelector("#modal-content #seachbarForm").addEventListener("click", function (event) {
+      event.preventDefault()
+    })
+  
+     query = document.querySelector('#modal-content input[name="query"]').value;
+     paese = document.querySelector("#modal-content #paeseSearchbar").value;
+     regione = document.querySelector("#modal-content #regioneSearchbar").value;
+     provincia = document.querySelector("#modal-content #provinciaSearchbar").value;
+     clientiList=document.querySelector("#modal-content #clientiList");
+
+  }else{
+    document.getElementById("seachbarForm").addEventListener("click", function (event) {
+      event.preventDefault()
+    })
+  
+     query = document.getElementsByName("query")[0].value;
+     paese = document.getElementById("paeseSearchbar").value;
+     regione = document.getElementById("regioneSearchbar").value;
+     provincia = document.getElementById("provinciaSearchbar").value;
+     clientiList=document.getElementById("clientiList");
+  }
+  
 
   if(query=="") query="empty"
 
-  document.getElementById("clientiList").textContent = "";
+  clientiList.textContent = "";
 
     return fetch('../clienti/filtered/queryNome/' + query+'/paesi/'+paese+'/regioni/'+regione+'/province/'+provincia, {
       method: 'GET',
@@ -215,21 +240,19 @@ function handleSearch() {
       .then(function (data) {
         console.log(data);
 
-        if(role=="dipendente" || userData.isAgente){
-          data.forEach(cliente=>{
-          
-              populateClienti(cliente)
-         
-          })
-      }else if(role=="subagente"){
         data.forEach(cliente=>{
-          if (userData.listaClienti.includes(cliente._id) && cliente.status) {
-            populateClienti(cliente)
+          if(modalActive){
+            if (!subagente.listaClienti.includes(cliente._id)) {
+              populateClienti(cliente)
+            }
+          }else{
+            if (subagente.listaClienti.includes(cliente._id) && cliente.status) {
+              populateClienti(cliente)
+            }
           }
+          
         })
-      }
 
-        
         
       })
       .catch(error => console.error(error));
@@ -239,7 +262,13 @@ function handleSearch() {
 }
 
 function populateClienti(cliente) {
-    var clientiList = document.getElementById('clientiList');
+    var clientiList
+    
+    if(modalActive){
+      clientiList= document.querySelector('#modal-content #clientiList');
+    }else{
+      clientiList= document.getElementById('clientiList');
+    }
 
     const listItem = document.createElement('li');
     const nomeCliente = document.createElement('span');
@@ -254,57 +283,22 @@ function populateClienti(cliente) {
     viewButton.setAttribute('data-id', cliente._id);
 
     // Aggiungi il testo al pulsante
-    viewButton.textContent = 'Visualizza';
-
-    // Aggiungi un gestore di eventi al pulsante per reindirizzare alla pagina del cliente
-    viewButton.addEventListener('click', function () {
-      const clienteId = this.getAttribute('data-id');
-      window.location.href = '../profiloCliente/index.html?clienteId=' + clienteId;
-    });
-
-    span.appendChild(viewButton);
-
-    if(role=="dipendente" || userData.isAgente){
-
-      const modificaClienteButton = document.createElement("button");
-
-
-            modificaClienteButton.textContent = "Modifica";
-            modificaClienteButton.style.width="100px"
-            modificaClienteButton.style.marginLeft="10px"
-            modificaClienteButton.style.background="grey"
-
-            modificaClienteButton.addEventListener("click", () => {
-                // Cambia lo status dell'cliente a false
-                window.location.href="/modificaCliente?clienteId="+cliente._id;
-            });
-    
-        span.appendChild(modificaClienteButton);
-
-        const toggleStatusButton = document.createElement("button");
-
-        if(cliente.status){
-            toggleStatusButton.textContent = "Disabilita";
-            toggleStatusButton.style.background="#8B0000"
-            toggleStatusButton.addEventListener("click", () => {
-                // Cambia lo status dell'cliente a false
-                toggleStatusCliente(cliente._id, false)
-            });
-        }else{
-            toggleStatusButton.textContent = "Abilita"
-            toggleStatusButton.style.background="#006400"
-            
-            toggleStatusButton.addEventListener("click", () => {
-                // Cambia lo status dell'cliente a true
-                toggleStatusCliente(cliente._id, true)
-            });
-        }
-
-        toggleStatusButton.style.width="100px"
-        toggleStatusButton.style.marginLeft="10px"
-    
-        span.appendChild(toggleStatusButton);
+    if(modalActive){
+      viewButton.textContent = 'Associa';
+      // Aggiungi un gestore di eventi al pulsante per reindirizzare alla pagina del cliente
+      viewButton.addEventListener('click', function () {
+        associaClienteASubagente(cliente._id)
+      });
+      
+    }else{
+      viewButton.textContent = 'Dissocia';
+      // Aggiungi un gestore di eventi al pulsante per reindirizzare alla pagina del cliente
+      viewButton.addEventListener('click', function () {
+        dissociaClienteASubagente(cliente._id)
+      });
     }
+    
+    span.appendChild(viewButton);
     
     // Aggiungi gli elementi al DOM
     listItem.appendChild(nomeCliente);
@@ -321,10 +315,11 @@ function openModal() {
 
   // Effettua la chiamata AJAX per caricare il contenuto della pagina
   $.ajax({
-    url: "../creaCliente",
+    url: "../getAllClienti",
     success: function (data) {
       modalContent.innerHTML = data;
       modalActive=true;
+      getAllClienti()
       selezionaPaese();
     },
     error: function (error) {
@@ -334,6 +329,7 @@ function openModal() {
 }
 
 function closeModal() {
+
   var modal = document.getElementById("modal");
   modal.style.display = "none";
 
@@ -341,88 +337,37 @@ function closeModal() {
   modalContent.innerHTML = "";
 
   modalActive=false;
+  
 }
 
-function registerCliente() {
-
-  const form = document.getElementById('clienteForm');
-
-  form.addEventListener("click", function (event) {
-    event.preventDefault()
-  });
-
-  var nome = document.getElementById('nome').value
-  var cognome = document.getElementById('cognome').value
-  var paese = document.getElementById("paeseCreaCliente").value;
-  var regione = document.getElementById("regioneCreaCliente").value;
-  var provincia = document.getElementById("provinciaCreaCliente").value;
-  var codiceFiscale = document.getElementById('codiceFiscale').value
-  var residenza = document.getElementById('residenza').value
-  var telefono = document.getElementById('telefono').value
-  var email = document.getElementById('email').value
-  var ragioneSociale = document.getElementById('ragioneSociale').value
-  var pIVA = document.getElementById('pIVA').value
-  var sede = document.getElementById('sede').value
-  var codSDI = document.getElementById('codSDI').value
-  var pec = document.getElementById('pec').value
-
-  if(nome!="" && cognome!="" && codiceFiscale!="" &&  paese!="empty" &&  regione!="empty" &&  provincia!="empty" &&  residenza!="" &&  telefono!="" &&  email!="" &&  pIVA!="" &&  sede!=""){
-
-  // Raccolgo i dati del cliente
-  const clienteData = {
-    codiceFiscale: codiceFiscale,
-    residenza: residenza,
-    telefono: telefono,
-    email: email,
-    ragioneSociale: ragioneSociale,
-    pIVA: pIVA,
-    sede: sede,
-    codSDI: codSDI,
-    pec: pec
-  };
-
-  // Effettuo la richiesta POST per salvare i dati nel database
-  fetch('../clienti', {
-    method: 'POST',
+function associaClienteASubagente(clienteId) {
+  var subagente=JSON.parse(localStorage.getItem("subagente"));
+  fetch('../subagenti/addCliente/' + subagente._id, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       'x-access-token': token
     },
-    body: JSON.stringify({
-      nome: nome,
-      cognome: cognome,
-      paese: paese,
-      regione: regione,
-      provincia: provincia,
-      anagrafica: clienteData
-    })
+    body: JSON.stringify({ cliente: clienteId })
   })
     .then((resp) => resp.json()) // Transform the data into json
     .then(function (data) { // Here you get the data to modify as you please
       // Elaboro la risposta del server
-      console.log('Dati salvati:', data);
 
-      if (role == "subagente") {
-        associaClienteASubagente(data.createdCliente.risultato._id);
-      }
+      var buttonSelected=document.querySelector('button[data-id="'+clienteId+'"]');
 
-      document.getElementById("warning").textContent="";
-      document.getElementById("successo").textContent="Cliente inserito con successo. \nSarai reindirizzato a home"
-      // Esegui altre azioni o reindirizzamento alla pagina desiderata
-      setTimeout(function(){closeModal()},1500);
+      buttonSelected.textContent="Associato";
+      buttonSelected.style.backgroundColor="green"
+
     })
     .catch(error => {
       console.error('Errore durante la richiesta:', error);
     });
-  }else{
-    document.getElementById("warning").textContent="Campi obbligatori mancanti!";
-  }
-
-
 }
 
-function associaClienteASubagente(clienteId) {
-  fetch('../subagenti/addCliente/' + userData._id, {
+function dissociaClienteASubagente(clienteId){
+  var subagente=JSON.parse(localStorage.getItem("subagente"));
+  fetch('../subagenti/rimuoviCliente/' + subagente._id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -434,26 +379,34 @@ function associaClienteASubagente(clienteId) {
     .then(function (data) { // Here you get the data to modify as you please
       // Elaboro la risposta del server
       console.log('Dati salvati:', data);
+      var buttonSelected=document.querySelector('button[data-id="'+clienteId+'"]');
+
+      buttonSelected.textContent="Dissociato";
+      buttonSelected.style.backgroundColor="red"
     })
     .catch(error => {
       console.error('Errore durante la richiesta:', error);
     });
 }
 
-function toggleStatusCliente(id, bool){
-  fetch('../clienti/'+id, {
-      method: 'PUT',
-      headers: {
-          'x-access-token': token,
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ status: bool}),
+function aggiornaPagina(){
+  var subagente=JSON.parse(localStorage.getItem("subagente"));
+
+  fetch('../subagenti/' + subagente._id, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token
+    },
   })
-      .then((resp) => resp.json()) // Transform the data into json
-      .then(function (data) { // Here you get the data to modify as you please
-          window.location.href="./"
-      })
-      .catch(function (error) {
-          console.error(error);
-      }); // If there is any error, you will catch them here*/
+    .then((resp) => resp.json()) // Transform the data into json
+    .then(function (data) { // Here you get the data to modify as you please
+      // Elaboro la risposta del server
+      console.log(data)
+      localStorage.setItem("subagente",JSON.stringify(data));
+      window.location.href="./"
+    })
+    .catch(error => {
+      console.error('Errore durante la richiesta:', error);
+    });
 }

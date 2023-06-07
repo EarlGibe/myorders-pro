@@ -23,12 +23,16 @@
       <p><strong>Sede:</strong> <span id="sede"></span></p>
       <p><strong>Codice SDI:</strong> <span id="codSDI"></span></p>
       <p><strong>PEC:</strong> <span id="pec"></span></p>
+      <br>
+      <p><strong>Is Agente:</strong> <span id="isAgente"></span></p>
     </div>
   </div>
 
   <div id="buttons">
     <button id="openModalButton" onclick="openModal()">Vedi ordini</button>
-    <a href="../getAllSubagenti"><button>Indietro</button></a>
+    <button onclick="redirectToGestisciClienti()">Gestisci clienti</button>
+    <button onclick="redirectToGestisciAziende()">Gestisci aziende</button>
+    <button onclick="redirectBack()">Indietro</button>
   </div>
 
   <div id="modal" class="modal">

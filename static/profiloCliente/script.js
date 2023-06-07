@@ -18,6 +18,9 @@ function getClientData() {
         document.getElementById("nome").textContent = data.nome;
         document.getElementById("cognome").textContent = data.cognome;
         document.getElementById("codiceFiscale").textContent = anagrafica.codiceFiscale;
+        document.getElementById("paese").textContent = data.paese; 
+        document.getElementById("regione").textContent = data.regione;
+        document.getElementById("provincia").textContent = data.provincia;
         document.getElementById("residenza").textContent = anagrafica.residenza;
         document.getElementById("telefono").textContent = anagrafica.telefono;
         document.getElementById("email").textContent = anagrafica.email;
@@ -100,7 +103,7 @@ function populateOrdini(ordine, ordiniList) {
     // Aggiungi un gestore di eventi al pulsante per reindirizzare alla pagina del ordine
     viewButton.addEventListener('click', function () {
         const ordineId = this.getAttribute('data-id');
-        window.location.href = '/ordini/id=' + ordineId;
+        window.location.href = '../visualizzaOrdine?ordineId=' + ordineId+'&clienteId='+clienteId;
     });
 
     // Aggiungi gli elementi al DOM

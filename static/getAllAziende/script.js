@@ -27,13 +27,12 @@ function getAllAziende() {
     })
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) { // Here you get the data to modify as you please
-            console.log(data);
-            const aziendeList = document.getElementById("aziendeList");
+
             data.forEach(azienda => {
                 if(role=="dipendente" || userData.isAgente){
                     populateAziende(azienda)
                 }else if(role=="subagente"){
-                    if (userData.listaAziende.includes(azienda._id)) {
+                    if (userData.listaAziende.includes(azienda._id) && azienda.status) {
                         populateAziende(azienda)
                     }
                 }
@@ -71,13 +70,11 @@ function handleSearch() {
                     });
                 }else if(role=="subagente"){
                     data.forEach(azienda => {
-                        if (userData.listaAziende.includes(azienda._id)) {
+                        if (userData.listaAziende.includes(azienda._id) && azienda.status) {
                             populateAziende(azienda)
                         }
                     });
-                }
-
-                
+                }                
             })
             .catch(error => console.error(error));
     }
@@ -91,6 +88,8 @@ function populateAziende(azienda) {
     const listItem = document.createElement("li");
     listItem.textContent = azienda.nome;
 
+    var span=document.createElement("span")
+
     const selectButton = document.createElement("button");
     selectButton.textContent = "Seleziona";
     selectButton.addEventListener("click", () => {
@@ -101,7 +100,36 @@ function populateAziende(azienda) {
 
     });
 
-    listItem.appendChild(selectButton);
+    span.appendChild(selectButton);
+
+    if(role=="dipendente" || userData.isAgente){
+        const toggleStatusButton = document.createElement("button");
+
+        if(azienda.status){
+            toggleStatusButton.textContent = "Disabilita";
+            toggleStatusButton.style.width="100px"
+            toggleStatusButton.style.marginLeft="10px"
+            toggleStatusButton.style.background="#8B0000"
+            toggleStatusButton.addEventListener("click", () => {
+                // Cambia lo status dell'azienda a false
+                toggleStatusAzienda(azienda._id, false)
+            });
+        }else{
+            toggleStatusButton.textContent = "Abilita"
+            toggleStatusButton.style.background="#006400"
+            toggleStatusButton.style.width="100px"
+            toggleStatusButton.style.marginLeft="10px"
+            toggleStatusButton.addEventListener("click", () => {
+                // Cambia lo status dell'azienda a true
+                toggleStatusAzienda(azienda._id, true)
+            });
+        }
+    
+        span.appendChild(toggleStatusButton);
+    }
+    
+
+    listItem.appendChild(span);
     aziendeList.appendChild(listItem);
 
 }
@@ -169,4 +197,22 @@ function aziendaPOST() {
     }
 
 
+}
+
+function toggleStatusAzienda(id, bool){
+    fetch('../aziende/'+id, {
+        method: 'PUT',
+        headers: {
+            'x-access-token': token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: bool}),
+    })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+            window.location.href="./"
+        })
+        .catch(function (error) {
+            console.error(error);
+        }); // If there is any error, you will catch them here*/
 }

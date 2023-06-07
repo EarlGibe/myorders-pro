@@ -1,6 +1,6 @@
-document.getElementById("loginButton").addEventListener("click", function(event){
+document.getElementById("loginButton").addEventListener("click", function (event) {
     event.preventDefault()
-  });
+});
 
 /**
  * This variable stores the logged in user
@@ -24,21 +24,21 @@ function login() {
     fetch('../authentications', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify( { username: username, password: password } ),
+        body: JSON.stringify({ username: username, password: password }),
     })
-    .then((resp) => resp.json()) // Transform the data into json
-    .then(function(data) { // Here you get the data to modify as you please
-        //console.log(data);
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+            console.log(data);
 
-        if(data.success){
-            redirect(data.id,data.token);
-        }else{
-            document.getElementById("warningMessage").textContent="Username o password errati";
-        }
-        
-        return;
-    })
-    .catch( error => console.error(error) ); // If there is any error you will catch them here
+            if (data.success) {
+                redirect(data.id, data.token);
+            } else {
+                document.getElementById("warningMessage").textContent = "Username o password errati";
+            }
+
+            return;
+        })
+        .catch(error => console.error(error)); // If there is any error you will catch them here
 
 };
 
@@ -47,30 +47,35 @@ function login() {
  * home: if the account is activate yet.
  * activateAccount: if not.
  */
-function redirect(id,token) {
+function redirect(id, token) {
 
-    fetch('../users/' + id,{
+    fetch('../users/' + id, {
         method: 'GET',
-        headers: {'x-access-token': token}
+        headers: { 'x-access-token': token }
     })
-    .then((resp) => resp.json()) // Transform the data into json
-    .then(function(data) { // Here you get the data to modify as you please
-        
-        localStorage.setItem('token', token);
-        localStorage.setItem('userId', id);
-        localStorage.setItem('userEmail', data.email);
-        localStorage.setItem('roleId', data.role_id);
-        localStorage.setItem('role', data.role);
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
 
-        console.log(data);
-        
-        if(!data.isFirstAccess){
-                window.location.href = "../home";
-        }else{
-            window.location.href = "../activateAccount/index.html";
-        }
-        
-    })
-    .catch( error => console.error(error) );    // If there is any error you will catch them here
+            localStorage.setItem('token', token);
+            localStorage.setItem('userId', id);
+            localStorage.setItem('userEmail', data.email);
+            localStorage.setItem('roleId', data.role_id);
+            localStorage.setItem('role', data.role);
+
+            console.log(data);
+
+            if (data.status) {
+                if (!data.isFirstAccess) {
+                    window.location.href = "../home";
+                } else {
+                    window.location.href = "../modificaPassword/index.html";
+                }
+            } else {
+                document.getElementById("warningMessage").textContent = "Il tuo account è stato disabilitato";
+            }
+
+
+        })
+        .catch(error => console.error(error));    // If there is any error you will catch them here
 }
 

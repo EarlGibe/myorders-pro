@@ -15,6 +15,7 @@ const ordini = require('./ordini.js');
 const subagenti = require('./subagenti.js');
 const tecnici = require('./tecnici.js');
 const reimpostaPassword = require('./reimpostaPassword.js');
+const regioniPerPaese = require('./regioniPerPaese.js');
 
 //modello
 const chiavi = require('../app/models/chiave.js');
@@ -128,6 +129,8 @@ app.use('/subagenti', subagenti);
 app.use('/tecnici', tecnici);
 app.use('/reimpostaPassword', reimpostaPassword);
 app.use('/exportPDF', exportPDF);
+
+app.use('/regioniPerPaese', regioniPerPaese);
 
 /* Default 404 handler */
 app.use((req, res) => {

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Creazione Cliente</title>
+  <title>Modifica Cliente</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="../includes/css/normalize.css">
   <script src="../includes/js/favicon.js"></script>
 </head>
 <body onload="loadPage()">
-  <h1>Creazione Cliente</h1>
+  <h1>Modifica Cliente</h1>
   <form id="clienteForm" method="post">
     <h2>Anagrafica</h2>
     <label for="nome">Nome*:</label>
@@ -25,13 +25,13 @@
 
     <label for="Regione">Regione*:</label>
     <select name="regione" id="regioneCreaCliente" onchange="selezionaProvincia()" required>
-      <option value="empty"></option>
     </select>
 
     <label for="Provincia">Provincia*:</label>
     <select name="provincia" id="provinciaCreaCliente" required>
-      <option value="empty"></option>
     </select>
+
+    <button onclick="abilitaModifica()">Modifica...</button>
 
     <br><br>
 
@@ -61,12 +61,14 @@
     <label for="pec">PEC:</label>
     <input type="text" id="pec" name="pec[]"><br>
 
-    <input type="submit" value="Salva" onclick="registerCliente()">
-    
-    <br><br>
-    
-    <span id="warning"></span>
-    <span id="successo"></span>
+    <br>
+    <span id="buttons">
+      <input id="backButton" onclick="redirectBack()" type="submit" value="Indietro">
+      <span id="warning"></span>
+      <input id="saveButton" onclick="salvaCliente()" type="submit" value="Salva">
+    </form>
+    </span>    
+
   </form>
 </body>
 <script src="./script.js"></script> 

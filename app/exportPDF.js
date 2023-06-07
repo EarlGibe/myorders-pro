@@ -155,6 +155,7 @@ router.post('', async (req, res) => {
       sgMail.send(msg)
         .then(() => {
           console.log('Email sent successfully');
+          res.status(200).json({email:"ok"});
         })
         .catch(error => {
           console.error('Error sending email:', error);

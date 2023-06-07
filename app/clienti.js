@@ -57,6 +57,54 @@ router.get('/filtered/queryNome/:nome', async (req, res) => {
   }
 })
 
+router.get('/filtered/queryNome/:nome/paesi/:paese/regioni/:regione/province/:provincia', async (req, res) => {
+  try {
+    var nome = req.params.nome;
+    var paese = req.params.paese;
+    var regione = req.params.regione;
+      var provincia = req.params.provincia;
+
+      if(nome=="empty"){
+        nome={ $regex: /^/ };
+      }else{
+        nome={ $regex: nome, $options: 'i' }
+      }
+
+      if(paese=="empty"){
+        paese={ $regex: /^/ };
+      }
+
+      if(regione=="empty"){
+        regione={ $regex: /^/ };
+      }
+
+      if(provincia=="empty"){
+        provincia={ $regex: /^/ };
+      }
+    
+      const arrayDB = await Cliente.find({
+        $and: [
+          {$or: [
+            { nome: nome },
+            { cognome: nome }
+          ]},
+          { paese: paese  },
+          { regione: regione},
+          { provincia:provincia}
+        ]
+      }).sort({ nome: 1, cognome: 1 });
+
+    if (arrayDB) {
+      res.json(arrayDB);
+    } else {
+      res.status(404).json({ error: 'La lista clienti è vuota.' });
+    }
+  } catch (error) {
+    if (process.env.VERBOSE_LOG == '1') console.error(error);
+    res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei clienti filtrati.' });
+  }
+})
+
 // Gestore per la richiesta POST /clienti
 router.post('', async (req, res) => {
   try {

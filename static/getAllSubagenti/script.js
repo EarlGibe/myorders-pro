@@ -16,7 +16,16 @@ function getAllSubagenti() {
     .then((resp) => resp.json()) // Transform the data into json
     .then(function (data) { // Here you get the data to modify as you please
       console.log(data);
-      data.forEach(subagente => populateSubagenti(subagente));
+
+      data.forEach(subagente => {
+        if (role == "dipendente" || userData.isAgente) {
+          populateSubagenti(subagente)
+        } else if (role == "subagente") {
+          if (subagente.status) {
+            populateSubagenti(subagente);
+          }
+        }
+      })
     })
     .catch(error => console.error(error)); // If there is any error, you will catch them here
 }
@@ -42,8 +51,14 @@ function handleSearch() {
       .then(resp => resp.json())
       .then(function (data) {
         console.log(data);
-        data.forEach(subagente=>{
+        data.forEach(subagente => {
+          if (role == "dipendente" || userData.isAgente) {
             populateSubagenti(subagente)
+          } else if (role == "subagente") {
+            if (subagente.status) {
+              populateSubagenti(subagente);
+            }
+          }
         })
         
       })
@@ -60,6 +75,8 @@ function populateSubagenti(subagente) {
     const nomeSubagente = document.createElement('span');
     const viewButton = document.createElement('button');
 
+    var span = document.createElement("span")
+
     // Imposta il nome del subagente
     nomeSubagente.textContent = subagente.nome + " " + subagente.cognome;
 
@@ -75,86 +92,73 @@ function populateSubagenti(subagente) {
       window.location.href = '../profiloSubagente/index.html?subagenteId=' + subagenteId;
     });
 
+    span.appendChild(viewButton);
+
+  if ((role == "dipendente" || userData.isAgente)) {
+    const toggleStatusButton = document.createElement("button");
+
+    if (subagente.status) {
+      toggleStatusButton.textContent = "Disabilita";
+      toggleStatusButton.style.background = "#8B0000"
+      toggleStatusButton.addEventListener("click", () => {
+        // Cambia lo status dell'subagente a false
+        toggleStatusSubagente(subagente._id, false)
+      });
+    } else {
+      toggleStatusButton.textContent = "Abilita"
+      toggleStatusButton.style.background = "#006400"
+
+      toggleStatusButton.addEventListener("click", () => {
+        // Cambia lo status dell'subagente a true
+        toggleStatusSubagente(subagente._id, true)
+      });
+    }
+
+    toggleStatusButton.style.width = "100px"
+    toggleStatusButton.style.marginLeft = "10px"
+
+    span.appendChild(toggleStatusButton);
+  }
+
     // Aggiungi gli elementi al DOM
     listItem.appendChild(nomeSubagente);
-    listItem.appendChild(viewButton);
+    listItem.appendChild(span);
     subagentiList.appendChild(listItem);
 
 }
 
-function openModal() {
-  var modal = document.getElementById("modal");
-  modal.style.display = "block";
-
-  var modalContent = document.getElementById("modal-content");
-
-  // Effettua la chiamata AJAX per caricare il contenuto della pagina
-  $.ajax({
-    url: "../creaSubagente",
-    success: function (data) {
-      modalContent.innerHTML = data;
-    },
-    error: function (error) {
-      console.error(error);
-    }
-  });
-}
-
-function closeModal() {
-  var modal = document.getElementById("modal");
-  modal.style.display = "none";
-
-  var modalContent = document.getElementById("modal-content");
-  modalContent.innerHTML = "";
-}
-
-function registerSubagente() {
-
-  const form = document.getElementById('subagenteForm');
-
-  form.addEventListener("click", function (event) {
-    event.preventDefault()
-  });
 
 
-  // Controllo la completezza dei campi
-  //if (form.checkValidity()) {
-  // Raccolgo i dati del subagente
-  var nome = document.getElementById('nome').value;
-  var cognome = document.getElementById('cognome').value;
-
-  const subagenteData = {
-    codiceFiscale: document.getElementById('codiceFiscale').value,
-    residenza: document.getElementById('residenza').value,
-    telefono: document.getElementById('telefono').value,
-    email: document.getElementById('email').value,
-    ragioneSociale: document.getElementById('ragioneSociale').value,
-    pIVA: document.getElementById('pIVA').value,
-    sede: document.getElementById('sede').value,
-    codSDI: document.getElementById('codSDI').value,
-    pec: document.getElementById('pec').value,
-  };
-
-  // Effettuo la richiesta POST per salvare i dati nel database
-  fetch('../subagenti', {
-    method: 'POST',
+function toggleStatusSubagente(id, bool) {
+  fetch('../subagenti/' + id, {
+    method: 'PUT',
     headers: {
-      'Content-Type': 'application/json',
-      'x-access-token': token
+      'x-access-token': token,
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ nome: nome, cognome: cognome, anagrafica: subagenteData })
+    body: JSON.stringify({ status: bool }),
   })
     .then((resp) => resp.json()) // Transform the data into json
     .then(function (data) { // Here you get the data to modify as you please
-      // Elaboro la risposta del server
-      console.log(data.createdSubagente.risultato);
-        
-        populateSubagenti(data.createdSubagente.risultato)
-        closeModal()
 
+      fetch('../users/cambiaStatus/' + id, {
+        method: 'PUT',
+        headers: {
+          'x-access-token': token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: bool }),
+      })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+
+          window.location.href = "./"
+        })
+        .catch(function (error) {
+          console.error(error);
+        }); // If there is any error, you will catch them here*/
     })
-    .catch(error => {
-      console.error('Errore durante la richiesta:', error);
-    });
+    .catch(function (error) {
+      console.error(error);
+    }); // If there is any error, you will catch them here*/
 }
-

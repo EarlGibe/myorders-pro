@@ -36,7 +36,16 @@ function getAllArticoli() {
         .then(resp => resp.json())
         .then(function (data) {
             console.log(data);
-            data.forEach(articolo => populateArticoli(articolo));
+
+            data.forEach(articolo => {
+                if(role=="dipendente" || userData.isAgente){
+                    populateArticoli(articolo);
+                }else if(role=="subagente"){
+                    if (articolo.status) {
+                        populateArticoli(articolo);
+                    }
+                }
+            })
         })
         .catch(error => console.error(error));
 }
@@ -57,7 +66,7 @@ function handleSearch(){
         })
 
     if(query==""||query=="*"){
-        getAllCataloghi()
+        getAllArticoli()
     }else{
     
         var searchTypes = document.getElementsByName("searchType");
@@ -80,7 +89,15 @@ function handleSearch(){
                 .then(resp => resp.json())
                 .then(function (data) {
                     console.log(data);
-                    data.forEach(articolo => populateArticoli(articolo));
+                    data.forEach(articolo => {
+                        if(role=="dipendente" || userData.isAgente){
+                            populateArticoli(articolo);
+                        }else if(role=="subagente"){
+                            if (articolo.status) {
+                                populateArticoli(articolo);
+                            }
+                        }
+                    })
                 })
                 .catch(error => console.error(error));
         }else{
@@ -94,7 +111,15 @@ function handleSearch(){
                     .then(resp => resp.json())
                     .then(function (data) {
                         console.log(data);
-                        data.forEach(articolo => populateArticoli(articolo));
+                        data.forEach(articolo => {
+                            if(role=="dipendente" || userData.isAgente){
+                                populateArticoli(articolo);
+                            }else if(role=="subagente"){
+                                if (articolo.status) {
+                                    populateArticoli(articolo);
+                                }
+                            }
+                        })
                     })
                     .catch(error => console.error(error));
             }
@@ -148,11 +173,37 @@ function populateArticoli(article) {
             </td>
 
             `
+            if(role=="dipendente" || userData.isAgente){
+                const toggleStatusButton = document.createElement("button");
+        
+                if(article.status){
+                    toggleStatusButton.textContent = "Disabilita";
+                    toggleStatusButton.style.background="#8B0000"
+            
+                    toggleStatusButton.addEventListener("click", () => {
+                        // Cambia lo status dell'articolo a false
+                        toggleStatusArticolo(article._id, false)
+                    });
+                }else{
+                    toggleStatusButton.textContent = "Abilita"
+                    toggleStatusButton.style.background="#006400"
 
+                    toggleStatusButton.addEventListener("click", () => {
+                        // Cambia lo status dell'articolo a true
+                        toggleStatusArticolo(article._id, true)
+                    });
+                }
+
+                toggleStatusButton.style.width="100px"
+                toggleStatusButton.style.marginLeft="10px"
+                toggleStatusButton.style.marginBottom="10px"
+                toggleStatusButton.style.marginTop="10px"
+            
+                row.appendChild(toggleStatusButton);
+            }
 
 
     productTable.appendChild(row);
-
 
 }
 
@@ -193,4 +244,22 @@ function uploadArticoli() {
         }
     };
     xhr.send(formData);
+}
+
+function toggleStatusArticolo(id, bool){
+    fetch('../articoli/'+id, {
+        method: 'PUT',
+        headers: {
+            'x-access-token': token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: bool}),
+    })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+            window.location.href="./"
+        })
+        .catch(function (error) {
+            console.error(error);
+        }); // If there is any error, you will catch them here*/
 }

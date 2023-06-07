@@ -7,7 +7,8 @@ const subagenteSchema = new Schema({
   anagrafica: {type: Object, required:true},
   listaClienti: [ {type: Schema.Types.ObjectId, ref: 'Cliente', required: true} ],
   listaAziende: [ {type: Schema.Types.ObjectId, ref: 'Azienda', required: true} ],
-  isAgente: {type: Boolean, required:true},
+  isAgente: {type: Boolean, required:false},
+  status:{type:Boolean, default:true},
   dataInserimento: { type: Date, default: Date.now }
 },
 {

@@ -1,72 +1,192 @@
 var token = localStorage.getItem("token");
 var userId = localStorage.getItem("userId");
-var userData = JSON.parse(localStorage.getItem("subagente"));
-var role=localStorage.getItem("role");
+var userData = JSON.parse(localStorage.getItem("userData"));
+var role = localStorage.getItem("role");
 
+function loadPage() {
+  var emptyItem = document.createElement("option");
+  emptyItem.value = "";
+  emptyItem.textContent = "";
+  document.getElementById("paeseCreaCliente").appendChild(emptyItem);
 
-function registerCliente(){
-
-    const form = document.getElementById('clienteForm');
-
-    form.addEventListener("click", function(event){
-        event.preventDefault()
-      });
-  
-
-      // Controllo la completezza dei campi
-      //if (form.checkValidity()) {
-        // Raccolgo i dati del cliente
-        const clienteData = {
-          nome: document.getElementById('nome').value,
-          cognome: document.getElementById('cognome').value,
-          codiceFiscale: document.getElementById('codiceFiscale').value,
-          residenza: document.getElementById('residenza').value,
-          telefono: document.getElementById('telefono').value,
-          email: document.getElementById('email').value,
-          ragioneSociale: document.getElementById('ragioneSociale').value,
-          pIVA: document.getElementById('pIVA').value,
-          sede: document.getElementById('sede').value,
-          codSDI: document.getElementById('codSDI').value,
-          pec: document.getElementById('pec').value,
-        };
-
-        // Effettuo la richiesta POST per salvare i dati nel database
-        fetch('../clienti', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-access-token': token
-          },
-          body: JSON.stringify({anagrafica:clienteData})
-        })
-          .then((resp) => resp.json()) // Transform the data into json
-          .then(function(data) { // Here you get the data to modify as you please
-            // Elaboro la risposta del server
-            console.log('Dati salvati:', data);
-
-            if(role=="subagente"){
-              associaClienteASubagente(data.createdCliente.risultato._id);
-            }
-            // Esegui altre azioni o reindirizzamento alla pagina desiderata
-            window.location.href='../home';
-          })
-          .catch(error => {
-            console.error('Errore durante la richiesta:', error);
-          });
-    
+  fetch('../regioniPerPaese/paesi', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token
+    }
+  })
+    .then((resp) => resp.json()) // Transform the data into json
+    .then(function (data) { // Here you get the data to modify as you please
+      // Elaboro la risposta del server
+      Array.from(data).forEach(paese => {
+        var paeseItem = document.createElement("option");
+        paeseItem.value = paese;
+        paeseItem.textContent = paese;
+        document.getElementById("paeseCreaCliente").appendChild(paeseItem);
+      })
+    })
+    .catch(error => {
+      console.error('Errore durante la richiesta:', error);
+    });
 }
 
-function associaClienteASubagente(clienteId){
-  fetch('../subagenti/addCliente/'+userData._id, {
+function selezionaRegione() {
+
+  var paese = document.getElementById("paeseCreaCliente").value
+
+  document.getElementById("regioneCreaCliente").textContent = ""
+
+  var emptyItem = document.createElement("option");
+  emptyItem.value = "";
+  emptyItem.textContent = "";
+  document.getElementById("regioneCreaCliente").appendChild(emptyItem);
+
+  fetch('../regioniPerPaese/paesi/' + paese + "/regioni", {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token
+    }
+  })
+    .then((resp) => resp.json()) // Transform the data into json
+    .then(function (data) { // Here you get the data to modify as you please
+      // Elaboro la risposta del server
+      Array.from(data).forEach(regione => {
+        var regioneItem = document.createElement("option");
+        regioneItem.value = regione;
+        regioneItem.textContent = regione;
+        document.getElementById("regioneCreaCliente").appendChild(regioneItem);
+      })
+    })
+    .catch(error => {
+      console.error('Errore durante la richiesta:', error);
+    });
+}
+
+function selezionaProvincia() {
+  document.getElementById("provinciaCreaCliente").textContent = ""
+
+  var emptyItem = document.createElement("option");
+  emptyItem.value = "";
+  emptyItem.textContent = "";
+  document.getElementById("provinciaCreaCliente").appendChild(emptyItem);
+
+  var paese = document.getElementById("paeseCreaCliente").value
+  var regione = document.getElementById("regioneCreaCliente").value
+
+  fetch('../regioniPerPaese/paesi/' + paese + "/regioni/"+regione+"/province", {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token
+    }
+  })
+    .then((resp) => resp.json()) // Transform the data into json
+    .then(function (data) { // Here you get the data to modify as you please
+      // Elaboro la risposta del server
+      var province=data.map(obj=>obj.province).flat()
+      province.forEach(provincia => {
+        var provinciaItem = document.createElement("option");
+        provinciaItem.value = provincia;
+        provinciaItem.textContent = provincia;
+        document.getElementById("provinciaCreaCliente").appendChild(provinciaItem);
+      })
+    })
+    .catch(error => {
+      console.error('Errore durante la richiesta:', error);
+    });
+}
+
+function registerCliente() {
+
+  const form = document.getElementById('clienteForm');
+
+  form.addEventListener("click", function (event) {
+    event.preventDefault()
+  });
+
+  var nome = document.getElementById('nome').value
+  var cognome = document.getElementById('cognome').value
+  var paese = document.getElementsByName("paese")[0].value;
+  var regione = document.getElementsByName("regione")[0].value;
+  var provincia = document.getElementsByName("provincia")[0].value;
+  var codiceFiscale = document.getElementById('codiceFiscale').value
+  var residenza = document.getElementById('residenza').value
+  var telefono = document.getElementById('telefono').value
+  var email = document.getElementById('email').value
+  var ragioneSociale = document.getElementById('ragioneSociale').value
+  var pIVA = document.getElementById('pIVA').value
+  var sede = document.getElementById('sede').value
+  var codSDI = document.getElementById('codSDI').value
+  var pec = document.getElementById('pec').value
+
+  if(nome!="" && cognome!="" && codiceFiscale!="" &&  paese!="empty" &&  regione!="empty" &&  provincia!="empty" &&  residenza!="" &&  telefono!="" &&  email!="" &&  pIVA!="" &&  sede!=""){
+
+  // Raccolgo i dati del cliente
+  const clienteData = {
+    codiceFiscale: codiceFiscale,
+    residenza: residenza,
+    telefono: telefono,
+    email: email,
+    ragioneSociale: ragioneSociale,
+    pIVA: pIVA,
+    sede: sede,
+    codSDI: codSDI,
+    pec: pec
+  };
+
+  // Effettuo la richiesta POST per salvare i dati nel database
+  fetch('../clienti', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token
+    },
+    body: JSON.stringify({
+      nome: nome,
+      cognome: cognome,
+      paese: paese,
+      regione: regione,
+      provincia: provincia,
+      anagrafica: clienteData
+    })
+  })
+    .then((resp) => resp.json()) // Transform the data into json
+    .then(function (data) { // Here you get the data to modify as you please
+      // Elaboro la risposta del server
+      console.log('Dati salvati:', data);
+
+      if (role == "subagente") {
+        associaClienteASubagente(data.createdCliente.risultato._id);
+      }
+
+      document.getElementById("warning").textContent="";
+      document.getElementById("successo").textContent="Cliente inserito con successo. \nSarai reindirizzato a home"
+      // Esegui altre azioni o reindirizzamento alla pagina desiderata
+      setTimeout(function(){window.location.href = '../home'},1500);
+    })
+    .catch(error => {
+      console.error('Errore durante la richiesta:', error);
+    });
+  }else{
+    document.getElementById("warning").textContent="Campi obbligatori mancanti!";
+  }
+
+
+}
+
+function associaClienteASubagente(clienteId) {
+  fetch('../subagenti/addCliente/' + userData._id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       'x-access-token': token
     },
-    body: JSON.stringify({cliente:clienteId})
+    body: JSON.stringify({ cliente: clienteId })
   })
     .then((resp) => resp.json()) // Transform the data into json
-    .then(function(data) { // Here you get the data to modify as you please
+    .then(function (data) { // Here you get the data to modify as you please
       // Elaboro la risposta del server
       console.log('Dati salvati:', data);
     })

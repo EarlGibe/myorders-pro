@@ -161,3 +161,7 @@ li {
   text-align: center;
   color:green;
 }
+
+.modal #buttons{
+  display:none;
+}

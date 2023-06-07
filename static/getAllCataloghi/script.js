@@ -30,9 +30,17 @@ function getAllCataloghi() {
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) { // Here you get the data to modify as you please
             console.log(data);
+            
             data.forEach(catalogo => {
-                populateCataloghi(catalogo);
+                if(role=="dipendente" || userData.isAgente){
+                    populateCataloghi(catalogo);
+                }else if(role=="subagente"){
+                    if (catalogo.status) {
+                        populateCataloghi(catalogo);
+                    }
+                }
             })
+      
 
         })
         .catch(error => console.error(error)); // If there is any error, you will catch them here
@@ -61,7 +69,13 @@ function handleSearch() {
             .then(function (data) {
                 console.log(data);
                 data.forEach(catalogo => {
-                    populateCataloghi(catalogo);
+                    if(role=="dipendente" || userData.isAgente){
+                        populateCataloghi(catalogo);
+                    }else if(role=="subagente"){
+                        if (catalogo.status) {
+                            populateCataloghi(catalogo);
+                        }
+                    }
                 })
             })
             .catch(error => console.error(error));
@@ -78,17 +92,48 @@ function populateCataloghi(catalogo) {
     const listItem = document.createElement("li");
     listItem.textContent = catalogo.nome;
 
+    var span=document.createElement("span")
+
     const selectButton = document.createElement("button");
     selectButton.textContent = "Seleziona";
     selectButton.addEventListener("click", () => {
         // Logica per gestire la selezione dell'catalogo
         console.log("Catalogo selezionato:", catalogo._id);
         localStorage.setItem("catalogoSelezionato", JSON.stringify(catalogo))
-        window.location.href = '../getAllArticoli';
+        window.location.href = '../getAllArticoli/index.html';
 
     });
 
-    listItem.appendChild(selectButton);
+    span.appendChild(selectButton);
+
+    if(role=="dipendente" || userData.isAgente){
+        const toggleStatusButton = document.createElement("button");
+
+        if(catalogo.status){
+            toggleStatusButton.textContent = "Disabilita";
+            toggleStatusButton.style.background="#8B0000"
+            toggleStatusButton.addEventListener("click", () => {
+                // Cambia lo status dell'catalogo a false
+                toggleStatusCatalogo(catalogo._id, false)
+            });
+        }else{
+            toggleStatusButton.textContent = "Abilita"
+            toggleStatusButton.style.background="#006400"
+
+            toggleStatusButton.addEventListener("click", () => {
+                // Cambia lo status dell'catalogo a true
+                toggleStatusCatalogo(catalogo._id, true)
+            });
+        }
+
+        toggleStatusButton.style.width="100px"
+        toggleStatusButton.style.marginLeft="10px"
+    
+        span.appendChild(toggleStatusButton);
+    }
+    
+
+    listItem.appendChild(span);
     cataloghiList.appendChild(listItem);
 
 }
@@ -171,4 +216,22 @@ function uploadArticoli(idCatalogo) {
         }
     };
     xhr.send(formData);
+}
+
+function toggleStatusCatalogo(id, bool){
+    fetch('../cataloghi/'+id, {
+        method: 'PUT',
+        headers: {
+            'x-access-token': token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: bool}),
+    })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+            window.location.href="./"
+        })
+        .catch(function (error) {
+            console.error(error);
+        }); // If there is any error, you will catch them here*/
 }

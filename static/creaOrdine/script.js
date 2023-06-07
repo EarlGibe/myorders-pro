@@ -752,6 +752,7 @@ function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
 
                         html += "<span><strong>Indirizzo fatturazione: </strong>" + indirizzoFatturazione + "<span>"
 
+                        html += "<br><hr><br><br>"
 
                         var totaleCatalogo = azienda.getElementsByClassName("totalePerCatalogo");
                         var totaleOrdineAzienda = 0;

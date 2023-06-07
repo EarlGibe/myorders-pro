@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Riepilogo ordine </title>
+    <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="../includes/css/normalize.css">
+  <script src="../includes/js/favicon.js"></script>
+</head>
+<body onload="loadRiepilogoOrdine()">
+    <h1>Riepilogo ordine</h1>
+    <h3 id="numeroOrdine"></h3>
+    
+  <section id="ordineTotale">
+    <div id="tables">
+
+    </div>
+ 
+    <span id="totaleOrdine">Totale ordine:</span>
+  </section>
+  
+   <br>
+
+   <div id="buttons">
+    <button onclick="redirectBack()">Indietro</button>
+    <button id="openModalButton">Esporta ordine</button>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Concludi ordine</h2>
+
+        <button type="submit" onclick="concludiOrdine()">Invia</button>
+ 
+        <span id="successo" class="infoMessageSpan"></span>
+        <span id="warning" class="infoMessageSpan"></span>
+        <span id="errore" class="infoMessageSpan"></span>
+    </div>
+  </div>
+
+
+
+</body>
+<script src="./script.js"></script>
+</html>

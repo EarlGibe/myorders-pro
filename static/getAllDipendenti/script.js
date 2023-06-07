@@ -16,7 +16,17 @@ function getAllDipendenti() {
     .then((resp) => resp.json()) // Transform the data into json
     .then(function (data) { // Here you get the data to modify as you please
       console.log(data);
-      data.forEach(dipendente => populateDipendenti(dipendente));
+
+      data.forEach(dipendente => {
+        if (role == "dipendente" || userData.isAgente) {
+          populateDipendenti(dipendente);
+        } else if (role == "subagente") {
+          if (dipendente.status) {
+            populateDipendenti(dipendente);
+          }
+        }
+      })
+
     })
     .catch(error => console.error(error)); // If there is any error, you will catch them here
 }
@@ -42,10 +52,16 @@ function handleSearch() {
       .then(resp => resp.json())
       .then(function (data) {
         console.log(data);
-        data.forEach(dipendente=>{
-            populateDipendenti(dipendente)
+        data.forEach(dipendente => {
+          if (role == "dipendente" || userData.isAgente) {
+            populateDipendenti(dipendente);
+          } else if (role == "subagente") {
+            if (dipendente.status) {
+              populateDipendenti(dipendente);
+            }
+          }
         })
-        
+
       })
       .catch(error => console.error(error));
   }
@@ -54,31 +70,61 @@ function handleSearch() {
 }
 
 function populateDipendenti(dipendente) {
-    var dipendentiList = document.getElementById('dipendentiList');
+  var dipendentiList = document.getElementById('dipendentiList');
 
-    const listItem = document.createElement('li');
-    const nomeDipendente = document.createElement('span');
-    const viewButton = document.createElement('button');
+  const listItem = document.createElement('li');
+  const nomeDipendente = document.createElement('span');
+  const viewButton = document.createElement('button');
 
-    // Imposta il nome del dipendente
-    nomeDipendente.textContent = dipendente.nome + " " + dipendente.cognome;
+  var span = document.createElement("span")
 
-    // Imposta l'ID del dipendente come attributo del pulsante
-    viewButton.setAttribute('data-id', dipendente._id);
+  // Imposta il nome del dipendente
+  nomeDipendente.textContent = dipendente.nome + " " + dipendente.cognome;
 
-    // Aggiungi il testo al pulsante
-    viewButton.textContent = 'Visualizza';
+  // Imposta l'ID del dipendente come attributo del pulsante
+  viewButton.setAttribute('data-id', dipendente._id);
 
-    // Aggiungi un gestore di eventi al pulsante per reindirizzare alla pagina del dipendente
-    viewButton.addEventListener('click', function () {
-      const dipendenteId = this.getAttribute('data-id');
-      window.location.href = '../profiloDipendente/index.html?dipendenteId=' + dipendenteId;
-    });
+  // Aggiungi il testo al pulsante
+  viewButton.textContent = 'Visualizza';
 
-    // Aggiungi gli elementi al DOM
-    listItem.appendChild(nomeDipendente);
-    listItem.appendChild(viewButton);
-    dipendentiList.appendChild(listItem);
+  // Aggiungi un gestore di eventi al pulsante per reindirizzare alla pagina del dipendente
+  viewButton.addEventListener('click', function () {
+    const dipendenteId = this.getAttribute('data-id');
+    window.location.href = '../profiloDipendente/index.html?dipendenteId=' + dipendenteId;
+  });
+
+  span.appendChild(viewButton);
+
+  if ((role == "dipendente" || userData.isAgente) && dipendente._id != userData._id) {
+    const toggleStatusButton = document.createElement("button");
+
+    if (dipendente.status) {
+      toggleStatusButton.textContent = "Disabilita";
+      toggleStatusButton.style.background = "#8B0000"
+      toggleStatusButton.addEventListener("click", () => {
+        // Cambia lo status dell'dipendente a false
+        toggleStatusDipendente(dipendente._id, false)
+      });
+    } else {
+      toggleStatusButton.textContent = "Abilita"
+      toggleStatusButton.style.background = "#006400"
+
+      toggleStatusButton.addEventListener("click", () => {
+        // Cambia lo status dell'dipendente a true
+        toggleStatusDipendente(dipendente._id, true)
+      });
+    }
+
+    toggleStatusButton.style.width = "100px"
+    toggleStatusButton.style.marginLeft = "10px"
+
+    span.appendChild(toggleStatusButton);
+  }
+
+  // Aggiungi gli elementi al DOM
+  listItem.appendChild(nomeDipendente);
+  listItem.appendChild(span);
+  dipendentiList.appendChild(listItem);
 
 }
 
@@ -148,9 +194,9 @@ function registerDipendente() {
     .then(function (data) { // Here you get the data to modify as you please
       // Elaboro la risposta del server
       console.log(data.createdDipendente.risultato);
-        
-        populateDipendenti(data.createdDipendente.risultato)
-        closeModal()
+
+      populateDipendenti(data.createdDipendente.risultato)
+      closeModal()
 
     })
     .catch(error => {
@@ -158,3 +204,36 @@ function registerDipendente() {
     });
 }
 
+function toggleStatusDipendente(id, bool) {
+  fetch('../dipendenti/' + id, {
+    method: 'PUT',
+    headers: {
+      'x-access-token': token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ status: bool }),
+  })
+    .then((resp) => resp.json()) // Transform the data into json
+    .then(function (data) { // Here you get the data to modify as you please
+
+      fetch('../users/cambiaStatus/' + id, {
+        method: 'PUT',
+        headers: {
+          'x-access-token': token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: bool }),
+      })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+
+          window.location.href = "./"
+        })
+        .catch(function (error) {
+          console.error(error);
+        }); // If there is any error, you will catch them here*/
+    })
+    .catch(function (error) {
+      console.error(error);
+    }); // If there is any error, you will catch them here*/
+}

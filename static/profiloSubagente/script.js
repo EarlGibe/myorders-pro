@@ -13,6 +13,9 @@ function getSubagenteData() {
     })
       .then(response => response.json())
       .then(data => {
+
+        localStorage.setItem("subagente",JSON.stringify(data));
+
         anagrafica=data.anagrafica;
         // Popolare i campi del profilo con i dati ottenuti
         document.getElementById("nome").textContent = data.nome;
@@ -26,6 +29,7 @@ function getSubagenteData() {
         document.getElementById("sede").textContent = anagrafica.sede;
         document.getElementById("codSDI").textContent = anagrafica.codSDI;
         document.getElementById("pec").textContent = anagrafica.pec;
+        document.getElementById("isAgente").textContent = data.isAgente;
       })
       .catch(error => {
         console.error("Si è verificato un errore:", error);
@@ -99,12 +103,25 @@ function populateOrdini(ordine, ordiniList) {
 
     // Aggiungi un gestore di eventi al pulsante per reindirizzare alla pagina del ordine
     viewButton.addEventListener('click', function () {
-        const ordineId = this.getAttribute('data-id');
-        window.location.href = '/ordini/id=' + ordineId;
+      const ordineId = this.getAttribute('data-id');
+      window.location.href = '../visualizzaOrdine?ordineId=' + ordineId+'&subagenteId='+subagenteId;
     });
 
     // Aggiungi gli elementi al DOM
     listItem.appendChild(nomeOrdine);
     listItem.appendChild(viewButton);
     ordiniList.appendChild(listItem);
+}
+
+function redirectBack(){
+  localStorage.removeItem("subagente")
+  window.location.href="../getAllSubagenti"
+}
+
+function redirectToGestisciClienti(){
+  window.location.href="../gestisciClientiSubagente"
+}
+
+function redirectToGestisciAziende(){
+  window.location.href="../gestisciAziendeSubagente"
 }

@@ -94,6 +94,21 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// PUT per cambiare lo status cercando tramite roleId
+router.put('/cambiaStatus/:roleId', async (req, res) => {
+  try {
+    const roleId = req.params.roleId;
+    const status = req.body.status;
+    const risultato = await User.updateOne(
+      { role_id: roleId},
+      { status: status }
+   );
+    res.status(200).json(risultato);
+  } catch (err) {
+    res.status(400).json({ errore: err.message });
+  }
+});
+
 // DELETE generale
 router.delete('', async (req, res) => {
   try {
