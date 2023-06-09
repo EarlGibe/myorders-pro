@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const sgMail = require('@sendgrid/mail')
 
 async function exportTableToPdf(html, outputFilePath) {
