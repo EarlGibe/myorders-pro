@@ -1,14 +1,16 @@
 openapi: 3.0.0
 info:
-  title: Documentazione API Clienti
+  title: Gestione Clienti API
+  description: API per la gestione dei clienti
   version: 1.0.0
+
 paths:
   /clienti:
     get:
-      summary: Restituisce tutti i clienti
+      summary: Recupera tutti i clienti
       responses:
         '200':
-          description: Elenco dei clienti
+          description: Successo
           content:
             application/json:
               schema:
@@ -17,24 +19,20 @@ paths:
                   $ref: '#/components/schemas/Cliente'
         '404':
           description: Lista clienti vuota
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+      tags:
+        - Clienti
+
     post:
-      summary: Inserisce un nuovo cliente
+      summary: Crea un nuovo cliente
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Cliente'
+              $ref: '#/components/schemas/ClienteInput'
       responses:
         '200':
-          description: Cliente inserito con successo
+          description: Successo
           content:
             application/json:
               schema:
@@ -43,19 +41,12 @@ paths:
                   message:
                     type: string
                   createdCliente:
-                    type: object
-                    properties:
-                      risultato:
-                        $ref: '#/components/schemas/Cliente'
-                      request:
-                        type: object
-                        properties:
-                          type:
-                            type: string
-                            example: GET
-                          url:
-                            type: string
-                            example: /clienti/1
+                    $ref: '#/components/schemas/ClienteOutput'
+        '400':
+          description: Errore di validazione
+      tags:
+        - Clienti
+
     put:
       summary: Aggiorna tutti i clienti
       requestBody:
@@ -63,142 +54,239 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Cliente'
+              $ref: '#/components/schemas/ClienteInput'
       responses:
         '200':
-          description: Clienti aggiornati con successo
+          description: Successo
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   n:
-                    type: integer
-                    description: Numero di documenti modificati
+                    type: number
                   nModified:
-                    type: integer
-                    description: Numero di documenti effettivamente modificati
+                    type: number
                   ok:
-                    type: integer
-                    description: Stato dell'operazione
+                    type: number
+        '400':
+          description: Errore di validazione
+      tags:
+        - Clienti
+
     delete:
       summary: Elimina tutti i clienti
       responses:
         '200':
-          description: Clienti eliminati con successo
+          description: Successo
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   n:
-                    type: integer
-                    description: Numero di documenti eliminati
+                    type: number
                   ok:
-                    type: integer
-                    description: Stato dell'operazione
+                    type: number
+        '400':
+          description: Errore di validazione
+      tags:
+        - Clienti
+
   /clienti/{id}:
     get:
-      summary: Restituisce un singolo cliente
+      summary: Recupera un cliente tramite ID
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
-          description: ID del cliente da restituire
           schema:
             type: string
+          description: ID del cliente
       responses:
         '200':
-          description: Cliente restituito con successo
+          description: Successo
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Cliente'
         '404':
           description: Cliente non trovato
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+      tags:
+        - Clienti
+
     put:
-      summary: Aggiorna un singolo cliente
+      summary: Aggiorna un cliente tramite ID
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
-          description: ID del cliente da aggiornare
           schema:
             type: string
+          description: ID del cliente
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Cliente'
+              $ref: '#/components/schemas/ClienteInput'
       responses:
         '200':
-          description: Cliente aggiornato con successo
+          description: Successo
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Cliente'
-        '404':
-          description: Cliente non trovato
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errore:
-                    type: string
+        '400':
+          description: Errore di validazione
+      tags:
+        - Clienti
+
     delete:
-      summary: Elimina un singolo cliente
+      summary: Elimina un cliente tramite ID
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
-          description: ID del cliente da eliminare
           schema:
             type: string
+          description: ID del cliente
       responses:
         '200':
-          description: Cliente eliminato con successo
+          description: Successo
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Cliente'
         '404':
           description: Cliente non trovato
+      tags:
+        - Clienti
+
+  /clienti/filtered/queryNome/{nome}:
+    get:
+      summary: Recupera clienti filtrati per nome o cognome
+      parameters:
+        - in: path
+          name: nome
+          required: true
+          schema:
+            type: string
+          description: Nome o cognome del cliente da cercare
+      responses:
+        '200':
+          description: Successo
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errore:
-                    type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cliente'
+        '404':
+          description: Lista clienti filtrata vuota
+      tags:
+        - Clienti
+
+  /clienti/filtered/queryNome/{nome}/paesi/{paese}/regioni/{regione}/province/{provincia}:
+    get:
+      summary: Recupera clienti filtrati per nome o cognome, paese, regione e provincia
+      parameters:
+        - in: path
+          name: nome
+          required: true
+          schema:
+            type: string
+          description: Nome o cognome del cliente da cercare
+        - in: path
+          name: paese
+          required: true
+          schema:
+            type: string
+          description: Paese del cliente da filtrare
+        - in: path
+          name: regione
+          required: true
+          schema:
+            type: string
+          description: Regione del cliente da filtrare
+        - in: path
+          name: provincia
+          required: true
+          schema:
+            type: string
+          description: Provincia del cliente da filtrare
+      responses:
+        '200':
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cliente'
+        '404':
+          description: Lista clienti filtrata vuota
+      tags:
+        - Clienti
+
 components:
   schemas:
     Cliente:
       type: object
       properties:
-        id:
-          type: array
-          items:
-            type: number
-          description: Identificatore del cliente
+        _id:
+          type: string
+        nome:
+          type: string
+        cognome:
+          type: string
+        paese:
+          type: string
+        regione:
+          type: string
+        provincia:
+          type: string
         anagrafica:
-          type: string
-          description: ID dell'anagrafica associata al cliente
-        subagente:
-          type: string
-          description: ID del subagente associato al cliente
+          type: object
+        status:
+          type: boolean
         dataInserimento:
           type: string
           format: date-time
-          description: Data di inserimento del cliente
+
+    ClienteInput:
+      type: object
+      properties:
+        nome:
+          type: string
+          required: true
+        cognome:
+          type: string
+          required: true
+        paese:
+          type: string
+          required: true
+        regione:
+          type: string
+          required: true
+        provincia:
+          type: string
+          required: true
+        anagrafica:
+          type: object
+          required: true
         status:
           type: boolean
-          description: Stato del cliente (default: true)
+
+    ClienteOutput:
+      type: object
+      properties:
+        risultato:
+          $ref: '#/components/schemas/Cliente'
+        request:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string

@@ -1,18 +1,24 @@
 openapi: 3.0.0
 info:
-  title: Documentazione API Cataloghi
+  title: Gestione Cataloghi API
   description: API per la gestione dei cataloghi
   version: 1.0.0
 
 paths:
   /cataloghi:
     get:
-      summary: Ottieni tutti i cataloghi
+      summary: Recupera tutti i cataloghi
       responses:
         '200':
-          description: Successo. Restituisce la lista dei cataloghi.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Catalogo'
         '404':
-          description: Cataloghi non trovati.
+          description: Lista cataloghi vuota
       tags:
         - Cataloghi
 
@@ -23,14 +29,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Catalogo'
+              $ref: '#/components/schemas/CatalogoInput'
       responses:
         '200':
-          description: Catalogo creato con successo.
+          description: Successo
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Catalogo'
+                type: object
+                properties:
+                  message:
+                    type: string
+                  createdCatalogo:
+                    $ref: '#/components/schemas/CatalogoOutput'
+        '400':
+          description: Errore di validazione
       tags:
         - Cataloghi
 
@@ -41,12 +54,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Catalogo'
+              $ref: '#/components/schemas/CatalogoInput'
       responses:
         '200':
-          description: Successo. Restituisce i cataloghi aggiornati.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  n:
+                    type: number
+                  nModified:
+                    type: number
+                  ok:
+                    type: number
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
       tags:
         - Cataloghi
 
@@ -54,67 +78,142 @@ paths:
       summary: Elimina tutti i cataloghi
       responses:
         '200':
-          description: Successo. Restituisce i cataloghi eliminati.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  n:
+                    type: number
+                  ok:
+                    type: number
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
       tags:
         - Cataloghi
 
   /cataloghi/{id}:
     get:
-      summary: Ottieni un catalogo specifico
+      summary: Recupera un catalogo tramite ID
       parameters:
-        - name: id
-          in: path
-          description: ID del catalogo da ottenere
+        - in: path
+          name: id
           required: true
           schema:
             type: string
+          description: ID del catalogo
       responses:
         '200':
-          description: Successo. Restituisce il catalogo richiesto.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalogo'
         '404':
-          description: Catalogo non trovato.
+          description: Catalogo non trovato
       tags:
         - Cataloghi
 
     put:
-      summary: Aggiorna un catalogo specifico
+      summary: Aggiorna un catalogo tramite ID
       parameters:
-        - name: id
-          in: path
-          description: ID del catalogo da aggiornare
+        - in: path
+          name: id
           required: true
           schema:
             type: string
+          description: ID del catalogo
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Catalogo'
+              $ref: '#/components/schemas/CatalogoInput'
       responses:
         '200':
-          description: Successo. Restituisce il catalogo aggiornato.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalogo'
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
       tags:
         - Cataloghi
 
     delete:
-      summary: Elimina un catalogo specifico
+      summary: Elimina un catalogo tramite ID
       parameters:
-        - name: id
-          in: path
-          description: ID del catalogo da eliminare
+        - in: path
+          name: id
           required: true
           schema:
             type: string
+          description: ID del catalogo
       responses:
         '200':
-          description: Successo. Restituisce il catalogo eliminato.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalogo'
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
+      tags:
+        - Cataloghi
+
+  /cataloghi/filtered/{azienda}:
+    get:
+      summary: Recupera i cataloghi filtrati per azienda
+      parameters:
+        - in: path
+          name: azienda
+          required: true
+          schema:
+            type: string
+          description: Nome dell'azienda da filtrare
+      responses:
+        '200':
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Catalogo'
+        '404':
+          description: Lista cataloghi filtrata vuota
+      tags:
+        - Cataloghi
+
+  /cataloghi/filtered/{azienda}/queryNome/{nome}:
+    get:
+      summary: Recupera i cataloghi filtrati per azienda e nome
+      parameters:
+        - in: path
+          name: azienda
+          required: true
+          schema:
+            type: string
+          description: Nome dell'azienda da filtrare
+        - in: path
+          name: nome
+          required: true
+          schema:
+            type: string
+          description: Nome del catalogo da cercare
+      responses:
+        '200':
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Catalogo'
+        '404':
+          description: Lista cataloghi filtrata vuota
       tags:
         - Cataloghi
 
@@ -125,23 +224,37 @@ components:
       properties:
         _id:
           type: string
-          description: ID del catalogo
-        listaArticoli:
-          type: array
-          items:
-            type: string
-          description: Lista degli ID degli articoli nel catalogo
+        nome:
+          type: string
         azienda:
           type: string
-          description: ID dell'azienda associata al catalogo
+        status:
+          type: boolean
         dataInserimento:
           type: string
           format: date-time
-          description: Data di inserimento del catalogo
+
+    CatalogoInput:
+      type: object
+      properties:
+        nome:
+          type: string
+          required: true
+        azienda:
+          type: string
+          required: true
         status:
           type: boolean
-          description: Stato del catalogo
-      required:
-        - _id
-        - listaArticoli
-        - azienda
+
+    CatalogoOutput:
+      type: object
+      properties:
+        risultato:
+          $ref: '#/components/schemas/Catalogo'
+        request:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string

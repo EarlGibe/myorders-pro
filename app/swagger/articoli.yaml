@@ -1,18 +1,24 @@
 openapi: 3.0.0
 info:
-  title: Documentazione API Articoli
+  title: Articolo API
   description: API per la gestione degli articoli
   version: 1.0.0
 
 paths:
   /articoli:
     get:
-      summary: Ottieni tutti gli articoli
+      summary: Restituisce tutti gli articoli
       responses:
         '200':
-          description: Successo. Restituisce la lista degli articoli.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Articolo'
         '404':
-          description: Articoli non trovati.
+          description: Articoli non trovati
       tags:
         - Articoli
 
@@ -25,17 +31,51 @@ paths:
             schema:
               $ref: '#/components/schemas/Articolo'
       responses:
-        '201':
-          description: Articolo creato con successo.
+        '200':
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  createdArticolo:
+                    $ref: '#/components/schemas/Articolo'
+        '400':
+          description: Richiesta non valida
+      tags:
+        - Articoli
+
+  /articoli/{id}:
+    get:
+      summary: Restituisce un articolo specifico
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successo
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Articolo'
+        '404':
+          description: Articolo non trovato
       tags:
         - Articoli
 
     put:
-      summary: Aggiorna tutti gli articoli
+      summary: Aggiorna un articolo specifico
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -44,77 +84,112 @@ paths:
               $ref: '#/components/schemas/Articolo'
       responses:
         '200':
-          description: Successo. Restituisce gli articoli aggiornati.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Articolo'
         '400':
-          description: Errore nella richiesta.
-      tags:
-        - Articoli
-
-    delete:
-      summary: Elimina tutti gli articoli
-      responses:
-        '200':
-          description: Successo. Restituisce gli articoli eliminati.
-        '400':
-          description: Errore nella richiesta.
-      tags:
-        - Articoli
-
-  /articoli/{id}:
-    get:
-      summary: Ottieni un articolo specifico
-      parameters:
-        - name: id
-          in: path
-          description: ID dell'articolo da ottenere
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successo. Restituisce l'articolo richiesto.
-        '404':
-          description: Articolo non trovato.
-      tags:
-        - Articoli
-
-    put:
-      summary: Aggiorna un articolo specifico
-      parameters:
-        - name: id
-          in: path
-          description: ID dell'articolo da aggiornare
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#components/schemas/Articolo'
-      responses:
-        '200':
-          description: Successo. Restituisce l'articolo aggiornato.
-        '400':
-          description: Errore nella richiesta.
+          description: Richiesta non valida
       tags:
         - Articoli
 
     delete:
       summary: Elimina un articolo specifico
       parameters:
-        - name: id
-          in: path
-          description: ID dell'articolo da eliminare
+        - in: path
+          name: id
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: Successo. Restituisce l'articolo eliminato.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Articolo'
         '400':
-          description: Errore nella richiesta.
+          description: Richiesta non valida
+      tags:
+        - Articoli
+
+  /articoli/filtered/{catalogo}:
+    get:
+      summary: Restituisce gli articoli filtrati per catalogo
+      parameters:
+        - in: path
+          name: catalogo
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Articolo'
+        '404':
+          description: La lista cataloghi è vuota
+      tags:
+        - Articoli
+
+  /articoli/filtered/{catalogo}/queryBarcode/{barcode}:
+    get:
+      summary: Restituisce gli articoli filtrati per catalogo e barcode
+      parameters:
+        - in: path
+          name: catalogo
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: barcode
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Articolo'
+        '404':
+          description: La lista cataloghi è vuota
+      tags:
+        - Articoli
+
+  /articoli/filtered/{catalogo}/queryNome/{nome}:
+    get:
+      summary: Restituisce gli articoli filtrati per catalogo e nome
+      parameters:
+        - in: path
+          name: catalogo
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: nome
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Articolo'
+        '404':
+          description: La lista cataloghi è vuota
       tags:
         - Articoli
 
@@ -123,42 +198,31 @@ components:
     Articolo:
       type: object
       properties:
-        _id:
-          type: string
-          description: ID dell'articolo
         nome:
           type: string
-          description: Nome dell'articolo
+          required: true
         descrizione:
           type: string
-          description: Descrizione dell'articolo
+        catalogo:
+          type: string
         coloriDisponibili:
           type: array
           items:
             type: string
-          description: Colori disponibili per l'articolo
         taglieDisponibili:
           type: array
           items:
             type: string
-          description: Taglie disponibili per l'articolo
         scontoApplicato:
           type: number
-          description: Sconto applicato all'articolo
+          default: 0
         prezzo:
           type: number
-          description: Prezzo dell'articolo
+          required: true
         barCodes:
           type: array
           items:
             type: string
-          description: Codici a barre dell'articolo
         status:
           type: boolean
-          description: Stato dell'articolo
-      required:
-        - _id
-        - nome
-        - descrizione
-
-    
+          default: true

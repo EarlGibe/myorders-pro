@@ -1,29 +1,27 @@
 openapi: 3.0.0
 info:
-  title: Documentazione API Ordini
+  title: Gestione Ordini API
+  description: API per la gestione degli ordini
   version: 1.0.0
+
 paths:
   /ordini:
     get:
-      summary: Restituisce tutti gli ordini
+      summary: Ottieni tutti gli ordini
       responses:
         '200':
-          description: Elenco degli ordini
+          description: Successo
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Ordine'
-        '404':
-          description: Ordini non trovati
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+        '500':
+          description: Errore durante la ricerca degli ordini
+      tags:
+        - Ordini
+
     post:
       summary: Crea un nuovo ordine
       requestBody:
@@ -31,31 +29,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Ordine'
+              $ref: '#/components/schemas/OrdineRequest'
       responses:
         '200':
-          description: Ordine creato con successo
+          description: Successo
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  createdOrdine:
-                    type: object
-                    properties:
-                      risultato:
-                        $ref: '#/components/schemas/Ordine'
-                      request:
-                        type: object
-                        properties:
-                          type:
-                            type: string
-                            example: GET
-                          url:
-                            type: string
-                            example: /ordini/1
+                $ref: '#/components/schemas/OrdineResponse'
+        '400':
+          description: Errore durante la creazione dell'ordine
+      tags:
+        - Ordini
+
     put:
       summary: Aggiorna tutti gli ordini
       requestBody:
@@ -63,10 +49,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Ordine'
+              $ref: '#/components/schemas/OrdineUpdateRequest'
       responses:
         '200':
-          description: Ordini aggiornati con successo
+          description: Successo
           content:
             application/json:
               schema:
@@ -74,18 +60,26 @@ paths:
                 properties:
                   n:
                     type: integer
-                    description: Numero di documenti modificati
                   nModified:
                     type: integer
-                    description: Numero di documenti effettivamente modificati
                   ok:
                     type: integer
-                    description: Stato dell'operazione
+                  tags:
+                    type: object
+                required:
+                  - n
+                  - nModified
+                  - ok
+        '400':
+          description: Errore durante l'aggiornamento degli ordini
+      tags:
+        - Ordini
+
     delete:
       summary: Elimina tutti gli ordini
       responses:
         '200':
-          description: Ordini eliminati con successo
+          description: Successo
           content:
             application/json:
               schema:
@@ -93,118 +87,214 @@ paths:
                 properties:
                   n:
                     type: integer
-                    description: Numero di documenti eliminati
                   ok:
                     type: integer
-                    description: Stato dell'operazione
+                  deletedCount:
+                    type: integer
+                required:
+                  - n
+                  - ok
+                  - deletedCount
+        '400':
+          description: Errore durante l'eliminazione degli ordini
+      tags:
+        - Ordini
+
   /ordini/{id}:
     get:
-      summary: Restituisce un singolo ordine
+      summary: Ottieni un ordine specifico
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
-          description: ID dell'ordine da restituire
           schema:
             type: string
+          description: ID dell'ordine da recuperare
       responses:
         '200':
-          description: Ordine restituito con successo
+          description: Successo
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ordine'
         '404':
           description: Ordine non trovato
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+        '500':
+          description: Errore durante la ricerca dell'ordine
+      tags:
+        - Ordini
+
     put:
-      summary: Aggiorna un singolo ordine
+      summary: Aggiorna un ordine specifico
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
-          description: ID dell'ordine da aggiornare
           schema:
             type: string
+          description: ID dell'ordine da aggiornare
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Ordine'
+              $ref: '#components/schemas/OrdineUpdateRequest'
       responses:
         '200':
-          description: Ordine aggiornato con successo
+          description: Successo
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ordine'
+        '400':
+          description: Errore durante l'aggiornamento dell'ordine
         '404':
           description: Ordine non trovato
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+      tags:
+        - Ordini
+
     delete:
-      summary: Elimina un singolo ordine
+      summary: Elimina un ordine specifico
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
-          description: ID dell'ordine da eliminare
           schema:
             type: string
+          description: ID dell'ordine da eliminare
       responses:
         '200':
-          description: Ordine eliminato con successo
+          description: Successo
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ordine'
+        '400':
+          description: Errore durante l'eliminazione dell'ordine
         '404':
           description: Ordine non trovato
+      tags:
+        - Ordini
+
+  /ordini/filteredByCliente/{cliente}:
+    get:
+      summary: Ottieni tutti gli ordini associati a un cliente
+      parameters:
+        - in: path
+          name: cliente
+          required: true
+          schema:
+            type: string
+          description: ID del cliente
+      responses:
+        '200':
+          description: Successo
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ordine'
+        '404':
+          description: Ordini non trovati per il cliente specificato
+        '500':
+          description: Errore durante la ricerca degli ordini
+      tags:
+        - Ordini
+
+  /ordini/filteredBySubagente/{subagente}:
+    get:
+      summary: Ottieni tutti gli ordini associati a un subagente
+      parameters:
+        - in: path
+          name: subagente
+          required: true
+          schema:
+            type: string
+          description: ID del subagente
+      responses:
+        '200':
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ordine'
+        '404':
+          description: Ordini non trovati per il subagente specificato
+        '500':
+          description: Errore durante la ricerca degli ordini
+      tags:
+        - Ordini
+
 components:
   schemas:
     Ordine:
       type: object
       properties:
+        id:
+          type: string
         cliente:
           type: string
-          description: ID del cliente associato all'ordine
         subagente:
           type: string
-          description: ID del subagente associato all'ordine
-        data:
-          type: string
-          format: date-time
-          description: Data dell'ordine
         listaArticoli:
           type: array
           items:
-            type: string
-          description: Elenco degli ID degli articoli nell'ordine
+            type: object
         indirizzoSpedizione:
-          type: string
-          description: Indirizzo di spedizione dell'ordine
+          type: object
         indirizzoFatturazione:
-          type: string
-          description: Indirizzo di fatturazione dell'ordine
+          type: object
+        isEvaso:
+          type: boolean
         status:
           type: boolean
-          description: Stato dell'ordine (default: true)
+        dataInserimento:
+          type: string
+          format: date-time
+
+    OrdineRequest:
+      type: object
+      properties:
+        cliente:
+          type: string
+        subagente:
+          type: string
+        listaArticoli:
+          type: array
+          items:
+            type: object
+        indirizzoSpedizione:
+          type: object
+        indirizzoFatturazione:
+          type: object
+      required:
+        - cliente
+        - subagente
+        - listaArticoli
+
+    OrdineUpdateRequest:
+      type: object
+      properties:
+        cliente:
+          type: string
+        subagente:
+          type: string
+        listaArticoli:
+          type: array
+          items:
+            type: object
+        indirizzoSpedizione:
+          type: object
+        indirizzoFatturazione:
+          type: object
+        isEvaso:
+          type: boolean
+        status:
+          type: boolean
+      required:
+        - cliente
+        - subagente
+        - listaArticoli

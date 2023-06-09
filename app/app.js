@@ -14,7 +14,7 @@ const exportPDF = require('./exportPDF.js');
 const ordini = require('./ordini.js');
 const subagenti = require('./subagenti.js');
 const tecnici = require('./tecnici.js');
-const reimpostaPassword = require('./reimpostaPassword.js');
+const sendOTP = require('./sendOTP.js');
 const regioniPerPaese = require('./regioniPerPaese.js');
 
 //modello
@@ -127,7 +127,7 @@ app.use('/dipendenti', dipendenti);
 app.use('/ordini', ordini);
 app.use('/subagenti', subagenti);
 app.use('/tecnici', tecnici);
-app.use('/reimpostaPassword', reimpostaPassword);
+app.use('/reimpostaPassword', sendOTP);
 app.use('/exportPDF', exportPDF);
 
 app.use('/regioniPerPaese', regioniPerPaese);

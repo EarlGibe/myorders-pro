@@ -1,0 +1,76 @@
+openapi: 3.0.0
+info:
+  title: Regioni API
+  version: 1.0.0
+  description: API for retrieving region, country, and province information
+
+paths:
+  /regioniPerPaese/paesi:
+    get:
+      summary: Get all countries
+      responses:
+        '200':
+          description: Successful response with an array of countries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /regioniPerPaese/paesi/{paese}/regioni:
+    get:
+      summary: Get all regions in a specific country
+      parameters:
+        - in: path
+          name: paese
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response with an array of regions in the specified country
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /regioniPerPaese/paesi/{paese}/regioni/{regione}/province:
+    get:
+      summary: Get all provinces in a specific region of a country
+      parameters:
+        - in: path
+          name: paese
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: regione
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response with an array of provinces in the specified region of the country
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Provincia'
+
+components:
+  schemas:
+    Provincia:
+      type: object
+      properties:
+        paese:
+          type: string
+        regione:
+          type: string
+        province:
+          type: array
+          items:
+            type: string

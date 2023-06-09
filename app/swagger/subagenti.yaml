@@ -1,136 +1,69 @@
-
 openapi: 3.0.0
 info:
   title: Documentazione API Subagenti
+  description: Documentazione delle API per la gestione dei subagenti
   version: 1.0.0
+
 paths:
   /subagenti:
     get:
-      summary: Restituisce tutti i subagenti
+      summary: Elenco dei subagenti
       responses:
         '200':
-          description: Elenco dei subagenti
+          description: Elenco dei subagenti recuperato con successo
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Subagente'
+                  $ref: '#/components/schemas/Subagent'
         '404':
           description: La lista dei subagenti è vuota
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
     post:
-      summary: Crea un nuovo subagente
+      summary: Creazione di un nuovo subagente
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Subagente'
+              $ref: '#/components/schemas/NewSubagent'
       responses:
         '200':
-          description: Subagente inserito con successo
+          description: Subagente creato con successo
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  createdsubagente:
-                    type: object
-                    properties:
-                      risultato:
-                        $ref: '#/components/schemas/Subagente'
-                      request:
-                        type: object
-                        properties:
-                          type:
-                            type: string
-                            example: GET
-                          url:
-                            type: string
-                            example: /subagenti/1
-    put:
-      summary: Aggiorna tutti i subagenti
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Subagente'
-      responses:
-        '200':
-          description: Subagenti aggiornati con successo
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  n:
-                    type: integer
-                    description: Numero di documenti modificati
-                  nModified:
-                    type: integer
-                    description: Numero di documenti effettivamente modificati
-                  ok:
-                    type: integer
-                    description: Stato dell'operazione
-    delete:
-      summary: Elimina tutti i subagenti
-      responses:
-        '200':
-          description: Subagenti eliminati con successo
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  n:
-                    type: integer
-                    description: Numero di documenti eliminati
-                  ok:
-                    type: integer
-                    description: Stato dell'operazione
+                $ref: '#/components/schemas/CreateSubagentResponse'
+        '400':
+          description: Errore nella richiesta di creazione del subagente
+
   /subagenti/{id}:
     get:
-      summary: Restituisce un singolo subagente
+      summary: Dettagli del subagente
       parameters:
         - name: id
           in: path
+          description: ID del subagente
           required: true
-          description: ID del subagente da restituire
           schema:
             type: string
       responses:
         '200':
-          description: Subagente restituito con successo
+          description: Dettagli del subagente recuperati con successo
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subagente'
+                $ref: '#/components/schemas/Subagent'
         '404':
-          description: Subagente non trovato
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+          description: Il subagente richiesto non è stato trovato
+
     put:
-      summary: Aggiorna un singolo subagente
+      summary: Aggiornamento del subagente
       parameters:
         - name: id
           in: path
+          description: ID del subagente
           required: true
-          description: ID del subagente da aggiornare
           schema:
             type: string
       requestBody:
@@ -138,30 +71,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Subagente'
+              $ref: '#/components/schemas/UpdateSubagentRequest'
       responses:
         '200':
           description: Subagente aggiornato con successo
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subagente'
-        '404':
-          description: Subagente non trovato
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                $ref: '#/components/schemas/Subagent'
+        '400':
+          description: Errore nell'aggiornamento del subagente
+
     delete:
-      summary: Elimina un singolo subagente
+      summary: Eliminazione del subagente
       parameters:
         - name: id
           in: path
+          description: ID del subagente
           required: true
-          description: ID del subagente da eliminare
           schema:
             type: string
       responses:
@@ -170,62 +97,226 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subagente'
-        '404':
-          description: Subagente non trovato
+                $ref: '#/components/schemas/Subagent'
+        '400':
+          description: Errore nell'eliminazione del subagente
+
+  /subagenti/filtered/queryNome/{nome}:
+    get:
+      summary: Filtraggio dei subagenti per nome/cognome
+      parameters:
+        - name: nome
+          in: path
+          description: Nome o cognome del subagente da cercare
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subagenti filtrati recuperati con successo
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subagent'
+        '404':
+          description: La lista dei subagenti filtrati è vuota
+
+  /subagenti/addCliente/{id}:
+    put:
+      summary: Aggiunta di un cliente alla lista del subagente
+      parameters:
+        - name: id
+          in: path
+          description: ID del subagente
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddClientRequest'
+      responses:
+        '200':
+          description: Cliente aggiunto con successo alla lista del subagente
+        '400':
+          description: Errore nell'aggiunta del cliente alla lista del subagente
+
+  /subagenti/rimuoviCliente/{id}:
+    put:
+      summary: Rimozione di un cliente dalla lista del subagente
+      parameters:
+        - name: id
+          in: path
+          description: ID del subagente
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveClientRequest'
+      responses:
+        '200':
+          description: Cliente rimosso con successo dalla lista del subagente
+        '400':
+          description: Errore nella rimozione del cliente dalla lista del subagente
+
+  /subagenti/addAzienda/{id}:
+    put:
+      summary: Aggiunta di un'azienda alla lista del subagente
+      parameters:
+        - name: id
+          in: path
+          description: ID del subagente
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddCompanyRequest'
+      responses:
+        '200':
+          description: Azienda aggiunta con successo alla lista del subagente
+        '400':
+          description: Errore nell'aggiunta dell'azienda alla lista del subagente
+
+  /subagenti/rimuoviAzienda/{id}:
+    put:
+      summary: Rimozione di un'azienda dalla lista del subagente
+      parameters:
+        - name: id
+          in: path
+          description: ID del subagente
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveCompanyRequest'
+      responses:
+        '200':
+          description: Azienda rimossa con successo dalla lista del subagente
+        '400':
+          description: Errore nella rimozione dell'azienda dalla lista del subagente
+
 components:
   schemas:
-    Subagente:
+    Subagent:
       type: object
       properties:
-        id:
-          type: array
-          items:
-            type: number
-          description: ID del subagente
-        matricola:
-          type: array
-          items:
-            type: string
-          description: Matricola del subagente
-        listaOrdini:
-          type: array
-          items:
-            type: object
-            properties:
-              ordine:
-                type: string
-                description: ID dell'ordine
-          description: Elenco degli ID degli ordini associati al subagente
+        nome:
+          type: string
+          description: Nome del subagente
+        cognome:
+          type: string
+          description: Cognome del subagente
+        anagrafica:
+          type: object
+          description: Informazioni anagrafiche del subagente
         listaClienti:
           type: array
           items:
-            type: object
-            properties:
-              cliente:
-                type: string
-                description: ID del cliente
-          description: Elenco degli ID dei clienti associati al subagente
+            type: string
+          description: Lista dei clienti associati al subagente
         listaAziende:
           type: array
           items:
-            type: object
-            properties:
-              azienda:
-                type: string
-                description: ID dell'azienda
-          description: Elenco degli ID delle aziende associate al subagente
+            type: string
+          description: Lista delle aziende associate al subagente
+        isAgente:
+          type: boolean
+          description: Indicatore se il subagente è un agente o meno
+        status:
+          type: boolean
+          description: Stato attivo/inattivo del subagente
         dataInserimento:
           type: string
           format: date-time
           description: Data di inserimento del subagente
-        status:
-          type: boolean
-          description: Stato del subagente (default: false)
+
+    NewSubagent:
+      type: object
+      properties:
+        nome:
+          type: string
+          description: Nome del subagente
+        cognome:
+          type: string
+          description: Cognome del subagente
+        anagrafica:
+          type: object
+          description: Informazioni anagrafiche del subagente
+
+    CreateSubagentResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Messaggio di conferma
+        createdsubagente:
+          type: object
+          properties:
+            risultato:
+              $ref: '#/components/schemas/Subagent'
+            request:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Tipo di richiesta
+                id:
+                  type: string
+                  description: ID del subagente creato
+
+    UpdateSubagentRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          description: Nuovo nome del subagente
+        cognome:
+          type: string
+          description: Nuovo cognome del subagente
+        anagrafica:
+          type: object
+          description: Nuove informazioni anagrafiche del subagente
+
+    AddClientRequest:
+      type: object
+      properties:
+        cliente:
+          type: string
+          description: ID del cliente da aggiungere alla lista del subagente
+
+    RemoveClientRequest:
+      type: object
+      properties:
+        cliente:
+          type: string
+          description: ID del cliente da rimuovere dalla lista del subagente
+
+    AddCompanyRequest:
+      type: object
+      properties:
+        azienda:
+          type: string
+          description: ID dell'azienda da aggiungere alla lista del subagente
+
+    RemoveCompanyRequest:
+      type: object
+      properties:
+        azienda:
+          type: string
+          description: ID dell'azienda da rimuovere dalla lista del subagente

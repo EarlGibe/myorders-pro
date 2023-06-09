@@ -1,18 +1,24 @@
 openapi: 3.0.0
 info:
-  title: Documentazione API Aziende
+  title: Gestione Aziende API
   description: API per la gestione delle aziende
   version: 1.0.0
 
 paths:
   /aziende:
     get:
-      summary: Ottieni tutte le aziende
+      summary: Recupera tutte le aziende
       responses:
         '200':
-          description: Successo. Restituisce la lista delle aziende.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Azienda'
         '404':
-          description: Aziende non trovate.
+          description: Lista aziende vuota
       tags:
         - Aziende
 
@@ -23,14 +29,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Azienda'
+              $ref: '#/components/schemas/AziendaInput'
       responses:
         '200':
-          description: Azienda creata con successo.
+          description: Successo
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Azienda'
+                type: object
+                properties:
+                  message:
+                    type: string
+                  createdAzienda:
+                    $ref: '#/components/schemas/AziendaOutput'
+        '400':
+          description: Errore di validazione
       tags:
         - Aziende
 
@@ -41,12 +54,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Azienda'
+              $ref: '#/components/schemas/AziendaInput'
       responses:
         '200':
-          description: Successo. Restituisce le aziende aggiornate.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  n:
+                    type: number
+                  nModified:
+                    type: number
+                  ok:
+                    type: number
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
       tags:
         - Aziende
 
@@ -54,67 +78,112 @@ paths:
       summary: Elimina tutte le aziende
       responses:
         '200':
-          description: Successo. Restituisce le aziende eliminate.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  n:
+                    type: number
+                  ok:
+                    type: number
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
       tags:
         - Aziende
 
   /aziende/{id}:
     get:
-      summary: Ottieni un'azienda specifica
+      summary: Recupera un'azienda tramite ID
       parameters:
-        - name: id
-          in: path
-          description: ID dell'azienda da ottenere
+        - in: path
+          name: id
           required: true
           schema:
             type: string
+          description: ID dell'azienda
       responses:
         '200':
-          description: Successo. Restituisce l'azienda richiesta.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Azienda'
         '404':
-          description: Azienda non trovata.
+          description: Azienda non trovata
       tags:
         - Aziende
 
     put:
-      summary: Aggiorna un'azienda specifica
+      summary: Aggiorna un'azienda tramite ID
       parameters:
-        - name: id
-          in: path
-          description: ID dell'azienda da aggiornare
+        - in: path
+          name: id
           required: true
           schema:
             type: string
+          description: ID dell'azienda
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#components/schemas/Azienda'
+              $ref: '#/components/schemas/AziendaInput'
       responses:
         '200':
-          description: Successo. Restituisce l'azienda aggiornata.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Azienda'
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
       tags:
         - Aziende
 
     delete:
-      summary: Elimina un'azienda specifica
+      summary: Elimina un'azienda tramite ID
       parameters:
-        - name: id
-          in: path
-          description: ID dell'azienda da eliminare
+        - in: path
+          name: id
           required: true
           schema:
             type: string
+          description: ID dell'azienda
       responses:
         '200':
-          description: Successo. Restituisce l'azienda eliminata.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Azienda'
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
+      tags:
+        - Aziende
+
+  /aziende/filtered/queryNome/{nome}:
+    get:
+      summary: Recupera le aziende filtrate per nome
+      parameters:
+        - in: path
+          name: nome
+          required: true
+          schema:
+            type: string
+          description: Nome dell'azienda da cercare
+      responses:
+        '200':
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Azienda'
+        '404':
+          description: Lista aziende filtrata vuota
       tags:
         - Aziende
 
@@ -125,22 +194,45 @@ components:
       properties:
         _id:
           type: string
-          description: ID dell'azienda
-        dati:
+        nome:
           type: string
-          description: ID dei dati aziendali
+        dati:
+          type: object
         listaCataloghi:
           type: array
           items:
             type: string
-          description: Lista degli ID dei cataloghi
         status:
           type: boolean
-          description: Stato dell'azienda
         dataInserimento:
           type: string
           format: date-time
-          description: Data di inserimento dell'azienda
-      required:
-        - _id
-        - dati
+
+    AziendaInput:
+      type: object
+      properties:
+        nome:
+          type: string
+          required: true
+        dati:
+          type: object
+        listaCataloghi:
+          type: array
+          items:
+            type: string
+        status:
+          type: boolean
+
+    AziendaOutput:
+      type: object
+      properties:
+        risultato:
+          $ref: '#/components/schemas/Azienda'
+        request:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
