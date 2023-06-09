@@ -35,7 +35,7 @@ router.post('', async (req, res) => {
   try {
     const nuovoTecnico = new Tecnico(req.body);
     const risultato = await nuovoTecnico.save();
-    res.json({
+    res.status(201).json({
       message: "Tecnico inserito con successo",
       createdTecnico: {
         risultato,

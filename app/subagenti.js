@@ -62,7 +62,7 @@ router.post('', async (req, res) => {
   try {
     const nuovosubagente = new Subagente(req.body);
     const risultato = await nuovosubagente.save();
-    res.json({
+    res.status(201).json({
       message: "subagente inserito con successo",
       createdsubagente: {
         risultato,

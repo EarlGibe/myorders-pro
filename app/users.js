@@ -52,7 +52,7 @@ router.post('', async (req, res) => {
   try {
     const nuovouser = new User(req.body);
     const risultato = await nuovouser.save();
-    res.json({
+    res.status(201).json({
       message: "User inserito con successo",
       createduser: {
         risultato,

@@ -111,7 +111,7 @@ router.post('', async (req, res) => {
     if (process.env.VERBOSE_LOG == '1') console.log(req.body);
     const nuovoCliente = new Cliente(req.body);
     const risultato = await nuovoCliente.save();
-    res.json({
+    res.status(201).json({
       message: "Cliente inserito con successo",
       createdCliente: {
         risultato,

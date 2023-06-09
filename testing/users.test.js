@@ -62,7 +62,7 @@ describe('[Testing] ' + apiName, () => {
     .expect(404);
   });
 
-  test.skip('POST ' + apiURL + ' should respond with 200', () => {
+  test.skip('POST ' + apiURL + ' should respond with 201', () => {
     return request(app).post(apiURL)
     .set('x-access-token', passepartout).set('Accept', 'application/json')
     .send({ username: "usernameProva" })
@@ -70,7 +70,7 @@ describe('[Testing] ' + apiName, () => {
     .send({ email: "prova.email@gmail.com" })
     .send({ role: "subagente" })
     .send({ role_id: "646a5a26d4594184c9a5ff73" })
-    .expect(200);
+    .expect(201);
   });
 
   test.skip('POST ' + apiURL + ' should respond with 400', () => {

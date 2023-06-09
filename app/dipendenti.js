@@ -55,7 +55,7 @@ router.post('', async (req, res) => {
   try {
     const nuovoDipendente = new Dipendente(req.body);
     const risultato = await nuovoDipendente.save();
-    res.json({
+    res.status(201).json({
       message: "Dipendente inserito con successo",
       createdDipendente: {
         risultato,

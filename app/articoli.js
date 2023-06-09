@@ -97,7 +97,7 @@ router.post('', async (req, res) => {
     try {
       const nuovoArticolo = new Articolo(req.body);
       const risultato = await nuovoArticolo.save();
-      res.json({
+      res.status(201).json({
         message: "Articolo inserito con successo",
         createdArticolo: {
           risultato,

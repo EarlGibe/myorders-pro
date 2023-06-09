@@ -26,6 +26,7 @@ const getID = '647b50f7fcfaae5ccd0c3d6b';
 const putID = '647b50f7fcfaae5ccd0c3d6b';
 const deleteID = '6479e3ba3ca23122500c7c75';
 const getCatalogo = '647b50f7fcfaae5ccd0c3d69';
+const putCalogo = '647e711e0eeb2c8307486343';
 const wrongID = '999999999999999999999999';
 
 describe('[Testing] ' + apiName, () => {
@@ -60,12 +61,13 @@ describe('[Testing] ' + apiName, () => {
     .expect(404);
   });
 
-  test.skip('POST ' + apiURL + ' should respond with 200', () => {
+  test.skip('POST ' + apiURL + ' should respond with 201', () => {
     return request(app).post(apiURL)
     .set('x-access-token', passepartout).set('Accept', 'application/json')
-    .send({ nome: "Articolo" })
-    .send({ prezzo: "1000000000" })
-    .expect(200);
+    .send({ nome: "nomeArticolo" })
+    .send({ prezzo: "0.5" })
+    .send({ catalogo: '647e711e0eeb2c8307486343'})
+    .expect(201);
   });
 
   test.skip('PUT ' + apiURL + ' should respond with 200', () => {

@@ -51,7 +51,7 @@ router.post('', async (req, res) => {
   try {
     const nuovaAzienda = new Azienda(req.body);
     const risultato = await nuovaAzienda.save();
-    res.json({
+    res.status(201).json({
       message: "Azienda creata con successo",
       createdAzienda: {
         risultato,

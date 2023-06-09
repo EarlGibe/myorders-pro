@@ -53,12 +53,12 @@ describe('[Testing] ' + apiName, () => {
     .expect(404);
   });
 
-  test.skip('POST ' + apiURL + ' should respond with 200', () => {
+  test.skip('POST ' + apiURL + ' should respond with 201', () => {
     return request(app).post(apiURL)
     .set('x-access-token', passepartout).set('Accept', 'application/json')
     .send({ anagrafica: [] })
     .send({ dataInserimento: "2023-06-03" })
-    .expect(200);
+    .expect(201);
   });
 
   test.skip('PUT ' + apiURL + ' should respond with 200', () => {

@@ -77,7 +77,7 @@ router.post('', async (req, res) => {
   try {
     const nuovoOrdine = new Ordine(req.body);
     const risultato = await nuovoOrdine.save();
-    res.json({
+    res.status(201).json({
       message: "Ordine creato con successo",
       createdOrdine: {
         risultato,

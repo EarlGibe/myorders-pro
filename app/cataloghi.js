@@ -74,7 +74,7 @@ router.post('', async (req, res) => {
   try {
     const nuovoCatalogo = new Catalogo(req.body);
     const risultato = await nuovoCatalogo.save();
-    res.json({
+    res.status(201).json({
       message: "Catalogo inserito con successo",
       createdCatalogo: {
         risultato,

@@ -49,7 +49,7 @@ describe('[Testing] ' + apiName, () => {
     .expect(200);
   });
 
-  test.skip('POST ' + apiURL + ' should respond with 200', () => {
+  test.skip('POST ' + apiURL + ' should respond with 201', () => {
     return request(app).post(apiURL)
     .set('x-access-token', passepartout).set('Accept', 'application/json')
     .send({ anagrafica: [] })
@@ -58,7 +58,7 @@ describe('[Testing] ' + apiName, () => {
     .send({ listaAziende: [] })
     .send({ isAgente: false })
     .send({ dataInserimento: "2023-06-04" })
-    .expect(200);
+    .expect(201);
   });
 
   test.skip('GET ' + apiURL + '/{id} with wrong ID should respond with 404', async () => {
