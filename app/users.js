@@ -133,4 +133,15 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// DELETE con ID specifico
+router.delete('/deleteByRoleId/:roleId', async (req, res) => {
+  try {
+    const risultato = await User.deleteOne({"role_id":req.params.roleId});
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 module.exports = router;

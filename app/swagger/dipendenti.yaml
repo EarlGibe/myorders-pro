@@ -31,7 +31,7 @@ paths:
             schema:
               $ref: '#/components/schemas/DipendenteInput'
       responses:
-        '200':
+        '201':
           description: Successo
           content:
             application/json:

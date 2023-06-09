@@ -28,7 +28,7 @@ paths:
             schema:
               $ref: '#/components/schemas/NewTecnico'
       responses:
-        '200':
+        '201':
           description: Tecnico inserito con successo
           content:
             application/json:

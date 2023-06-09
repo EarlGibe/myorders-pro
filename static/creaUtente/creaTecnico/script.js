@@ -8,8 +8,8 @@ function salvaTecnico() {
   });
 
   // Ottenere i valori dei campi del modulo
-  const codiceFiscale = document.getElementById('codiceFiscale').value;
-  const email = document.getElementById('email').value;
+  var codiceFiscale = document.getElementById('codiceFiscale').value;
+  var email = document.getElementById('email').value;
 
   if (codiceFiscale != "" && email != "") {
     // Creare l'oggetto anagrafica con i valori raccolti
@@ -29,9 +29,9 @@ function salvaTecnico() {
 
         var createdTecnico = result.createdTecnico;
 
-        var usernameVar = createdTecnico.risultato.nome + "_" + createdTecnico.risultato.cognome;
-        var passwordVar = createdTecnico.risultato.nome + "12345";
-        var role_idVar = createdTecnico.request.id;
+        var usernameVar = email;
+        var passwordVar = createdTecnico.risultato.codiceFiscale + "12345";
+        var role_idVar = createdTecnico.risultato._id;
 
 
         // Effettuare la richiesta POST
