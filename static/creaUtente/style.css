@@ -13,7 +13,7 @@ body {
   
   .buttons {
     display: flex;
-    max-width: 500px;
+    max-width: 900px;
     justify-content: space-between;
     align-items: center;
     margin: 0 auto;
@@ -43,5 +43,11 @@ body {
   
   .button:hover {
     background-color: #604f44;
+  }
+
+  #indietroButton{
+
+    width: 80px;
+    height: 25px;
   }
   

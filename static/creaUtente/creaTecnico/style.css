@@ -1,0 +1,68 @@
+body {
+  background-color: #f2f2f2;
+  font-family: Rob, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+}
+
+h2 {
+  color: #666;
+  margin-top: 20px;
+}
+
+form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  text-align:center;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  color: black;
+  text-align: left;
+  font-style: italic;
+}
+
+input[type="text"],
+input[type="email"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: medium;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+input[type="submit"] {
+  background-color: #020202;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+input[type="submit"]:hover {
+  background-color: #505050;
+}
+
+#listaClienti,
+#listaAziende {
+  margin-top: 10px;
+}
+
+#warning{
+  color:red;
+}
