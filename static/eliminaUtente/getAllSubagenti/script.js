@@ -113,7 +113,7 @@ function closeModal() {
 }
 
 function eliminaSubagente() {
-  var id=document.querySelector(".modal #confermaButton").getAttribute('data-id');
+  var id = document.querySelector(".modal #confermaButton").getAttribute('data-id');
   fetch('/subagenti/' + id, {
     method: 'DELETE',
     headers: {
@@ -123,7 +123,20 @@ function eliminaSubagente() {
   })
     .then((resp) => resp.json()) // Transform the data into json
     .then(function (data) { // Here you get the data to modify as you please
-      window.location.href="./"
+      fetch('/users/deleteByRoleId/' + id, {
+        method: 'DELETE',
+        headers: {
+          'x-access-token': token,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+          window.location.href="./"
+        })
+        .catch(function (error) {
+          console.error(error);
+        }); // If there is any error, you will catch them here*/
     })
     .catch(function (error) {
       console.error(error);

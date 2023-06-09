@@ -26,6 +26,7 @@ const getID = '64776deb362c8813b703b829';
 const putID = '64776deb362c8813b703b829';
 const roleID = '647f8c3afe94805af3954b07';
 const deleteID = '6479bd3e2c5000e3da081642';
+const deleteRole = '64834bc6454a0b6f4f3b469c';
 const getUsername = 'tecnicoGabri';
 const blankField = '';
 const wrongID = '999999999999999999999999';
@@ -174,6 +175,18 @@ describe('[Testing] ' + apiName, () => {
 
   test.skip('DELETE ' + apiURL + '/{id} with wrong ID should respond with 404', async () => {
     return request(app).delete(apiURL + '/' + wrongID)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .expect(404);
+  });  
+
+  test.skip('DELETE ' + apiURL + '/deleteByRoleId/{roleId} should respond with 200', async () => {
+    return request(app).delete(apiURL + '/deleteByRoleId/' + deleteRole)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .expect(200);
+  });
+
+  test('DELETE ' + apiURL + '/deleteByRoleId/{roleId} with wrong ID should respond with 404', async () => {
+    return request(app).delete(apiURL + '/deleteByRoleId/' + wrongID)
     .set('x-access-token', passepartout).set('Accept', 'application/json')
     .expect(404);
   });  
