@@ -16,6 +16,7 @@ const subagenti = require('./subagenti.js');
 const tecnici = require('./tecnici.js');
 const sendOTP = require('./sendOTP.js');
 const regioniPerPaese = require('./regioniPerPaese.js');
+const geoLocalization = require('./geoLocalization.js');
 
 //modello
 const chiavi = require('../app/models/chiave.js');
@@ -117,7 +118,6 @@ app.use('/exportPDF', tokenChecker);
 /**
  * Resource routing
  */
-
 app.use('/users', users);
 app.use('/articoli', articoli);
 app.use('/aziende', aziende);
@@ -129,6 +129,7 @@ app.use('/subagenti', subagenti);
 app.use('/tecnici', tecnici);
 app.use('/reimpostaPassword', sendOTP);
 app.use('/exportPDF', exportPDF);
+app.use('/geolocalization',geoLocalization);
 
 app.use('/regioniPerPaese', regioniPerPaese);
 
