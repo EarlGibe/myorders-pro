@@ -27,6 +27,7 @@ const putID = '64776deb362c8813b703b829';
 const roleID = '647f8c3afe94805af3954b07';
 const deleteID = '6479bd3e2c5000e3da081642';
 const getUsername = 'tecnicoGabri';
+const blankField = '';
 const wrongID = '999999999999999999999999';
 
 describe('[Testing] ' + apiName, () => {
@@ -64,12 +65,67 @@ describe('[Testing] ' + apiName, () => {
   test.skip('POST ' + apiURL + ' should respond with 200', () => {
     return request(app).post(apiURL)
     .set('x-access-token', passepartout).set('Accept', 'application/json')
-    .send({ username: "ciaoBello" })
+    .send({ username: "usernameProva" })
     .send({ password: "12345" })
     .send({ email: "prova.email@gmail.com" })
     .send({ role: "subagente" })
     .send({ role_id: "646a5a26d4594184c9a5ff73" })
     .expect(200);
+  });
+
+  test.skip('POST ' + apiURL + ' should respond with 400', () => {
+    return request(app).post(apiURL)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ username: blankField })
+    .send({ password: "12345" })
+    .send({ email: "prova.email@gmail.com" })
+    .send({ role: "subagente" })
+    .send({ role_id: "646a5a26d4594184c9a5ff73" })
+    .expect(400);
+  });
+
+  test.skip('POST ' + apiURL + ' should respond with 400', () => {
+    return request(app).post(apiURL)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ username: "usernameProva" })
+    .send({ password: blankField })
+    .send({ email: "prova.email@gmail.com" })
+    .send({ role: "subagente" })
+    .send({ role_id: "646a5a26d4594184c9a5ff73" })
+    .expect(400);
+  });
+
+  test.skip('POST ' + apiURL + ' should respond with 400', () => {
+    return request(app).post(apiURL)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ username: "usernameProva" })
+    .send({ password: "12345" })
+    .send({ email: blankField })
+    .send({ role: "subagente" })
+    .send({ role_id: "646a5a26d4594184c9a5ff73" })
+    .expect(400);
+  });
+
+  test.skip('POST ' + apiURL + ' should respond with 400', () => {
+    return request(app).post(apiURL)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ username: "usernameProva" })
+    .send({ password: "12345" })
+    .send({ email: "prova.email@gmail.com" })
+    .send({ role: blankField })
+    .send({ role_id: "646a5a26d4594184c9a5ff73" })
+    .expect(400);
+  });
+
+  test.skip('POST ' + apiURL + ' should respond with 400', () => {
+    return request(app).post(apiURL)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ username: "usernameProva" })
+    .send({ password: "12345" })
+    .send({ email: "prova.email@gmail.com" })
+    .send({ role: "subagente" })
+    .send({ role_id: blankField })
+    .expect(400);
   });
 
   test.skip('PUT ' + apiURL + ' should respond with 200', () => {

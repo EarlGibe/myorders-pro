@@ -21,8 +21,8 @@ const timeout = 8000;
 // values
 const username = 'admin';
 const password = 'admin';
-const wrongUsername = 'marcoFormentini';
-const wrongPassword = 'Caterina4ever';
+const wrongUsername = 'wrongUsername';
+const wrongPassword = 'wrongPassword';
 const blank = '';
 
 describe('[Testing] ' + apiName, () => {
