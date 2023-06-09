@@ -5,7 +5,7 @@ const puppeteer = require('puppeteer');
 const sgMail = require('@sendgrid/mail')
 
 async function exportTableToPdf(html, outputFilePath) {
-  const browser = await puppeteer.launch({headless: 'new'});
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
   // Set the content of the page to your HTML table
