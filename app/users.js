@@ -83,12 +83,13 @@ router.put('/:id', async (req, res) => {
     if(process.env.VERBOSE_LOG == '1') console.log(req.body);
     if(process.env.VERBOSE_LOG == '1') console.log(res.body);
 
-    const updatedUser = await User.findByIdAndUpdate(
+    const risultato = await User.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
-    res.status(200).json(updatedUser);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -103,7 +104,8 @@ router.put('/cambiaStatus/:roleId', async (req, res) => {
       { role_id: roleId},
       { status: status }
    );
-    res.status(200).json(risultato);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
   }
@@ -123,8 +125,9 @@ router.delete('', async (req, res) => {
 // DELETE con ID specifico
 router.delete('/:id', async (req, res) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedUser);
+    const risultato = await User.findByIdAndDelete(req.params.id);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

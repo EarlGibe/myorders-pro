@@ -66,7 +66,8 @@ router.put('/:id', async (req, res) => {
     const idTecnico = req.params.id;
     const nuovoTecnico = req.body;
     const risultato = await Tecnico.findByIdAndUpdate(idTecnico, nuovoTecnico, { new: true });
-    res.status(200).json(risultato);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
   }
@@ -87,7 +88,8 @@ router.delete('/:id', async (req, res) => {
   try {
     const idTecnico = req.params.id;
     const risultato = await Tecnico.findByIdAndDelete(idTecnico);
-    res.status(200).json(risultato);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
   }

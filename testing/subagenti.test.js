@@ -27,11 +27,13 @@ const putID = '646a5a26d4594184c9a5ff73';
 const deleteID = '647c551dc13c2772b5419b62';
 const putAzienda = '6469f19f9cc45fcbd7f072e4';
 const putCliente = '6479e10e9e80ac3ce731861d';
+const wrongID = '999999999999999999999999';
 
 describe('[Testing] ' + apiName, () => {
-  beforeAll( async () => { jest.setTimeout(timeout);
-
-  app.locals.db = await mongoose.connect(dbURL); });
+  beforeAll( async () => {
+    jest.setTimeout(timeout);
+    app.locals.db = await mongoose.connect(dbURL);
+  });
 
   afterAll( () => { mongoose.connection.close(true); });
 
@@ -57,6 +59,12 @@ describe('[Testing] ' + apiName, () => {
     .send({ isAgente: false })
     .send({ dataInserimento: "2023-06-04" })
     .expect(200);
+  });
+
+  test.skip('GET ' + apiURL + '/{id} with wrong ID should respond with 404', async () => {
+    return request(app).get(apiURL + '/' + wrongID)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .expect(404);
   });
 
   test.skip('PUT ' + apiURL + ' should respond with 200', () => {
@@ -87,6 +95,13 @@ describe('[Testing] ' + apiName, () => {
     .expect(200);
   });
 
+  test.skip('PUT ' + apiURL + '/{id} with wrong ID should respond with 404', async () => {
+    return request(app).put(apiURL + '/' + wrongID)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ dataInserimento: "2023-06-03" })
+    .expect(404);
+  });
+
   // // !!!!!!! Questo comando ELIMINA TUTTO !!!!!!!
   // // -----------------------------------------------------
   // test.skip('DELETE ' + apiURL + ' should respond with 200', async () => {
@@ -101,6 +116,12 @@ describe('[Testing] ' + apiName, () => {
     return request(app).delete(apiURL + '/' + deleteID)
     .set('x-access-token', passepartout).set('Accept', 'application/json')
     .expect(200);
+  });
+
+  test.skip('DELETE ' + apiURL + '/{id} with wrong ID should respond with 404', async () => {
+    return request(app).delete(apiURL + '/' + wrongID)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .expect(404);
   });
   
 });

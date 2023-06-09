@@ -13,16 +13,16 @@ const dbURL = `mongodb+srv://${dbuser}:${dbpassword}@${dbhost}/${dbname}?${dbpar
 const timeout = 10000;
 
 describe('[Testing] app', () => {
-    beforeAll( async () => {
-        jest.setTimeout(timeout);
-        app.locals.db = await mongoose.connect(dbURL);
-    });
+  beforeAll( async () => {
+      jest.setTimeout(timeout);
+      app.locals.db = await mongoose.connect(dbURL);
+  });
 
-    afterAll( () => { mongoose.connection.close(true); });
+  afterAll( () => { mongoose.connection.close(true); });
 
-    test.skip('GET / should respond with 200', async () => {
-        return request(app).get('/').expect(200).then( (res) => {
-            if(res.body) expect(res.body).not.toBe('null');
-        })
-    });
+  test.skip('GET / should respond with 200', async () => {
+      return request(app).get('/').expect(200).then( (res) => {
+          if(res.body) expect(res.body).not.toBe('null');
+      })
+  });
 });

@@ -33,53 +33,74 @@ describe('[Testing] ' + apiName, () => {
 
   afterAll( () => { mongoose.connection.close(true); });
 
-  test.skip('POST ' + apiURL + ' should respond with 200', () => {
-    return request(app).post(apiURL)
+  test.skip('POST ' + apiURL + ' should respond with 200 and valid authentication token', async () => {
+    const response =  await request(app)
+    .post(apiURL)
     .send({ username: username })
-    .send({ password: password })
-    .expect(200);
+    .send({ password: password });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('token');
   });
 
-  test.skip('POST ' + apiURL + ' wrong username should respond with 401', () => {
-    return request(app).post(apiURL)
+  test.skip('POST ' + apiURL + ' wrong username should respond with 401', async () => {
+    const response = await request(app)
+    .post(apiURL)
     .send({ username: wrongUsername })
-    .send({ password: password })
-    .expect(401);
+    .send({ password: password });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body).not.toHaveProperty('token');
   });
 
-  test.skip('POST ' + apiURL + ' wroung password should respond with 401', () => {
-    return request(app).post(apiURL)
+  test.skip('POST ' + apiURL + ' wrong password should respond with 401', async () => {
+    const response = await request(app)
+    .post(apiURL)
     .send({ username: username })
-    .send({ password: wrongPassword })
-    .expect(401);
+    .send({ password: wrongPassword });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body).not.toHaveProperty('token');
   });
 
-  test.skip('POST ' + apiURL + ' wrong everything should respond with 401', () => {
-    return request(app).post(apiURL)
+  test.skip('POST ' + apiURL + ' wrong everything should respond with 401', async () => {
+    const response = await request(app)
+    .post(apiURL)
     .send({ username: wrongUsername })
-    .send({ password: wrongPassword })
-    .expect(401);
+    .send({ password: wrongPassword });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body).not.toHaveProperty('token');
   });
 
-  test.skip('POST ' + apiURL + ' no password should respond with 401', () => {
-    return request(app).post(apiURL)
+  test.skip('POST ' + apiURL + ' no password should respond with 401', async () => {
+    const response = await request(app)
+    .post(apiURL)
     .send({ username: username })
-    .send({ password: blank })
-    .expect(401);
+    .send({ password: blank });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body).not.toHaveProperty('token');
   });
 
-  test.skip('POST ' + apiURL + ' no username should respond with 401', () => {
-    return request(app).post(apiURL)
+  test.skip('POST ' + apiURL + ' no username should respond with 401', async () => {
+    const response = await request(app)
+    .post(apiURL)
     .send({ username: blank })
-    .send({ password: password })
-    .expect(401);
+    .send({ password: password });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body).not.toHaveProperty('token');
   });
 
-  test.skip('POST ' + apiURL + ' nothing should respond with 401', () => {
-    return request(app).post(apiURL)
+  test.skip('POST ' + apiURL + ' nothing should respond with 401', async () => {
+    const response = await request(app)
+    .post(apiURL)
     .send({ username: blank })
-    .send({ password: blank })
-    .expect(401);
+    .send({ password: blank });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body).not.toHaveProperty('token');
   });
   
 });

@@ -25,11 +25,13 @@ const timeout = 8000;
 const getID = '6469655dec90cea82d4e5295';
 const putID = '6469655dec90cea82d4e5295';
 const deleteID = '6479d031cf6294b91cc9fd71';
+const wrongID = '999999999999999999999999';
 
 describe('[Testing] ' + apiName, () => {
-  beforeAll( async () => { jest.setTimeout(timeout);
-
-  app.locals.db = await mongoose.connect(dbURL); });
+  beforeAll( async () => {
+    jest.setTimeout(timeout);
+    app.locals.db = await mongoose.connect(dbURL);
+  });
 
   afterAll( () => { mongoose.connection.close(true); });
 
@@ -43,6 +45,12 @@ describe('[Testing] ' + apiName, () => {
     return request(app).get(apiURL + '/' + getID)
     .set('x-access-token', passepartout).set('Accept', 'application/json')
     .expect(200);
+  });
+
+  test.skip('GET ' + apiURL + '/{id} with wrong ID should respond with 404', async () => {
+    return request(app).get(apiURL + '/' + wrongID)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .expect(404);
   });
 
   test.skip('POST ' + apiURL + ' should respond with 200', () => {
@@ -66,6 +74,13 @@ describe('[Testing] ' + apiName, () => {
     .expect(200);
   });
 
+  test.skip('PUT ' + apiURL + '/{id} with wrong ID should respond with 404', async () => {
+    return request(app).put(apiURL + '/' + wrongID)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ dataInserimento: "2023-06-03" })
+    .expect(404);
+  });
+
   // // !!!!!!! Questo comando ELIMINA TUTTO !!!!!!!
   // // -----------------------------------------------------
   // test.skip('DELETE ' + apiURL + ' should respond with 200', async () => {
@@ -80,6 +95,12 @@ describe('[Testing] ' + apiName, () => {
     return request(app).delete(apiURL + '/' + deleteID)
     .set('x-access-token', passepartout).set('Accept', 'application/json')
     .expect(200);
+  });
+
+  test.skip('DELETE ' + apiURL + '/{id} with wrong ID should respond with 404', async () => {
+    return request(app).delete(apiURL + '/' + wrongID)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .expect(404);
   });
   
 });

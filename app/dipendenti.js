@@ -86,7 +86,8 @@ router.put('/:id', async (req, res) => {
     const idDipendente = req.params.id;
     const nuovoDipendente = req.body;
     const risultato = await Dipendente.findByIdAndUpdate(idDipendente, nuovoDipendente, { new: true });
-    res.status(200).json(risultato);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
   }
@@ -107,7 +108,8 @@ router.delete('/:id', async (req, res) => {
   try {
     const idDipendente = req.params.id;
     const risultato = await Dipendente.findByIdAndDelete(idDipendente);
-    res.status(200).json(risultato);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
   }

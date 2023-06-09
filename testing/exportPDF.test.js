@@ -19,7 +19,7 @@ const apiName = 'exportPDF';
 const apiURL = '/' + apiName;
 
 // settings
-const timeout = 10000;
+const timeout = 20000;
 
 // documents IDs
 const html = `
@@ -48,21 +48,23 @@ const email = {
 
 describe('[Testing] ' + apiName, () => {
   beforeAll( async () => {
+    jest.setTimeout(timeout);
     app.locals.db = await mongoose.connect(dbURL);
   });
 
   afterAll( () => { mongoose.connection.close(true); });
 
-  test.skip('POST ' + apiURL + ' should respond with 200',function() {
+  test.skip('POST ' + apiURL + ' should respond with 200', async () => {
     
-    return request(app)
+    const response = await request(app)
     .post(apiURL)
     .set('x-access-token', passepartout)
     .set('Accept', 'application/json')
     .send({ html: html })
-    .send({ outputFilePath: "./esportaPDF/test1.pdf" })
-    .send({ email: email })
-    .expect(200);
-  },20000);
+    .send({ outputFilePath: "test1.pdf" })
+    .send({ email: email });
+
+    expect(response.statusCode).toBe(200);
+  }, timeout);
   
 });

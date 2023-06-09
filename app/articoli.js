@@ -7,6 +7,7 @@ const fs = require('fs');
 const multer = require('multer');
 
 const Articolo = require('./models/articolo.js');
+const { error } = require('console');
 
 // GET generico
 router.get('', async(req,res)=>{
@@ -124,12 +125,11 @@ router.put('', async (req, res) => {
 // PUT con ID specifico
 router.put('/:id', async (req, res) => {
   try {
-    const updatedArticolo = await Articolo.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.status(200).json(updatedArticolo);
+    const idArticolo = req.params.id;
+    const nuovoArticolo = req.body;
+    const risultato = await Articolo.findByIdAndUpdate(idArticolo, nuovoArticolo, { new: true });
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -150,7 +150,8 @@ router.delete('', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const deletedArticolo = await Articolo.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedArticolo);
+    if(deletedArticolo === null) res.status(404).json(deletedArticolo);
+    else res.status(200).json(deletedArticolo);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
