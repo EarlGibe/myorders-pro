@@ -1,17 +1,30 @@
 const express = require('express');
 const router = express.Router();
+
+//const puppeteer = require('puppeteer');
+
+var html_to_pdf = require('html-pdf-node');
+
 const fs = require('fs');
-const puppeteer = require('puppeteer');
 const sgMail = require('@sendgrid/mail')
 
 async function exportTableToPdf(html, outputFilePath) {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+  let options = {
+    path: outputFilePath,
+    format: 'A4',
+    margin: {
+      top: "10mm",
+      right: "10mm",
+      bottom: "10mm",
+      left: "10mm"
+    }
+  };
+  // Example of options with args //
+  // let options = { format: 'A4', args: ['--no-sandbox', '--disable-setuid-sandbox'] };
 
-  // Set the content of the page to your HTML table
-  await page.setContent(
-
-    `
+  let file = {
+    content:
+      `
   <style>
   body {
     font-family: 'Roboto', sans-serif;
@@ -101,30 +114,23 @@ async function exportTableToPdf(html, outputFilePath) {
   }
   </style>
   ${html}
-`
-  );
 
-  // Generate the PDF with default options
-  await page.pdf({ 
-    path: outputFilePath,
-    format: 'A4',
-    margin: {
-        top: "10mm",
-        right: "10mm",
-        bottom: "10mm",
-        left: "10mm"
-    }
+  `
+  };
+
+  await html_to_pdf.generatePdf(file, options).then((buffer) => {
+    fs.writeFileSync(outputFilePath, buffer);
+    console.log('File PDF generato con successo!');
+  }).catch((err) => {
+    console.error(err);
   });
-
-  // Close the browser
-  await browser.close();
 }
 
 
 // GET generale
 router.post('', async (req, res) => {
   var html = req.body.html;
-  var outputFilePath = './exportedPDF/'+req.body.outputFilePath;
+  var outputFilePath = './exportedPDF/' + req.body.outputFilePath;
 
   exportTableToPdf(html, outputFilePath)
     .then(() => {
@@ -137,13 +143,13 @@ router.post('', async (req, res) => {
 
       // Construct the email message
       const msg = {
-        to: [req.body.email.azienda,req.body.email.ufficio, req.body.email.cliente, req.body.email.subagente], // Replace with the recipient's email address
+        to: [req.body.email.azienda, req.body.email.ufficio, req.body.email.cliente, req.body.email.subagente], // Replace with the recipient's email address
         from: 'app.myorderspro@gmail.com', // Replace with your email address
         subject: 'PDF Attachment',
         text: 'Please find the attached PDF file.',
         attachments: [
           {
-            filename: `riepilogo ordine `+req.body.outputFilePath,
+            filename: `riepilogo ordine ` + req.body.outputFilePath,
             content: attachment,
             type: 'application/pdf',
             disposition: 'attachment'
@@ -155,12 +161,12 @@ router.post('', async (req, res) => {
       sgMail.send(msg)
         .then(() => {
           console.log('Email sent successfully');
-          res.status(200).json({email:"ok"});
+          res.status(200).json({ email: "ok" });
         })
         .catch(error => {
           console.error('Error sending email:', error);
         });
-      
+
     })
     .catch((err) => console.error('Error exporting PDF:', err));
 })
