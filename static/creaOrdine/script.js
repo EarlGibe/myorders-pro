@@ -643,6 +643,11 @@ function configureModal() {
 
     openModalButton.addEventListener("click", function () {
         modal.style.display = "block";
+        
+        var check=document.getElementById("checkSameFatturazione").checked;
+        if(check){
+            document.getElementById("indirizzoFatturazioneSpan").style.display = "none";
+        }
     });
 
     closeButton.addEventListener("click", function () {
@@ -650,33 +655,199 @@ function configureModal() {
     });
 }
 
+function verificaIndirizzoSpedizione(){
+    document.getElementById("verifiedSpedizione").textContent="Verifico..."
+    document.getElementById("verifiedSpedizione").style.color="black"
+  
+    var paese=document.getElementById("paeseSpedizione").value;
+    var provincia=document.getElementById("provinciaSpedizione").value;
+    var regione=document.getElementById("regioneSpedizione").value;
+    var citta=document.getElementById("cittaSpedizione").value;
+    var via=document.getElementById("viaSpedizione").value;
+    var capZip=document.getElementById("capZipSpedizione").value;
+    var civico=document.getElementById("civicoSpedizione").value;
+  
+    if(paese!="" &&  regione!="" &&  provincia!="" &&  via!="" &&  capZip!=""){
+  
+      var address={
+        civico:civico,
+        via:via,
+        citta:citta,
+        provincia:provincia,
+        regione:regione,
+        capZip:capZip,
+        nazione:paese,
+      }
+    
+      fetch('../geolocalization/adv', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': token
+        },
+        body: JSON.stringify(address)
+      })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+          // Elaboro la risposta del server
+          console.log('Dati salvati:', data);
+    
+          if(data.field!="empty"){
+            document.getElementById("verifiedSpedizione").textContent="Verificato"
+            document.getElementById("verifiedSpedizione").style.color="darkgreen"
+          }else{
+            document.getElementById("verifiedSpedizione").textContent="Non trovato"
+            document.getElementById("verifiedSpedizione").style.color="darkred"
+          }
+        })
+        .catch(error => {
+          console.error('Errore durante la richiesta:', error);
+        });
+    }else{
+      document.getElementById("verifiedSpedizione").textContent="Campi obbligatori mancanti"
+      document.getElementById("verifiedSpedizione").style.color="darkred"
+    }
+  }
+
+  function verificaIndirizzoFatturazione(){
+    document.getElementById("verifiedFatturazione").textContent="Verifico..."
+    document.getElementById("verifiedFatturazione").style.color="black"
+
+  
+    var paese=document.getElementById("paeseFatturazione").value;
+    var provincia=document.getElementById("provinciaFatturazione").value;
+    var regione=document.getElementById("regioneFatturazione").value;
+    var citta=document.getElementById("cittaFatturazione").value;
+    var via=document.getElementById("viaFatturazione").value;
+    var capZip=document.getElementById("capZipFatturazione").value;
+    var civico=document.getElementById("civicoFatturazione").value;
+  
+    if(paese!="" &&  regione!="" &&  provincia!="" &&  via!="" &&  capZip!=""){
+  
+      var address={
+        civico:civico,
+        via:via,
+        citta:citta,
+        provincia:provincia,
+        regione:regione,
+        capZip:capZip,
+        nazione:paese,
+      }
+    
+      fetch('../geolocalization/adv', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': token
+        },
+        body: JSON.stringify(address)
+      })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+          // Elaboro la risposta del server
+          console.log('Dati salvati:', data);
+    
+          if(data.field!="empty"){
+            document.getElementById("verifiedFatturazione").textContent="Verificato"
+            document.getElementById("verifiedFatturazione").style.color="darkgreen"
+          }else{
+            document.getElementById("verifiedFatturazione").textContent="Non trovato"
+            document.getElementById("verifiedFatturazione").style.color="darkred"
+          }
+        })
+        .catch(error => {
+          console.error('Errore durante la richiesta:', error);
+        });
+    }else{
+      document.getElementById("verifiedFatturazione").textContent="Campi obbligatori mancanti"
+      document.getElementById("verifiedFatturazione").style.color="darkred"
+    }
+  }
+
+function toggleIndirizzoFatturazione(){
+    var check=document.getElementById("checkSameFatturazione").checked;
+    if(check){
+        document.getElementById("indirizzoFatturazioneSpan").style.display = "none";
+    }else{
+        document.getElementById("indirizzoFatturazioneSpan").style.display = "block";
+    }
+}
+
 function concludiOrdine() {
 
     let ordineAttivo = JSON.parse(localStorage.getItem("ordineAttivo"));
 
-    var indirizzoSpedizione = document.getElementById("indirizzoSpedizione").value;
-    var indirizzoFatturazione = document.getElementById("indirizzoFatturazione").value;
+    var paeseSpedizione=document.getElementById("paeseSpedizione").value;
+    var provinciaSpedizione=document.getElementById("provinciaSpedizione").value;
+    var regioneSpedizione=document.getElementById("regioneSpedizione").value;
+    var cittaSpedizione=document.getElementById("cittaSpedizione").value;
+    var viaSpedizione=document.getElementById("viaSpedizione").value;
+    var capZipSpedizione=document.getElementById("capZipSpedizione").value;
+    var civicoSpedizione=document.getElementById("civicoSpedizione").value;
 
-    if (indirizzoSpedizione && indirizzoSpedizione) {
-        fetch('../ordini/' + ordineAttivo._id, {
+    var paeseFatturazione;
+    var provinciaFatturazione;
+    var regioneFatturazione;
+    var cittaFatturazione;
+    var viaFatturazione;
+    var capZipFatturazione;
+    var civicoFatturazione;
+
+    var check=document.getElementById("checkSameFatturazione").checked;
+    if(check){
+        paeseFatturazione=paeseSpedizione;
+        provinciaFatturazione=provinciaSpedizione;
+        regioneFatturazione=regioneSpedizione;
+        cittaFatturazione=cittaSpedizione;
+        viaFatturazione=viaSpedizione;
+        capZipFatturazione=capZipSpedizione;
+        civicoFatturazione=civicoSpedizione;
+    }else{
+        paeseFatturazione=document.getElementById("paeseFatturazione").value;
+        provinciaFatturazione=document.getElementById("provinciaFatturazione").value;
+        regioneFatturazione=document.getElementById("regioneFatturazione").value;
+        cittaFatturazione=document.getElementById("cittaFatturazione").value;
+        viaFatturazione=document.getElementById("viaFatturazione").value;
+        capZipFatturazione=document.getElementById("capZipFatturazione").value;
+        civicoFatturazione=document.getElementById("civicoFatturazione").value;
+    }
+
+    if (paeseFatturazione && provinciaFatturazione && regioneFatturazione && cittaFatturazione && viaFatturazione && capZipFatturazione && 
+        paeseSpedizione && provinciaSpedizione && regioneSpedizione && cittaSpedizione && viaSpedizione && capZipSpedizione) {
+            var indirizzoSpedizione={
+                    paeseSpedizione:paeseSpedizione,
+                    provinciaSpedizione:provinciaSpedizione,
+                    regioneSpedizione:regioneSpedizione,
+                    cittaSpedizione:cittaSpedizione,
+                    viaSpedizione:viaSpedizione,
+                    capZipSpedizione:capZipSpedizione,
+                    civicoSpedizione:civicoSpedizione
+            }
+
+            var indirizzoFatturazione={
+                paeseFatturazione:paeseFatturazione,
+                provinciaFatturazione:provinciaFatturazione,
+                regioneFatturazione:regioneFatturazione,
+                cittaFatturazione:cittaFatturazione,
+                viaFatturazione:viaFatturazione,
+                capZipFatturazione:capZipFatturazione,
+                civicoFatturazione:civicoFatturazione
+            }
+        
+            fetch('../ordini/' + ordineAttivo._id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'x-access-token': token
             },
-            body: JSON.stringify({ isEvaso: true, indirizzoSpedizione: indirizzoSpedizione, indirizzoFatturazione: indirizzoFatturazione })
+            body: JSON.stringify({ isEvaso: true, 
+                indirizzoSpedizione: indirizzoSpedizione, 
+                indirizzoFatturazione: indirizzoFatturazione })
         })
             .then((resp) => resp.json()) // Transform the data into json
             .then(function (data) { // Here you get the data to modify as you please
 
                 createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione)
-
-                document.getElementById("errore").textContent = ""
-                document.getElementById("successo").textContent = "Ordine salvato e inviato. \n Sarai reindirizzato alla home fra 3 secondi "
-
-                localStorage.removeItem("ordineAttivo");
-                
-                setTimeout(()=>window.location.href="../home",3000);
 
             })
             .catch(error => console.error(error)); // If there is any error, you will catch them here
@@ -690,6 +861,9 @@ function concludiOrdine() {
 }
 
 function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
+    document.getElementById("successo").textContent = "Attendi..."
+    document.getElementById("successo").color = "black"
+
     var ordineAttivo = JSON.parse(localStorage.getItem("ordineAttivo"));
 
     const aziende = document.getElementsByClassName("aziendaTable");
@@ -746,11 +920,11 @@ function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
 
                         html += "<br>"
 
-                        html += "<span><strong>Indirizzo spedizione: </strong>" + indirizzoSpedizione + "<span>"
+                        html += "<span><strong>Indirizzo spedizione: </strong>" + jsonToHTML(indirizzoSpedizione) + "<span>"
 
                         html += "<br>"
 
-                        html += "<span><strong>Indirizzo fatturazione: </strong>" + indirizzoFatturazione + "<span>"
+                        html += "<span><strong>Indirizzo fatturazione: </strong>" + jsonToHTML(indirizzoFatturazione) + "<span>"
 
                         html += "<br><hr><br><br>"
 
@@ -787,6 +961,12 @@ function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
                         })
                             .then(resp => resp.json())
                             .then(function (data) {
+                                document.getElementById("errore").textContent = ""
+                                document.getElementById("successo").textContent = "Ordine salvato e inviato. \n Sarai reindirizzato alla home fra 3 secondi "
+
+                                localStorage.removeItem("ordineAttivo");
+                                
+                                setTimeout(()=>window.location.href="../home",3000);
                             })
                             .catch(error => console.error(error));
 
@@ -822,3 +1002,4 @@ function jsonToHTML(json) {
     }
     return html;
 }
+

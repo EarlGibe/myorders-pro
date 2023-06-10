@@ -6,8 +6,8 @@ const ordineSchema = new Schema({
   cliente: { type: Schema.Types.ObjectId, ref: 'Cliente', required: true },
   subagente: { type: Schema.Types.ObjectId, ref: 'Subagente', required: true },
   listaArticoli: [{ type: Schema.Types.Object, required: true }],
-  indirizzoSpedizione: { type: Object },
-  indirizzoFatturazione: { type: Object },
+  indirizzoSpedizione: { type: Array },
+  indirizzoFatturazione: { type: Array },
   isEvaso:{type: Boolean, default:false},
   status: { type: Boolean, default: true },
   dataInserimento: { type: Date, default: Date.now }

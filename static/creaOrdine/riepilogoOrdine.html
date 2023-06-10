@@ -30,11 +30,69 @@
       <span class="close">&times;</span>
       <h2>Concludi ordine</h2>
 
-        <label for="name">Indirizzo spedizione:</label>
-        <input type="text" id="indirizzoSpedizione" name="indirizzoSpedizione" required>
+        <label for="name"><strong>Indirizzo spedizione:</strong></label>
+        <br>
+        <br>
+        <label for="paese">Paese*:</label>
+        <input type="text" id="paeseSpedizione" name="paese[]" required><br>
 
-        <label for="name">Indirizzo fatturazione:</label>
-        <input type="text" id="indirizzoFatturazione" name="indirizzoFatturazione" required>
+        <label for="Regione">Regione*:</label>
+        <input type="text" id="regioneSpedizione" name="regione[]" required><br>
+
+        <label for="Provincia">Provincia*:</label>
+        <input type="text" id="provinciaSpedizione" name="provincia[]" required><br>
+
+        <label for="citta">Città*:</label>
+        <input type="text" id="cittaSpedizione" name="citta[]" required><br>
+
+        <label for="via">Via*:</label>
+        <input type="text" id="viaSpedizione" name="via[]" required><br>
+
+        <label for="civico">Civico:</label>
+        <input type="text" id="civicoSpedizione" name="civico[]" required><br>
+
+        <label for="capZip">CapZip*:</label>
+        <input type="text" id="capZipSpedizione" name="capZip[]" required><br>
+
+
+        <button class="verificaIndirizzoButton" onclick="verificaIndirizzoSpedizione()">Verifica esistenza indirizzo</button>
+        <span id="verifiedSpedizione"></span>
+
+        <br><br>
+
+        <label for="name"><strong>Indirizzo spedizione:</strong></label>
+        <p>L'indirizzo di fatturazione corrisponde con quello di spedizione <input id="checkSameFatturazione" type="checkbox" onchange="toggleIndirizzoFatturazione()" checked></input></p>
+        
+        <span id="indirizzoFatturazioneSpan">
+
+          <label for="paese">Paese*:</label>
+        <input type="text" id="paeseFatturazione" name="paese[]" required><br>
+
+        <label for="Regione">Regione*:</label>
+        <input type="text" id="regioneFatturazione" name="regione[]" required><br>
+
+        <label for="Provincia">Provincia*:</label>
+        <input type="text" id="provinciaFatturazione" name="provincia[]" required><br>
+        </select>
+
+        <label for="citta">Città*:</label>
+        <input type="text" id="cittaFatturazione" name="citta[]" required><br>
+
+        <label for="via">Via*:</label>
+        <input type="text" id="viaFatturazione" name="via[]" required><br>
+
+        <label for="civico">Civico:</label>
+        <input type="text" id="civicoFatturazione" name="civico[]" required><br>
+
+        <label for="capZip">CapZip*:</label>
+        <input type="text" id="capZipFatturazione" name="capZip[]" required><br>
+
+        <button  class="verificaIndirizzoButton"  onclick="verificaIndirizzoFatturazione()">Verifica esistenza indirizzo</button>
+        <span id="verifiedFatturazione"></span>
+      </span>
+
+      <br><br>
+
 
         <button type="submit" onclick="concludiOrdine()">Invia</button>
  

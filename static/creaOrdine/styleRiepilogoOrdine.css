@@ -80,28 +80,28 @@ button:hover {
 }
 
 
-/*Popup style*/
+/*modal style*/
 
 .modal {
   display: none;
   position: fixed;
   z-index: 9999;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
   background-color: #fff;
-  margin: 15% auto;
+  margin: 10% auto;
   padding: 20px;
-  border: 1px solid #888;
   width: 80%;
   max-width: 600px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .close {
@@ -119,34 +119,13 @@ button:hover {
   cursor: pointer;
 }
 
-#uploadForm {
-  margin-top: 20px;
-  margin-bottom: 20px;
+.modal form {
+  width: auto;
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="file"] {
-  padding: 5px;
-  margin-bottom: 10px;
-}
-
-button[type="submit"] {
-  padding: 10px;
-  background-color: black;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button[type="submit"]:hover {
-  background-color: #555;
+.modal input{
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 #successo
@@ -163,4 +142,8 @@ button[type="submit"]:hover {
   margin-top: 10px;
   color: red;
   font-weight: bold;
+}
+
+.verificaIndirizzoButton{
+  background-color: grey !important;
 }
