@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./models/address'); // get our mongoose model
+
 const Address = require('./models/address');
 
 // API
@@ -22,12 +22,12 @@ var parameters;
 // ---------------------------------------------------------
 // Simple query
 // ---------------------------------------------------------
-/*
+
 router.post('', async function(req, res) {
 
 	if(process.env.VERBOSE_LOG == '1') console.log("Entro in geoLocalization simple");
 
-	if (req.body == null) {
+	if (req.body.query == null) {
 
 		if(process.env.VERBOSE_LOG == '1') console.log("No data to search");
 		res.status(400).json("Richiesta vuota");
@@ -35,20 +35,18 @@ router.post('', async function(req, res) {
 
 	console.log(req)
 
-	let simpleQuery = geoSearchUrl + queryParameter + req.body + "&" + formatParameter + "&" + limitParameter;
+	let simpleQuery = geoSearchUrl + queryParameter + req.body.query + "&" + formatParameter + "&" + limitParameter;
 
 	fetch(simpleQuery, {
         method: 'GET'
     })
 	.then(resp => resp.json())
 	.then(function (data) { 
-
 		res.status(200).send(data);
-
 	})
 	.catch(error => console.error(error))
 
-});*/
+});
 
 // ---------------------------------------------------------
 // Advanced query

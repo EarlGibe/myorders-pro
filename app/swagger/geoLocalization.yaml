@@ -1,0 +1,138 @@
+openapi: 3.0.0
+info:
+  title: GeoLocalization API
+  version: 1.0.0
+paths:
+  /geoLocalization:
+    post:
+      summary: Esegue una ricerca di base per la localizzazione geografica
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Stringa di ricerca
+      responses:
+        '200':
+          description: Ricerca eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Richiesta vuota
+          content:
+            application/json:
+              schema:
+                type: string
+      x-codeSamples:
+        - lang: JavaScript
+          source:
+            const query = {
+              query: 'stringa di ricerca'
+            };
+
+            fetch('/geoLocalization', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(query)
+            })
+            .then(resp => resp.json())
+            .then(data => {
+              console.log(data);
+            })
+            .catch(error => console.error(error))
+
+  /geoLocalization/adv:
+    post:
+      summary: Esegue una ricerca avanzata per la localizzazione geografica
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      responses:
+        '200':
+          description: Ricerca eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    description: Risultato della ricerca
+        '400':
+          description: Richiesta vuota
+          content:
+            application/json:
+              schema:
+                type: string
+      x-codeSamples:
+        - lang: JavaScript
+          source:
+            const address = {
+              civico: ['123'],
+              via: ['Via esempio'],
+              citta: ['Città esempio'],
+              provincia: ['Provincia esempio'],
+              regione: ['Regione esempio'],
+              capZip: ['12345'],
+              nazione: ['Nazione esempio']
+            };
+
+            fetch('/geoLocalization/adv', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(address)
+            })
+            .then(resp => resp.json())
+            .then(data => {
+              console.log(data);
+            })
+            .catch(error => console.error(error))
+
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        civico:
+          type: array
+          items:
+            type: string
+        via:
+          type: array
+          items:
+            type: string
+        citta:
+          type: array
+          items:
+            type: string
+        provincia:
+          type: array
+          items:
+            type: string
+        regione:
+          type: array
+          items:
+            type: string
+        capZip:
+          type: array
+          items:
+            type: string
+        nazione:
+          type: array
+          items:
+            type: string
