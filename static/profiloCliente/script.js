@@ -21,7 +21,10 @@ function getClientData() {
         document.getElementById("paese").textContent = data.paese; 
         document.getElementById("regione").textContent = data.regione;
         document.getElementById("provincia").textContent = data.provincia;
-        document.getElementById("residenza").textContent = anagrafica.residenza;
+        document.getElementById("citta").textContent=anagrafica.citta;
+        document.getElementById("via").textContent=anagrafica.via;
+        document.getElementById("capZip").textContent=anagrafica.capZip;
+        document.getElementById("civico").textContent=anagrafica.civico;
         document.getElementById("telefono").textContent = anagrafica.telefono;
         document.getElementById("email").textContent = anagrafica.email;
         document.getElementById("ragioneSociale").textContent = anagrafica.ragioneSociale;

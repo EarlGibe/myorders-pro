@@ -34,10 +34,21 @@
     </select>
 
     <br><br>
+    <label for="citta">Città*:</label>
+    <input type="text" id="citta" name="citta[]" required><br>
 
+    <label for="via">Via*:</label>
+    <input type="text" id="via" name="via[]" required><br>
 
-    <label for="residenza">Residenza*:</label>
-    <input type="text" id="residenza" name="residenza[]" required><br>
+    <label for="civico">Civico:</label>
+    <input type="text" id="civico" name="civico[]" required><br>
+
+    <label for="capZip">CapZip*:</label>
+    <input type="text" id="capZip" name="capZip[]" required><br>
+
+    <button onclick="verificaIndirizzo()" id="verificaIndirizzoButton">Verifica indirizzo</button>
+    <span id="verified"></span>
+    <br><br>
 
     <label for="telefono">Telefono*:</label>
     <input type="text" id="telefono" name="telefono" required><br>

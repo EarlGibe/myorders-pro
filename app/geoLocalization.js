@@ -22,6 +22,7 @@ var parameters;
 // ---------------------------------------------------------
 // Simple query
 // ---------------------------------------------------------
+/*
 router.post('', async function(req, res) {
 
 	if(process.env.VERBOSE_LOG == '1') console.log("Entro in geoLocalization simple");
@@ -32,11 +33,22 @@ router.post('', async function(req, res) {
 		res.status(400).json("Richiesta vuota");
 	}
 
+	console.log(req)
+
 	let simpleQuery = geoSearchUrl + queryParameter + req.body + "&" + formatParameter + "&" + limitParameter;
 
-	fetchGeoResult(simpleQuery);
+	fetch(simpleQuery, {
+        method: 'GET'
+    })
+	.then(resp => resp.json())
+	.then(function (data) { 
 
-});
+		res.status(200).send(data);
+
+	})
+	.catch(error => console.error(error))
+
+});*/
 
 // ---------------------------------------------------------
 // Advanced query
@@ -47,17 +59,19 @@ router.post('/adv', async function(req, res) {
 
 	let checkAddress = new Address(req.body);
 
-	if (checkAddress.indirizzo == null && checkAddress.civico == null && checkAddress.citta == null && checkAddress.nazione == null && checkAddress.provReg == null & checkAddress.capZip == null) {
+	console.log(checkAddress)
+
+	if (checkAddress.civico == null && checkAddress.via == null && checkAddress.citta == null && checkAddress.provincia == null && checkAddress.regione == null && checkAddress.capZip == null && checkAddress.nazione == null) {
 		if(process.env.VERBOSE_LOG == '1') console.log("No data to search");
 		res.status(400).json("Richiesta vuota");
 	}
 
 	let advQuery = geoSearchUrl;
 
-	if (checkAddress.civico != null && checkAddress.indirizzo != null) {
-		advQuery = advQuery + streetParameter + checkAddress.civico + " " + checkAddress.indirizzo + "&";
-	} else if (checkAddress.indirizzo != null) {
-		advQuery = advQuery + streetParameter + checkAddress.indirizzo + "&";
+	if (checkAddress.civico != null && checkAddress.via != null) {
+		advQuery = advQuery + streetParameter + checkAddress.civico + " " + checkAddress.via + "&";
+	} else if (checkAddress.via != null) {
+		advQuery = advQuery + streetParameter + checkAddress.via + "&";
 	}
 
 	if (checkAddress.citta != null ) {
@@ -72,30 +86,34 @@ router.post('/adv', async function(req, res) {
 		advQuery = advQuery + postalcodeParam + checkAddress.capZip + "&";
 	}
 
-	if (checkAddress.provReg != null ) {
-		advQuery = advQuery + stateParameter + checkAddress.provReg + "&";
+	if (checkAddress.provincia != null ) {
+		advQuery = advQuery + stateParameter + checkAddress.provincia + "&";
+	}
+
+	if (checkAddress.regione != null ) {
+		advQuery = advQuery + stateParameter + checkAddress.regione + "&";
 	}
 
 	advQuery = advQuery + formatParameter + "&" + limitParameter;
 
-	fetchGeoResult(advQuery);
-
-});
-
-async function fetchGeoResult(urlString) {
-
-	await fetch(urlString, {
+	
+	fetch(advQuery, {
         method: 'GET'
     })
 	.then(resp => resp.json())
 	.then(function (data) { 
+		console.log(data)
 
-		console.log(data);
-
+		if(data.length!=0){
+			res.status(200).send(JSON.stringify({field:data[0].display_name}));
+		}else{
+			res.status(200).send(JSON.stringify({field:"empty"})) //non cambiare codice, la ricerca è stata effettuata con successo ma la vita non trovata
+		}
+		
 
 	})
 	.catch(error => console.error(error))
 
-};
+});
 
 module.exports = router;

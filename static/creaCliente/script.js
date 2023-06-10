@@ -112,7 +112,10 @@ function registerCliente() {
   var regione = document.getElementsByName("regione")[0].value;
   var provincia = document.getElementsByName("provincia")[0].value;
   var codiceFiscale = document.getElementById('codiceFiscale').value
-  var residenza = document.getElementById('residenza').value
+  var citta=document.getElementById("citta").value;
+  var via=document.getElementById("via").value;
+  var capZip=document.getElementById("capZip").value;
+  var civico=document.getElementById("civico").value;
   var telefono = document.getElementById('telefono').value
   var email = document.getElementById('email').value
   var ragioneSociale = document.getElementById('ragioneSociale').value
@@ -121,12 +124,15 @@ function registerCliente() {
   var codSDI = document.getElementById('codSDI').value
   var pec = document.getElementById('pec').value
 
-  if(nome!="" && cognome!="" && codiceFiscale!="" &&  paese!="empty" &&  regione!="empty" &&  provincia!="empty" &&  residenza!="" &&  telefono!="" &&  email!="" &&  pIVA!="" &&  sede!=""){
+  if(nome!="" && cognome!="" && codiceFiscale!="" &&  paese!="empty" &&  regione!="empty" &&  provincia!="empty" &&  citta!="" && via!="" &&  capZip!="" && telefono!="" &&  email!="" &&  pIVA!="" &&  sede!=""){
 
   // Raccolgo i dati del cliente
   const clienteData = {
     codiceFiscale: codiceFiscale,
-    residenza: residenza,
+    citta: citta,
+    via: via,
+    civico: civico,
+    capZip: capZip,
     telefono: telefono,
     email: email,
     ragioneSociale: ragioneSociale,
@@ -193,4 +199,63 @@ function associaClienteASubagente(clienteId) {
     .catch(error => {
       console.error('Errore durante la richiesta:', error);
     });
+}
+
+function verificaIndirizzo(){
+  document.getElementById("verified").textContent="Verifico..."
+  document.getElementById("verified").style.color="black"
+
+  const form = document.getElementById('clienteForm');
+  form.addEventListener("click", function (event) {
+    event.preventDefault()
+  });
+
+  var paese=document.getElementById("paeseCreaCliente").value;
+  var provincia=document.getElementById("provinciaCreaCliente").value;
+  var regione=document.getElementById("regioneCreaCliente").value;
+  var citta=document.getElementById("citta").value;
+  var via=document.getElementById("via").value;
+  var capZip=document.getElementById("capZip").value;
+  var civico=document.getElementById("civico").value;
+
+  if(paese!="empty" &&  regione!="empty" &&  provincia!="empty" &&  via!="" &&  capZip!=""){
+
+    var address={
+      civico:civico,
+      via:via,
+      citta:citta,
+      provincia:provincia,
+      regione:regione,
+      capZip:capZip,
+      nazione:paese,
+    }
+  
+    fetch('../geolocalization/adv', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      },
+      body: JSON.stringify(address)
+    })
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function (data) { // Here you get the data to modify as you please
+        // Elaboro la risposta del server
+        console.log('Dati salvati:', data);
+  
+        if(data.field!="empty"){
+          document.getElementById("verified").textContent="Verificato"
+          document.getElementById("verified").style.color="darkgreen"
+        }else{
+          document.getElementById("verified").textContent="Non trovato"
+          document.getElementById("verified").style.color="darkred"
+        }
+      })
+      .catch(error => {
+        console.error('Errore durante la richiesta:', error);
+      });
+  }else{
+    document.getElementById("verified").textContent="Campi obbligatori mancanti"
+    document.getElementById("verified").style.color="darkred"
+  }
 }
