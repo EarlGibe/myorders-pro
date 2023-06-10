@@ -20,7 +20,11 @@ fetch('../dipendenti/'+roleId, {
         localStorage.setItem("userData",  JSON.stringify(dipendente));
     })
     .catch(error => console.error(error)); // If there is any error, you will catch them here
-     
+  
+if(!(localStorage.getItem("isAgente"))){
+    document.getElementById("changeMode").style.display="none";
+} 
+    
 function logout(){
   localStorage.clear();
   window.location.href="../"

@@ -18,3 +18,13 @@ function redirect(){
     break;
   }
 }
+
+function changeMode(){
+  if(role=="subagente"){
+    localStorage.setItem("role","dipendente")
+    window.location.href="./"
+  }else if(role=="dipendente"){
+    localStorage.setItem("role","subagente")
+    window.location.href="./"
+  }
+}

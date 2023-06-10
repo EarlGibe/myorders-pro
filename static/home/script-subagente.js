@@ -11,7 +11,11 @@ fetch('../subagenti/'+roleId, {
     })
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data to modify as you please
-        console.log(data);
+        //console.log(data);
+
+        if(!data.isAgente){
+            document.getElementById("changeMode").style.display="none";
+        }
 
         var subagente={};
         subagente._id=data._id;
@@ -20,8 +24,10 @@ fetch('../subagenti/'+roleId, {
         subagente.listaOrdini=data.listaOrdini;
         subagente.listaClienti=data.listaClienti;
         subagente.listaAziende=data.listaAziende;
-    
+
         localStorage.setItem("userData",  JSON.stringify(subagente));
+
+        localStorage.setItem("isAgente",data.isAgente);
     })
     .catch(error => console.error(error)); // If there is any error, you will catch them here
      
