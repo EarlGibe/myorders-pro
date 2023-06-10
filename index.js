@@ -1,6 +1,6 @@
 // Servers start flags
-const HTTP_START = false;
-const SECURE_START = true;
+const HTTP_START = true;
+const SECURE_START = false;
 
 // HTTP section
 const app = require('./app/app.js');
