@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const port = process.env.HTTP_PORT || 3000;
 
 // HTTPS section
-const https = require("node:https");
+//const https = require("node:https");
 const fs = require("fs");
 const securePort = process.env.SECURE_PORT || 4000;
 
@@ -48,7 +48,7 @@ app.locals.db = mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopolo
         });
     } 
 
-    if (SECURE_START) {
+    /*if (SECURE_START) {
 
         if(process.env.VERBOSE_LOG == '1') console.log("Downloading the HTTPS private key...");
 
@@ -65,7 +65,7 @@ app.locals.db = mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopolo
         https.createServer({key: httpsKey, cert: fs.readFileSync('./cert.pem')}, app).listen(securePort, () => {
             console.log(`Secure server HTTPS listening on port ${securePort} \n`);
         })
-    }
+    }*/
     
 });
 
