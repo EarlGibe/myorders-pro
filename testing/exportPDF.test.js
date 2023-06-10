@@ -46,6 +46,9 @@ const email = {
   subagente: "robertogiordano113@gmail.com"
 }
 
+const outputFilePath = "test1.pdf";
+const wrongFilePath = "/cartella/test1.pdf";
+
 describe('[Testing] ' + apiName, () => {
   beforeAll( async () => {
     jest.setTimeout(timeout);
@@ -54,17 +57,30 @@ describe('[Testing] ' + apiName, () => {
 
   afterAll( () => { mongoose.connection.close(true); });
 
-  test.skip('POST ' + apiURL + ' should respond with 200', async () => {
+  test('POST ' + apiURL + ' should respond with 200', async () => {
     
     const response = await request(app)
     .post(apiURL)
     .set('x-access-token', passepartout)
     .set('Accept', 'application/json')
     .send({ html: html })
-    .send({ outputFilePath: "test1.pdf" })
+    .send({ outputFilePath: outputFilePath })
     .send({ email: email });
 
     expect(response.statusCode).toBe(200);
+  }, timeout);
+
+  test.skip('POST ' + apiURL + ' with a directory in the request should respond with 404', async () => {
+    
+    const response = await request(app)
+    .post(apiURL)
+    .set('x-access-token', passepartout)
+    .set('Accept', 'application/json')
+    .send({ html: html })
+    .send({ outputFilePath: wrongFilePath })
+    .send({ email: email });
+
+    expect(response.statusCode).toBe(404);
   }, timeout);
   
 });

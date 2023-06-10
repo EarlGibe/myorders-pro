@@ -27,13 +27,13 @@ router.post('', async function(req, res) {
 
 	if(process.env.VERBOSE_LOG == '1') console.log("Entro in geoLocalization simple");
 
+	console.log(req.body.query);
+
 	if (req.body.query == null) {
 
 		if(process.env.VERBOSE_LOG == '1') console.log("No data to search");
 		res.status(400).json("Richiesta vuota");
 	}
-
-	console.log(req)
 
 	let simpleQuery = geoSearchUrl + queryParameter + req.body.query + "&" + formatParameter + "&" + limitParameter;
 

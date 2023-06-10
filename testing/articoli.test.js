@@ -70,6 +70,15 @@ describe('[Testing] ' + apiName, () => {
     .expect(201);
   });
 
+  test.skip('POST ' + apiURL + ' with negative price should respond with 400', () => {
+    return request(app).post(apiURL)
+    .set('x-access-token', passepartout).set('Accept', 'application/json')
+    .send({ nome: "nomeArticolo" })
+    .send({ prezzo: "-0.5" })
+    .send({ catalogo: '647e711e0eeb2c8307486343'})
+    .expect(400);
+  });
+
   test.skip('PUT ' + apiURL + ' should respond with 200', () => {
     return request(app).put(apiURL)
     .set('x-access-token', passepartout).set('Accept', 'application/json')

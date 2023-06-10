@@ -135,8 +135,12 @@ router.post('', async (req, res) => {
   exportTableToPdf(html, outputFilePath)
     .then(() => {
       console.log('PDF exported successfully!')
-
-      attachment = fs.readFileSync(outputFilePath).toString("base64");
+      var attachment;
+      try {
+        attachment = fs.readFileSync(outputFilePath).toString("base64");
+      } catch {
+        res.status(404).json({ error: "File not found" });
+      }
 
       var SGMailToken = req.app.get('SGMailToken');
       sgMail.setApiKey(SGMailToken);

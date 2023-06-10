@@ -95,6 +95,7 @@ router.get('/:id', async (req, res) => {
  // Gestore per la richiesta POST /articoli
 router.post('', async (req, res) => {
     try {
+      if(req.body.prezzo < 0) throw("prezzo non può essere negativo");
       const nuovoArticolo = new Articolo(req.body);
       const risultato = await nuovoArticolo.save();
       res.status(201).json({
