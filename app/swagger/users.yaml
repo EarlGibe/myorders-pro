@@ -164,6 +164,90 @@ paths:
                   message:
                     type: string
                     description: Messaggio di errore
+    /users/cambiaStatus/{roleId}:
+    put:
+      summary: Cambia lo status di un utente tramite l'ID del ruolo
+      parameters:
+        - in: path
+          name: roleId
+          required: true
+          schema:
+            type: string
+            description: ID del ruolo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: boolean
+                  description: Nuovo stato dell'utente
+      responses:
+        '200':
+          description: Stato dell'utente cambiato con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  risultato:
+                    type: object
+                    description: Risultato dell'operazione
+        '400':
+          description: Errore durante il cambio dello stato dell'utente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errore:
+                    type: string
+                    description: Messaggio di errore
+    /users/deleteByRoleId/{roleId}:
+    delete:
+      summary: Elimina un utente tramite l'ID del ruolo
+      parameters:
+        - in: path
+          name: roleId
+          required: true
+          schema:
+            type: string
+            description: ID del ruolo
+      responses:
+        '200':
+          description: Utente eliminato con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  risultato:
+                    type: object
+                    description: Risultato dell'operazione
+        '404':
+          description: L'utente con l'ID del ruolo specificato non è stato trovato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  risultato:
+                    type: object
+                    description: Risultato dell'operazione
+        '400':
+          description: Errore durante l'eliminazione dell'utente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Messaggio di errore
+                  
+
 components:
   schemas:
     User:

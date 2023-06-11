@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reimposta password</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="../includes/css/normalize.css">
+    <script src="../includes/js/favicon.js"></script>
+</head>
+<body onload="onLoadIndex()">
+  
+        <h1>Richiedi OTP</h1>
+        <form id="getOTPForm" method="post">
+            <label for="username">Inserisci username:</label>
+            <input type="username" name="username" id="username"><br><br>
+            <label for="email">Inserisci email:</label>
+            <input type="email" name="email" id="email"><br><br>
+            <input id="richiediOTPButton" type="submit" onclick="richiediOTP()" value="Richiedi OTP">
+            
+            <span id="warningMessage"></span>
+        
+        </form>
+</body>
+<script src="./script.js"></script> 
+</html>

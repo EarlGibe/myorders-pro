@@ -1,0 +1,70 @@
+openapi: 3.0.0
+info:
+  title: Password Reset API
+  version: 1.0.0
+  description: API for resetting user passwords
+
+paths:
+  /reimpostaPassword:
+    post:
+      summary: Reset user password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+      responses:
+        '200':
+          description: User found and OTP sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found or username and email do not match
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+components:
+  schemas:
+    ResetPasswordRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        OTP:
+          type: string
+      required:
+        - username
+        - email
+        - OTP
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+      required:
+        - id
+        - username
+        - email

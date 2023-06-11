@@ -1,48 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Creazione Subagente</title>
+  <title>Creazione Cliente</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="../includes/css/normalize.css">
+  <script src="../includes/js/favicon.js"></script>
 </head>
-<body>
-  <h1>Creazione Subagente</h1>
-  <form action="salva_subagente.php" method="post">
+<body onload="loadPage()">
+  <h1>Creazione Cliente</h1>
+  <form id="clienteForm" method="post">
     <h2>Anagrafica</h2>
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" name="nome[]"><br>
+    <label for="nome">Nome*:</label>
+    <input type="text" id="nome" name="nome[]" required><br>
 
-    <label for="cognome">Cognome:</label>
-    <input type="text" id="cognome" name="cognome[]"><br>
+    <label for="cognome">Cognome*:</label>
+    <input type="text" id="cognome" name="cognome[]" required><br>
 
-    <label for="codiceFiscale">Codice Fiscale:</label>
-    <input type="text" id="codiceFiscale" name="codiceFiscale[]"><br>
+    <label for="codiceFiscale">Codice Fiscale*:</label>
+    <input type="text" id="codiceFiscale" name="codiceFiscale[]" required><br>
 
-    <label for="residenza">Residenza:</label>
-    <select id="residenza" name="residenza">
-      <option value="address1">Address 1</option>
-      <option value="address2">Address 2</option>
-      <option value="address3">Address 3</option>
-    </select><br>
+    <label for="paese">Paese*:</label>
+    <select name="paese" id="paeseCreaCliente" onchange="selezionaRegione()" required>
+    </select>
 
-    <label for="telefono">Telefono:</label>
+    <label for="Regione">Regione*:</label>
+    <select name="regione" id="regioneCreaCliente" onchange="selezionaProvincia()" required>
+      <option value="empty"></option>
+    </select>
+
+    <label for="Provincia">Provincia*:</label>
+    <select name="provincia" id="provinciaCreaCliente" required>
+      <option value="empty"></option>
+    </select>
+
+    <br><br>
+    <label for="citta">Città*:</label>
+    <input type="text" id="citta" name="citta[]" required><br>
+
+    <label for="via">Indirizzo*:</label>
+    <input type="text" id="via" name="via[]" required><br>
+
+    <label for="civico">Civico:</label>
+    <input type="text" id="civico" name="civico[]" required><br>
+
+    <label for="capZip">CapZip*:</label>
+    <input type="text" id="capZip" name="capZip[]" required><br>
+
+    <button onclick="verificaIndirizzo()" id="verificaIndirizzoButton">Verifica indirizzo</button>
+    <span id="verified"></span>
+    <br><br>
+
+    <label for="telefono">Telefono*:</label>
     <input type="text" id="telefono" name="telefono" required><br>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email"><br>
+    <label for="email">Email*:</label>
+    <input type="email" id="email" name="email" required><br>
 
     <label for="ragioneSociale">Ragione Sociale:</label>
     <input type="text" id="ragioneSociale" name="ragioneSociale[]"><br>
 
-    <label for="pIVA">Partita IVA:</label>
-    <input type="text" id="pIVA" name="pIVA[]"><br>
+    <label for="pIVA">Partita IVA*:</label>
+    <input type="text" id="pIVA" name="pIVA[]" required><br>
 
-    <label for="sede">Sede:</label>
-    <select id="sede" name="sede">
-      <option value="address1">Address 1</option>
-      <option value="address2">Address 2</option>
-      <option value="address3">Address 3</option>
-    </select><br>
+    <label for="sede">Sede*:</label>
+    <input type="text" id="sede" name="sede[]" required><br>
+ 
 
     <label for="codSDI">Codice SDI:</label>
     <input type="text" id="codSDI" name="codSDI[]"><br>
@@ -50,23 +72,12 @@
     <label for="pec">PEC:</label>
     <input type="text" id="pec" name="pec[]"><br>
 
-    <h2>Lista Clienti</h2>
-    <label for="listaClienti">Seleziona Clienti:</label>
-    <select id="listaClienti" name="listaClienti" multiple>
-      <option value="cliente1">Cliente 1</option>
-      <option value="cliente2">Cliente 2</option>
-      <option value="cliente3">Cliente 3</option>
-    </select><br>
-
-    <h2>Lista Aziende</h2>
-    <label for="listaAziende">Seleziona Aziende:</label>
-    <select id="listaAziende" name="listaAziende" multiple>
-      <option value="azienda1">Azienda 1</option>
-      <option value="azienda2">Azienda 2</option>
-      <option value="azienda3">Azienda 3</option>
-    </select><br>
-
-    <input type="submit" value="Salva">
+    <input type="submit" value="Salva" onclick="registerCliente()">
+    
+    <br><br>
+    
+    <span id="warning"></span>
+    <span id="successo"></span>
   </form>
 </body>
 <script src="./script.js"></script> 

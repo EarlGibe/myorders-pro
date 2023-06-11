@@ -1,11 +1,13 @@
 openapi: 3.0.0
 info:
-  title: Documentazione API di Autenticazione
+  title: Autenticazione API
+  description: API per l'autenticazione e generazione di token
   version: 1.0.0
+
 paths:
-  /authenticate:
+  /authentications:
     post:
-      summary: Autenticazione e ottenimento di un nuovo token
+      summary: Autenticazione utente e generazione di un token
       requestBody:
         required: true
         content:
@@ -15,13 +17,13 @@ paths:
               properties:
                 username:
                   type: string
-                  description: Nome utente
                 password:
                   type: string
-                  description: Password dell'utente
+                email:
+                  type: string
       responses:
         '200':
-          description: Autenticazione riuscita
+          description: Successo
           content:
             application/json:
               schema:
@@ -29,43 +31,32 @@ paths:
                 properties:
                   success:
                     type: boolean
-                    description: Stato dell'autenticazione
-                    example: true
+                    default: true
                   message:
                     type: string
-                    description: Messaggio di successo
-                    example: Enjoy your token!
                   token:
                     type: string
-                    description: Token generato per l'autenticazione
                   username:
                     type: string
-                    description: Nome utente
                   id:
                     type: string
-                    description: ID dell'utente
                   self:
                     type: string
-                    description: URL di auto-referenziazione
-                    example: users/12345
         '401':
           description: Autenticazione fallita
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    description: Stato dell'autenticazione
-                    example: false
-                  message:
-                    type: string
-                    description: Messaggio di errore
-                    example: Authentication failed. User or password not found.
-components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
+      tags:
+        - Autenticazione
 
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        _id:
+          type: string

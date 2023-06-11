@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Modifica Cliente</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="../includes/css/normalize.css">
+  <script src="../includes/js/favicon.js"></script>
+</head>
+<body onload="loadPage()">
+  <h1>Modifica Cliente</h1>
+  <form id="clienteForm" method="post">
+    <h2>Anagrafica</h2>
+    <label for="nome">Nome*:</label>
+    <input type="text" id="nome" name="nome[]" required><br>
+
+    <label for="cognome">Cognome*:</label>
+    <input type="text" id="cognome" name="cognome[]" required><br>
+
+    <label for="codiceFiscale">Codice Fiscale*:</label>
+    <input type="text" id="codiceFiscale" name="codiceFiscale[]" required><br>
+
+    <label for="paese">Paese*:</label>
+    <select name="paese" id="paeseCreaCliente" onchange="selezionaRegione()" required>
+    </select>
+
+    <label for="Regione">Regione*:</label>
+    <select name="regione" id="regioneCreaCliente" onchange="selezionaProvincia()" required>
+    </select>
+
+    <label for="Provincia">Provincia*:</label>
+    <select name="provincia" id="provinciaCreaCliente" required>
+    </select>
+
+    <button onclick="abilitaModifica()">Modifica...</button>
+
+    <br><br>
+
+
+    <label for="residenza">Residenza*:</label>
+    <input type="text" id="residenza" name="residenza[]" required><br>
+
+    <label for="telefono">Telefono*:</label>
+    <input type="text" id="telefono" name="telefono" required><br>
+
+    <label for="email">Email*:</label>
+    <input type="email" id="email" name="email" required><br>
+
+    <label for="ragioneSociale">Ragione Sociale:</label>
+    <input type="text" id="ragioneSociale" name="ragioneSociale[]"><br>
+
+    <label for="pIVA">Partita IVA*:</label>
+    <input type="text" id="pIVA" name="pIVA[]" required><br>
+
+    <label for="sede">Sede*:</label>
+    <input type="text" id="sede" name="sede[]" required><br>
+ 
+
+    <label for="codSDI">Codice SDI:</label>
+    <input type="text" id="codSDI" name="codSDI[]"><br>
+
+    <label for="pec">PEC:</label>
+    <input type="text" id="pec" name="pec[]"><br>
+
+    <br>
+    <span id="buttons">
+      <input id="backButton" onclick="redirectBack()" type="submit" value="Indietro">
+      <span id="warning"></span>
+      <input id="saveButton" onclick="salvaCliente()" type="submit" value="Salva">
+    </form>
+    </span>    
+
+  </form>
+</body>
+<script src="./script.js"></script> 
+</html>
+

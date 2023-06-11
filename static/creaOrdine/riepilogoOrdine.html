@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Riepilogo ordine </title>
+    <link rel="stylesheet" href="./styleRiepilogoOrdine.css">
+  <link rel="stylesheet" href="../includes/css/normalize.css">
+  <script src="../includes/js/favicon.js"></script>
+</head>
+<body onload="loadRiepilogoOrdine()">
+    <h1>Riepilogo ordine</h1>
+    <h3 id="numeroOrdine"></h3>
+    
+  <section id="ordineTotale">
+    <div id="tables">
+
+    </div>
+ 
+    <span id="totaleOrdine">Totale ordine:</span>
+  </section>
+  
+   <br>
+
+   <div id="buttons">
+    <a href="./articoliDisponibili.html"><button>Indietro</button></a>
+    <button id="openModalButton">Concludi ordine</button>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Concludi ordine</h2>
+
+        <label for="name"><strong>Indirizzo spedizione:</strong></label>
+        <br>
+        <br>
+        <label for="paese">Paese*:</label>
+        <input type="text" id="paeseSpedizione" name="paese[]" required><br>
+
+        <label for="Regione">Regione*:</label>
+        <input type="text" id="regioneSpedizione" name="regione[]" required><br>
+
+        <label for="Provincia">Provincia*:</label>
+        <input type="text" id="provinciaSpedizione" name="provincia[]" required><br>
+
+        <label for="citta">Città*:</label>
+        <input type="text" id="cittaSpedizione" name="citta[]" required><br>
+
+        <label for="via">Indirizzo*:</label>
+        <input type="text" id="viaSpedizione" name="via[]" required><br>
+
+        <label for="civico">Civico:</label>
+        <input type="text" id="civicoSpedizione" name="civico[]" required><br>
+
+        <label for="capZip">CapZip*:</label>
+        <input type="text" id="capZipSpedizione" name="capZip[]" required><br>
+
+        <button class="verificaIndirizzoButton" onclick="verificaIndirizzoSpedizione()">Verifica esistenza indirizzo</button>
+        <span id="verifiedSpedizione"></span>
+
+        <br><br>
+
+        <label for="name"><strong>Indirizzo fatturazione:</strong></label>
+        <p>L'indirizzo di fatturazione corrisponde con quello di spedizione <input id="checkSameFatturazione" type="checkbox" onchange="toggleIndirizzoFatturazione()" checked></input></p>
+        
+        <span id="indirizzoFatturazioneSpan">
+
+          <label for="paese">Paese*:</label>
+        <input type="text" id="paeseFatturazione" name="paese[]" required><br>
+
+        <label for="Regione">Regione*:</label>
+        <input type="text" id="regioneFatturazione" name="regione[]" required><br>
+
+        <label for="Provincia">Provincia*:</label>
+        <input type="text" id="provinciaFatturazione" name="provincia[]" required><br>
+        </select>
+
+        <label for="citta">Città*:</label>
+        <input type="text" id="cittaFatturazione" name="citta[]" required><br>
+
+        <label for="via">Indirizzo*:</label>
+        <input type="text" id="viaFatturazione" name="via[]" required><br>
+
+        <label for="civico">Civico:</label>
+        <input type="text" id="civicoFatturazione" name="civico[]" required><br>
+
+        <label for="capZip">CapZip*:</label>
+        <input type="text" id="capZipFatturazione" name="capZip[]" required><br>
+
+        <button  class="verificaIndirizzoButton"  onclick="verificaIndirizzoFatturazione()">Verifica esistenza indirizzo</button>
+        <span id="verifiedFatturazione"></span>
+      </span>
+
+      <label for="dataSpedizione">Data spedizione:</label>
+      <input type="text" id="dataSpedizione" name="dataSpedizione[]"><br>
+
+      <label for="modalitaPagamento">Modalità pagamento:</label>
+      <input type="text" id="modalitaPagamento" name="modalitaPagamento[]"><br>
+
+      <label for="note">Note:</label>
+      <textarea id="note" name="note[]"></textarea>
+      <br>
+
+      <br><br>
+
+
+        <button type="submit" onclick="concludiOrdine()">Invia</button>
+ 
+        <span id="successo" class="infoMessageSpan"></span>
+        <span id="errore" class="infoMessageSpan"></span>
+    </div>
+  </div>
+
+
+
+</body>
+<script src="./script.js"></script>
+</html>

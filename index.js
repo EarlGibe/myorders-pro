@@ -1,58 +1,72 @@
-//const https = require("node:https");
-//const fs = require("fs");
+// Servers start flags
+const HTTP_START = true;
+const SECURE_START = false;
 
-const express = require("express");
-
+// HTTP section
 const app = require('./app/app.js');
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
+const port = process.env.HTTP_PORT || 3000;
 
-//const secureApp = express();
+// HTTPS section
+//const https = require("node:https");
+const fs = require("fs");
+const securePort = process.env.SECURE_PORT || 4000;
 
-const port = process.env.PORT || 3000;
-//const securePort = 4000;
+// Database section
+const dbuser = 'Group19';
+const dbpassword = 'BDqYxCkjxOx5lWA0';
+const dbname = 'myorders_pro';
+const dbhost = 'maincluster.yx3zxsu.mongodb.net'
+const dbparams = 'retryWrites=true&w=majority'
+const dbURL = `mongodb+srv://${dbuser}:${dbpassword}@${dbhost}/${dbname}?${dbparams}`;
 
-const user = 'Group19';
-const password = 'BDqYxCkjxOx5lWA0';
-const dbname='myorders_pro'
+const Chiave = require('./app/models/chiave.js');
 
-const URL = `mongodb+srv://${user}:${password}@maincluster.yx3zxsu.mongodb.net/${dbname}?retryWrites=true&w=majority`;
+// Show our logo
+console.log("  __  __        ____          _                  ______            ");
+console.log(" |  \\/  |      / __ \\        | |                 |  __ \\           ");
+console.log(" | \\  / |_   _| |  | |_ __ __| | ___ _ __ ___    | |__) | __ ___   ");
+console.log(" | |\\/| | | | | |  | | '__/ _` |/ _ \\ '__/ __|   |  ___/ '__/ _ \\  ");
+console.log(" | |  | | |_| | |__| | | | (_| |  __/ |  \\__ \\   | |   | | | (_) | ");
+console.log(" |_|  |_|\\__, |\\____/|_|  \\__,_|\\___|_|  |___/   |_|   |_|  \\___/  ");
+console.log("          __/ |                                                    ");
+console.log("         |___/                                                     ");
+console.log("                                                                   ");
 
-app.locals.db = mongoose.connect(URL, {useNewUrlParser: true, useUnifiedTopology: true})
-.then ( () => {
+// Connection to database and server start
+if(process.env.VERBOSE_LOG == '1') console.log("Attempt to connect to database...");
+
+app.locals.db = mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopology: true})
+.then ( async () => {
     
-    console.log("Connected to Database");
+    if(process.env.VERBOSE_LOG == '1') console.log("... connected to Database!");
+
+    if (HTTP_START) {
+
+        app.listen(port, () => {
+            console.log(`Server HTTP listening on port ${port} \n`);
+        });
+    } 
+
+    /*if (SECURE_START) {
+
+        if(process.env.VERBOSE_LOG == '1') console.log("Downloading the HTTPS private key...");
+
+        try{
+            httpsKey = (await Chiave.findOne({ nome: 'key.pem' })).valore;
+            app.set('httpsKey', httpsKey);
+            if(process.env.VERBOSE_LOG == '1') console.log("... HTTPS private key acquired!");
+            
+        }catch(error){
+            if(process.env.VERBOSE_LOG == '1') console.log(error);
+            res.status(500).json({ error: 'Si è verificato un errore durante la ricerca delle chiave https.' });
+        }
+
+        https.createServer({key: httpsKey, cert: fs.readFileSync('./cert.pem')}, app).listen(securePort, () => {
+            console.log(`Secure server HTTPS listening on port ${securePort} \n`);
+        })
+    }*/
     
-    app.listen(port, () => {
-        console.log(`Server listening on port ${port}`);
-    });
-    
 });
-
-
-//HTTPS CRUD
-/*
-https.createServer({
-    key: fs.readFileSync("key.pem"),
-    cert: fs.readFileSync("cert.pem"),
-}, secureApp).listen(securePort, ()=>{
-    console.log("Secure server running on port ", securePort);
-})
-
-secureApp.get('/', (req, res) => {
-    res.send('get secure');
-});
-
-secureApp.post('/', (req, res) => {
-    res.send('post secure');
-});
-
-secureApp.put('/', (req, res) => {
-    res.send('put secure');
-});
-
-secureApp.delete('/', (req, res) => {
-    res.send('delete secure');
-});
-*/
 
 module.exports=app;

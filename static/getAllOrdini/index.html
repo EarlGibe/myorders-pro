@@ -4,11 +4,28 @@
   <title>Lista Ordini</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="../includes/css/normalize.css">
+  <script src="../includes/js/favicon.js"></script>
 </head>
-<body>
+<body onload="getAllOrdini()">
   <h1>Lista Ordini</h1>
   <ul id="ordiniList"></ul>
 
-  <script src="./script.js"></script> 
+  <span id="warning"></span>
+
+  <div id="buttons">
+    <a href="../home"><button>Indietro</button></a>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+
+
 </body>
+<script src="./script.js"></script> 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </html>

@@ -6,7 +6,7 @@ const Ordine = require('./models/ordine');
 // Gestore per la richiesta GET /ordini
 router.get('', async(req,res)=>{
     try{
-        const arrayOrdiniDB = await Ordine.find()
+        const arrayOrdiniDB = await Ordine.find().sort({dataInserimento: -1})
             
         if(!arrayOrdiniDB){
           res.status(404).send("Error: ordini non trovati");
@@ -15,7 +15,7 @@ router.get('', async(req,res)=>{
         }
         
     }catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca degli ordini.' });
     }
 })
@@ -32,17 +32,52 @@ router.get('/:id', async (req, res) => {
             res.status(404).json({ error: 'L\'ordine richiesto non è stato trovato.' });
         }
     } catch (error) {
-        console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'ordine.' });
     }
 });
+
+// Restituisce tutti gli ordini associati a un cliente passato come parametro
+router.get('/filteredByCliente/:cliente', async (req, res) => {
+  try {
+      const cliente = req.params.cliente;
+      const ordine = await Ordine.find({cliente:cliente}).sort({dataInserimento: -1})
+        
+      if (ordine) {
+          res.json(ordine);
+      } else {
+          res.status(404).json({ error: 'L\'ordine richiesto non è stato trovato.' });
+      }
+  } catch (error) {
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
+      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'ordine.' });
+  }
+});
+
+// Restituisce tutti gli ordini associati a un subagente passato come parametro
+router.get('/filteredBySubagente/:subagente', async (req, res) => {
+  try {
+      const subagente = req.params.subagente;
+      const ordine = await Ordine.find({subagente:subagente}).sort({dataInserimento: -1})
+        
+      if (ordine) {
+          res.json(ordine);
+      } else {
+          res.status(404).json({ error: 'L\'ordine richiesto non è stato trovato.' });
+      }
+  } catch (error) {
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
+      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'ordine.' });
+  }
+});
+
 
  // Gestore per la richiesta POST /ordini
 router.post('', async (req, res) => {
   try {
     const nuovoOrdine = new Ordine(req.body);
     const risultato = await nuovoOrdine.save();
-    res.json({
+    res.status(201).json({
       message: "Ordine creato con successo",
       createdOrdine: {
         risultato,
@@ -73,7 +108,8 @@ router.put('/:id', async (req, res) => {
     const idOrdine = req.params.id;
     const nuovoOrdine = req.body;
     const risultato = await Ordine.findByIdAndUpdate(idOrdine, nuovoOrdine, { new: true });
-    res.status(200).json(risultato);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
   }
@@ -89,11 +125,13 @@ router.delete('', async (req, res) => {
   }
 });
 
-router.delete('/ordini/:id', async (req, res) => {
+// DELETE con ID specifico
+router.delete('/:id', async (req, res) => {
   try {
     const idOrdine = req.params.id;
     const risultato = await Ordine.findByIdAndDelete(idOrdine);
-    res.status(200).json(risultato);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
   }

@@ -6,12 +6,12 @@ const Tecnico = require('./models/tecnico');
 // GET /tecnici
 router.get('', async(req,res)=>{
     try{
-      const arrayTecniciDB = await Tecnici.find();
+      const arrayTecniciDB = await Tecnico.find();
             
       if (arrayTecniciDB) res.json(arrayTecniciDB);
       else res.status(404).json({ error: 'La lista tecnici è vuota.' });           
     } catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei tecnici.' });
     }
 })
@@ -20,12 +20,12 @@ router.get('', async(req,res)=>{
 router.get('/:id', async (req, res) => {
     try {
       const id = req.params.id;
-      const tecnico = await tecnico.findById(id);
+      const tecnico = await Tecnico.findById(id);
 
       if (tecnico) res.json(tecnico);
       else res.status(404).json({ error: 'Il tecnico richiesto non è stato trovato.' });
     } catch (error) {
-        console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del tecnico.' });
     }
 });
@@ -35,7 +35,7 @@ router.post('', async (req, res) => {
   try {
     const nuovoTecnico = new Tecnico(req.body);
     const risultato = await nuovoTecnico.save();
-    res.json({
+    res.status(201).json({
       message: "Tecnico inserito con successo",
       createdTecnico: {
         risultato,
@@ -50,7 +50,7 @@ router.post('', async (req, res) => {
   }
 });
 
-// PUT
+// PUT generale
 router.put('', async (req, res) => {
   try {
     const updatedTecnici = await Tecnico.updateMany({}, req.body);
@@ -60,19 +60,20 @@ router.put('', async (req, res) => {
   }
 });
 
-// PUT (id)
+// PUT con ID specifico
 router.put('/:id', async (req, res) => {
   try {
     const idTecnico = req.params.id;
     const nuovoTecnico = req.body;
     const risultato = await Tecnico.findByIdAndUpdate(idTecnico, nuovoTecnico, { new: true });
-    res.status(200).json(risultato);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
   }
 });
 
-// DELETE
+// DELETE generale
 router.delete('', async (req, res) => {
   try {
     const deletedTecnici = await Tecnici.deleteMany({});
@@ -82,12 +83,13 @@ router.delete('', async (req, res) => {
   }
 });
 
-// DELETE (id)
+// DELETE con ID specifico
 router.delete('/:id', async (req, res) => {
   try {
     const idTecnico = req.params.id;
     const risultato = await Tecnico.findByIdAndDelete(idTecnico);
-    res.status(200).json(risultato);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
   }

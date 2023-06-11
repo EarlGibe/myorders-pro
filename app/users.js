@@ -3,17 +3,19 @@ const router = express.Router();
 
 const User = require('./models/user.js');
 
+// GET generale
 router.get('', async(req,res)=>{
     try{
          const arrayUsersDB= await User.find();
-         console.log(arrayUsersDB)
+         if(process.env.VERBOSE_LOG == '1') console.log(arrayUsersDB)
          res.status(200).json(arrayUsersDB);
     }catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'utente.' });
     }
 })
 
+// GET con ID specifico
 router.get('/:id', async (req, res) => {
     try {
       const id = req.params.id;
@@ -24,17 +26,33 @@ router.get('/:id', async (req, res) => {
         res.status(404).json({ error: 'L\'user richiesto non è stato trovato.' });
       }
     } catch (error) {
-      console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
       res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'user.' });
     }
-  });
+});
 
-   // Gestore per la richiesta POST /users
+// GET con username
+router.get('/username/:username', async (req, res) => {
+  try {
+    const username = req.params.username;
+    const user = await User.findOne({ username: username } );
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ error: 'L\'user richiesto non è stato trovato.' });
+    }
+  } catch (error) {
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
+    res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dell\'user.' });
+  }
+});
+
+// Gestore per la richiesta POST /users
 router.post('', async (req, res) => {
   try {
     const nuovouser = new User(req.body);
     const risultato = await nuovouser.save();
-    res.json({
+    res.status(201).json({
       message: "User inserito con successo",
       createduser: {
         risultato,
@@ -62,17 +80,34 @@ router.put('', async (req, res) => {
 // PUT con ID specifico
 router.put('/:id', async (req, res) => {
   try {
-    console.log(req.body);
-    console.log(res.body);
+    if(process.env.VERBOSE_LOG == '1') console.log(req.body);
+    if(process.env.VERBOSE_LOG == '1') console.log(res.body);
 
-    const updatedUser = await User.findByIdAndUpdate(
+    const risultato = await User.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
-    res.status(200).json(updatedUser);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+});
+
+// PUT per cambiare lo status cercando tramite roleId
+router.put('/cambiaStatus/:roleId', async (req, res) => {
+  try {
+    const roleId = req.params.roleId;
+    const status = req.body.status;
+    const risultato = await User.updateOne(
+      { role_id: roleId},
+      { status: status }
+   );
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
+  } catch (err) {
+    res.status(400).json({ errore: err.message });
   }
 });
 
@@ -90,8 +125,20 @@ router.delete('', async (req, res) => {
 // DELETE con ID specifico
 router.delete('/:id', async (req, res) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedUser);
+    const risultato = await User.findByIdAndDelete(req.params.id);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// DELETE con ID specifico
+router.delete('/deleteByRoleId/:roleId', async (req, res) => {
+  try {
+    const risultato = await User.deleteOne({ "role_id": req.params.roleId });
+    if(risultato.acknowledged != 'true') res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

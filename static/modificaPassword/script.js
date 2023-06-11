@@ -1,11 +1,11 @@
-document.getElementById("changePasswordButton").addEventListener("click", function(event){
-    event.preventDefault()
-  });
-
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
+const token = localStorage.getItem("token");
+const userId = localStorage.getItem("userId");
 
 function changePassword(){
+
+    document.getElementById("cambiaPasswordForm").addEventListener("click", function(event){
+        event.preventDefault()
+      });
 
     var vecchia_password=document.getElementById("vecchia_password").value;
     var nuova_password = document.getElementById("nuova_password").value;
@@ -20,7 +20,7 @@ function changePassword(){
         })
         .then((resp) => resp.json()) // Transform the data into json
         .then(function(data) { // Here you get the data to modify as you please
-            
+            console.log(data.password)
             if(data.password==vecchia_password){
                 if(nuova_password!=vecchia_password){
                     if(nuova_password==conferma_password){

@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const addressSchema = new Schema({
-  indirizzo: [{type: String, required: true }],
   civico: [{type: String }],
-  citta: [{type: String, required: true }],
+  via: [{type: String}],
+  citta: [{type: String}],
+  provincia: [{type: String }],
+  regione: [{type: String }],
   capZip: [{type: String }],
-  provReg: [{type: String }],
-  nazione: [{type: String, required: true }],
-  isVerified: { type: Boolean, default: false }
+  nazione: [{type: String}],
 },
 {
   collection:'addresses'

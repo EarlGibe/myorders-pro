@@ -1,14 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Articoli Disponibili</title>
-  <link rel="stylesheet" href="./style.css">
+    <title>Articoli disponibili</title>
+    <link rel="stylesheet" href="./styleArticoliDisponibili.css">
   <link rel="stylesheet" href="../includes/css/normalize.css">
+  <script src="../includes/js/favicon.js"></script>
 </head>
 <body onload="getAllArticoli()">
-  <h1>Articoli Disponibili</h1>
-  <ul id="articoliList"></ul>
+    <h1>Articoli disponibili</h1>
 
-  <script src="./script.js"></script>
+    <section class="search-form">
+
+      <label>
+        <input type="radio" name="searchType" value="barcode" checked> Barcode
+      </label>
+      <label>
+        <input type="radio" name="searchType" value="nome"> Nome
+      </label>
+      
+      <form id="seachbarForm">
+  
+        <input type="text" name="query" placeholder="Cerca qualcosa..." />
+        <input type="submit" value="Cerca" onclick="handleSearch()"/>
+      
+      </form>
+    </section>
+    
+    <table id="productTable">
+      <tr id="intestazione">
+        <th>Nome</th>
+        <th>Descrizione</th>
+        <th>Prezzo</th>
+        <th>Sconto <br> Applicato</th>
+        <th>Codici a barre</th>
+        <th>Qta Totale</th>
+        <th>Totale(€)</th>
+        <th>Colori Disponibili</th>
+        <th id="taglieDisponibiliTh">Taglie Disponibili</th>
+        
+    </tr>
+   </table>
+
+   <div id="buttons">
+    <a href="./cataloghiDisponibili.html"><button>Indietro</button></a>
+    <a href="./riepilogoOrdine.html"><button>Riepilogo Ordine</button></a>
+  </div>
+
+   
+
 </body>
+<script src="./script.js"></script>
 </html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cataloghi Disponibili</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="../includes/css/normalize.css">
+  <script src="../includes/js/favicon.js"></script>
+</head>
+<body onload="loadPage()">
+  <h1>Cataloghi Disponibili</h1>
+
+  <section class="search-form">
+    
+    <form id="seachbarForm">
+
+      <input type="text" name="query" placeholder="Cerca catalogo..." />
+      <input type="submit" value="Cerca" onclick="handleSearch()"/>
+    
+    </form>
+  </section>
+
+  <ul id="cataloghiList"></ul>
+
+
+  <div id="buttons">
+    <a href="../getAllAziende/index.html"><button>Indietro</button></a>
+    <button id="openModalButton">Nuovo catalogo...</button>
+  </div>
+  
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Crea catalogo</h2>
+
+        <label for="name">Nome:</label>
+        <input type="text" id="nameCatalogo" name="nameCatalogo" required>
+        
+        
+        <form id="uploadForm" action="../articoli/upload" method="post" enctype="multipart/form-data">
+          <label>Inserisci articoli:</label>
+          <input type="file" name="csvFile" accept=".csv" required>
+        </form>
+
+        <button type="submit" onclick="catalogoPOST()">Invia</button>
+
+        <span id="successoArticoli" class="infoMessageSpan"></span>
+        <span id="warningArticoli" class="infoMessageSpan"></span>
+        <span id="erroreArticoli" class="infoMessageSpan"></span>
+        
+        <span id="successoCatalogo" class="infoMessageSpan"></span>
+        <span id="erroreCatalogo" class="infoMessageSpan"></span>
+    </div>
+  </div>
+
+  
+</body>
+<script>
+
+
+</script>
+<script src="./script.js"></script>
+</html>

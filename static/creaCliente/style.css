@@ -47,3 +47,26 @@ input[type="submit"] {
   font-weight: bold;
   cursor: pointer;
 }
+
+select {
+  display: inline-block;
+  width: 350px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+option {
+  padding: 5px;
+}
+
+#warning{
+  text-align: center;
+  color:red;
+}
+
+#successo{
+  text-align: center;
+  color:green;
+}

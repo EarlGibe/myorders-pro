@@ -6,7 +6,7 @@ const Catalogo = require('./models/catalogo');
 // Gestore per la richiesta GET /cataloghi
 router.get('', async(req,res)=>{
     try{
-        const arrayCataloghiDB = await Catalogo.find()
+        const arrayCataloghiDB = await Catalogo.find().sort({nome: 1})
           
             if (arrayCataloghiDB) {
               res.json(arrayCataloghiDB);
@@ -14,7 +14,7 @@ router.get('', async(req,res)=>{
               res.status(404).json({ error: 'La lista cataloghi è vuota.' });
             }            
     }catch(error){
-        console.log(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei cataloghi.' });
     }
 })
@@ -31,17 +31,50 @@ router.get('/:id', async (req, res) => {
             res.status(404).json({ error: 'Il catalogo richiesto non è stato trovato.' });
         }
     } catch (error) {
-        console.error(error);
+      if(process.env.VERBOSE_LOG == '1') console.error(error);
         res.status(500).json({ error: 'Si è verificato un errore durante la ricerca del catalogo.' });
     }
 });
+
+router.get('/filtered/:azienda', async(req,res)=>{
+  try{
+    const azienda = req.params.azienda;
+      const arrayCataloghiDB = await Catalogo.find({azienda:azienda}).sort({nome: 1})
+        
+          if (arrayCataloghiDB) {
+            res.json(arrayCataloghiDB);
+          } else {
+            res.status(404).json({ error: 'La lista cataloghi è vuota.' });
+          }            
+  }catch(error){
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
+      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei cataloghi filtrati.' });
+  }
+})
+
+router.get('/filtered/:azienda/queryNome/:nome', async(req,res)=>{
+  try{
+    const azienda = req.params.azienda;
+    const nome = req.params.nome;
+      const arrayCataloghiDB = await Catalogo.find({azienda:azienda, nome: {$regex: nome, $options: 'i'}}).sort({nome: 1});
+        
+          if (arrayCataloghiDB) {
+            res.json(arrayCataloghiDB);
+          } else {
+            res.status(404).json({ error: 'La lista cataloghi è vuota.' });
+          }            
+  }catch(error){
+    if(process.env.VERBOSE_LOG == '1') console.error(error);
+      res.status(500).json({ error: 'Si è verificato un errore durante la ricerca dei cataloghi filtrati.' });
+  }
+})
 
  // Gestore per la richiesta POST /cataloghi
 router.post('', async (req, res) => {
   try {
     const nuovoCatalogo = new Catalogo(req.body);
     const risultato = await nuovoCatalogo.save();
-    res.json({
+    res.status(201).json({
       message: "Catalogo inserito con successo",
       createdCatalogo: {
         risultato,
@@ -72,7 +105,8 @@ router.put('/:id', async (req, res) => {
     const idCatalogo = req.params.id;
     const nuovoCatalogo = req.body;
     const risultato = await Catalogo.findByIdAndUpdate(idCatalogo, nuovoCatalogo, { new: true });
-    res.status(200).json(risultato);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
   }
@@ -93,7 +127,8 @@ router.delete('/:id', async (req, res) => {
   try {
     const idCatalogo = req.params.id;
     const risultato = await Catalogo.findByIdAndDelete(idCatalogo);
-    res.status(200).json(risultato);
+    if(risultato === null) res.status(404).json(risultato);
+    else res.status(200).json(risultato);
   } catch (err) {
     res.status(400).json({ errore: err.message });
   }

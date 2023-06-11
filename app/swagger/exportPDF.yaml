@@ -1,0 +1,48 @@
+openapi: 3.0.0
+info:
+  title: Export PDF API
+  description: API per l'esportazione di file PDF
+  version: 1.0.0
+
+paths:
+  /exportPDF:
+    post:
+      summary: Esporta un file PDF e invia mail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportPDFRequest'
+      responses:
+        '200':
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportPDFResponse'
+        '500':
+          description: Errore durante l'esportazione del PDF
+      tags:
+        - Export PDF
+
+components:
+  schemas:
+    ExportPDFRequest:
+      type: object
+      properties:
+        html:
+          type: string
+        outputFilePath:
+          type: string
+      required:
+        - html
+        - outputFilePath
+
+    ExportPDFResponse:
+      type: object
+      properties:
+        email:
+          type: string
+      required:
+        - email

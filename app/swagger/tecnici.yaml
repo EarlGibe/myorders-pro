@@ -8,7 +8,7 @@ paths:
       summary: Recupera tutti i tecnici
       responses:
         '200':
-          description: Elenco dei tecnici
+          description: Elenco di tutti i tecnici
           content:
             application/json:
               schema:
@@ -16,36 +16,26 @@ paths:
                 items:
                   $ref: '#/components/schemas/Tecnico'
         '404':
-          description: Nessun tecnico trovato
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: Messaggio di errore
+          description: La lista dei tecnici è vuota
+        '500':
+          description: Errore durante la ricerca dei tecnici
     post:
-      summary: Crea un nuovo tecnico
+      summary: Inserisce un nuovo tecnico
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TecnicoInput'
+              $ref: '#/components/schemas/NewTecnico'
       responses:
-        '200':
-          description: Tecnico creato con successo
+        '201':
+          description: Tecnico inserito con successo
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: Messaggio di successo
-                  createdTecnico:
-                    $ref: '#/components/schemas/Tecnico'
+                $ref: '#/components/schemas/CreateTecnicoResponse'
+        '400':
+          description: Errore durante l'inserimento del tecnico
     put:
       summary: Aggiorna tutti i tecnici
       requestBody:
@@ -53,37 +43,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TecnicoInput'
+              $ref: '#/components/schemas/UpdateTecniciRequest'
       responses:
         '200':
           description: Tecnici aggiornati con successo
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: Messaggio di successo
-    delete:
-      summary: Elimina tutti i tecnici
-      responses:
-        '200':
-          description: Tecnici eliminati con successo
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: Messaggio di successo
-  /tecnici/{id}:
+        '400':
+          description: Errore durante l'aggiornamento dei tecnici
+  '/tecnici/{id}':
     get:
       summary: Recupera un tecnico specifico
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           description: ID del tecnico
           required: true
           schema:
@@ -97,19 +68,13 @@ paths:
                 $ref: '#/components/schemas/Tecnico'
         '404':
           description: Tecnico non trovato
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: Messaggio di errore
+        '500':
+          description: Errore durante la ricerca del tecnico
     put:
       summary: Aggiorna un tecnico specifico
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           description: ID del tecnico
           required: true
           schema:
@@ -119,7 +84,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TecnicoInput'
+              $ref: '#/components/schemas/UpdateTecnicoRequest'
       responses:
         '200':
           description: Tecnico aggiornato con successo
@@ -127,21 +92,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Tecnico'
-        '404':
-          description: Tecnico non trovato
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: Messaggio di errore
+        '400':
+          description: Errore durante l'aggiornamento del tecnico
     delete:
       summary: Elimina un tecnico specifico
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           description: ID del tecnico
           required: true
           schema:
@@ -149,74 +106,55 @@ paths:
       responses:
         '200':
           description: Tecnico eliminato con successo
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tecnico'
-        '404':
-          description: Tecnico non trovato
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: Messaggio di errore
+        '400':
+          description: Errore durante l'eliminazione del tecnico
 components:
   schemas:
     Tecnico:
       type: object
       properties:
-        _id:
-          type: string
-          description: ID del tecnico
-        username:
-          type: string
-          description: Nome utente
-        password:
-          type: string
-          description: Password del tecnico
-        status:
-          type: boolean
-          description: Stato del tecnico
-        loggedIn:
-          type: boolean
-          description: Flag di accesso
-        isFirstAccess:
-          type: boolean
-          description: Flag del primo accesso
         codiceFiscale:
           type: string
           description: Codice fiscale del tecnico
-        email:
+        dataInserimento:
           type: string
-          description: Email del tecnico
-    TecnicoInput:
+          format: date-time
+          description: Data di inserimento del tecnico
+    NewTecnico:
       type: object
       properties:
-        username:
-          type: string
-          description: Nome utente
-          required: true
-        password:
-          type: string
-          description: Password del tecnico
-          required: true
-        status:
-          type: boolean
-          description: Stato del tecnico
-        loggedIn:
-          type: boolean
-          description: Flag di accesso
-        isFirstAccess:
-          type: boolean
-          description: Flag del primo accesso
         codiceFiscale:
           type: string
-          description: Codice fiscale del tecnico
-          required: true
-        email:
+          description: Codice fiscale del nuovo tecnico
+    CreateTecnicoResponse:
+      type: object
+      properties:
+        message:
           type: string
-          description: Email del tecnico
-          required: true
+          description: Messaggio di conferma
+        createdTecnico:
+          type: object
+          properties:
+            risultato:
+              $ref: '#/components/schemas/Tecnico'
+            request:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Tipo di richiesta
+                url:
+                  type: string
+                  description: URL del tecnico creato
+    UpdateTecniciRequest:
+      type: object
+      properties:
+        codiceFiscale:
+          type: string
+          description: Nuovo codice fiscale per tutti i tecnici
+    UpdateTecnicoRequest:
+      type: object
+      properties:
+        codiceFiscale:
+          type: string
+          description: Nuovo codice fiscale per il tecnico

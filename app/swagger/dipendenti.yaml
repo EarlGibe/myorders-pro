@@ -1,18 +1,24 @@
 openapi: 3.0.0
 info:
-  title: Documentazione API Dipendenti
+  title: Gestione Dipendenti API
   description: API per la gestione dei dipendenti
   version: 1.0.0
 
 paths:
   /dipendenti:
     get:
-      summary: Ottieni tutti i dipendenti
+      summary: Recupera tutti i dipendenti
       responses:
         '200':
-          description: Successo. Restituisce la lista dei dipendenti.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dipendente'
         '404':
-          description: Dipendenti non trovati.
+          description: Lista dipendenti vuota
       tags:
         - Dipendenti
 
@@ -23,14 +29,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Dipendente'
+              $ref: '#/components/schemas/DipendenteInput'
       responses:
-        '200':
-          description: Dipendente creato con successo.
+        '201':
+          description: Successo
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Dipendente'
+                type: object
+                properties:
+                  message:
+                    type: string
+                  createdDipendente:
+                    $ref: '#/components/schemas/DipendenteOutput'
+        '400':
+          description: Errore di validazione
       tags:
         - Dipendenti
 
@@ -41,12 +54,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Dipendente'
+              $ref: '#/components/schemas/DipendenteInput'
       responses:
         '200':
-          description: Successo. Restituisce i dipendenti aggiornati.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  n:
+                    type: number
+                  nModified:
+                    type: number
+                  ok:
+                    type: number
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
       tags:
         - Dipendenti
 
@@ -54,67 +78,112 @@ paths:
       summary: Elimina tutti i dipendenti
       responses:
         '200':
-          description: Successo. Restituisce i dipendenti eliminati.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  n:
+                    type: number
+                  ok:
+                    type: number
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
       tags:
         - Dipendenti
 
   /dipendenti/{id}:
     get:
-      summary: Ottieni un dipendente specifico
+      summary: Recupera un dipendente tramite ID
       parameters:
-        - name: id
-          in: path
-          description: ID del dipendente da ottenere
+        - in: path
+          name: id
           required: true
           schema:
             type: string
+          description: ID del dipendente
       responses:
         '200':
-          description: Successo. Restituisce il dipendente richiesto.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dipendente'
         '404':
-          description: Dipendente non trovato.
+          description: Dipendente non trovato
       tags:
         - Dipendenti
 
     put:
-      summary: Aggiorna un dipendente specifico
+      summary: Aggiorna un dipendente tramite ID
       parameters:
-        - name: id
-          in: path
-          description: ID del dipendente da aggiornare
+        - in: path
+          name: id
           required: true
           schema:
             type: string
+          description: ID del dipendente
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Dipendente'
+              $ref: '#/components/schemas/DipendenteInput'
       responses:
         '200':
-          description: Successo. Restituisce il dipendente aggiornato.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dipendente'
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
       tags:
         - Dipendenti
 
     delete:
-      summary: Elimina un dipendente specifico
+      summary: Elimina un dipendente tramite ID
       parameters:
-        - name: id
-          in: path
-          description: ID del dipendente da eliminare
+        - in: path
+          name: id
           required: true
           schema:
             type: string
+          description: ID del dipendente
       responses:
         '200':
-          description: Successo. Restituisce il dipendente eliminato.
+          description: Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dipendente'
         '400':
-          description: Errore nella richiesta.
+          description: Errore di validazione
+      tags:
+        - Dipendenti
+
+  /dipendenti/filtered/queryNome/{nome}:
+    get:
+      summary: Recupera dipendenti filtrati per nome o cognome
+      parameters:
+        - in: path
+          name: nome
+          required: true
+          schema:
+            type: string
+          description: Nome o cognome del dipendente da cercare
+      responses:
+        '200':
+          description: Successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dipendente'
+        '404':
+          description: Lista dipendenti filtrata vuota
       tags:
         - Dipendenti
 
@@ -125,18 +194,42 @@ components:
       properties:
         _id:
           type: string
-          description: ID del dipendente
-        matricola:
-          type: number
-          description: Matricola del dipendente
-        dati:
+        nome:
           type: string
-          description: ID dell'anagrafica associata al dipendente
+        cognome:
+          type: string
+        anagrafica:
+          type: object
+        status:
+          type: boolean
         dataInserimento:
           type: string
           format: date-time
-          description: Data di inserimento del dipendente
-      required:
-        - _id
-        - matricola
-        - dati
+
+    DipendenteInput:
+      type: object
+      properties:
+        nome:
+          type: string
+          required: true
+        cognome:
+          type: string
+          required: true
+        anagrafica:
+          type: object
+          required: true
+        status:
+          type: boolean
+
+    DipendenteOutput:
+      type: object
+      properties:
+        risultato:
+          $ref: '#/components/schemas/Dipendente'
+        request:
+          type: object
+          properties:
+            type:
+              type: string
+            id:
+              type: string

@@ -1,15 +1,19 @@
 var token=localStorage.getItem("token")
-var dipendenteId=JSON.parse(localStorage.getItem("dipendente"))._id;
+var userData=JSON.parse(localStorage.getItem("userData"));
 var userId=localStorage.getItem("userId");
 
-function getData(){
+function loadPage(){
     riempiCampi();
+
+    document.getElementById("dipendenteForm").addEventListener("click", function(event){
+      event.preventDefault()
+    });
 
 }
 
   function riempiCampi(){
     // Effettuare la richiesta POST
-    fetch('/dipedenti/'+dipendenteId, {
+    fetch('/dipendenti/'+userData._id, {
       method: 'GET',
       headers: {
         'x-access-token':token,
@@ -18,25 +22,18 @@ function getData(){
     })
       .then(response => response.json())
       .then(result => {
-        document.getElementById('nome').value=result.anagrafica.nome;
-        document.getElementById('cognome').value=result.anagrafica.cognome;
-        document.getElementById('codiceFiscale').value=result.anagrafica.codiceFiscale;
-        document.getElementById('residenza').value=result.anagrafica.residenza;
-        document.getElementById('telefono').value=result.anagrafica.telefono;
-        document.getElementById('email').value=result.anagrafica.email;
-        document.getElementById('ragioneSociale').value=result.anagrafica.ragioneSociale;
-        document.getElementById('pIVA').value=result.anagrafica.pIVA;
-        document.getElementById('sede').value=result.anagrafica.sede;
-        document.getElementById('codSDI').value=result.anagrafica.codSDI;
-        document.getElementById('pec').value=result.anagrafica.pec;
+        if(result.nome) document.getElementById('nome').value=result.nome;
+        if(result.nome) document.getElementById('cognome').value=result.cognome;
+        if(result.anagrafica.codiceFiscale)document.getElementById('codiceFiscale').value=result.anagrafica.codiceFiscale;
+        if(result.anagrafica.residenza)document.getElementById('residenza').value=result.anagrafica.residenza;
+        if(result.anagrafica.telefono)document.getElementById('telefono').value=result.anagrafica.telefono;
+        if(result.anagrafica.email)document.getElementById('email').value=result.anagrafica.email;
+        if(result.anagrafica.pIVA)document.getElementById('pIVA').value=result.anagrafica.pIVA;
+        if(result.anagrafica.pec)document.getElementById('pec').value=result.anagrafica.pec;
       });
   }
 
   function salvaDipendente() {
-
-    document.getElementById("dipendenteForm").addEventListener("click", function(event){
-        event.preventDefault()
-      });
 
     // Ottenere i valori dei campi del modulo
     const nome = document.getElementById('nome').value;
@@ -45,34 +42,29 @@ function getData(){
     const residenza = document.getElementById('residenza').value;
     const telefono = document.getElementById('telefono').value;
     const email = document.getElementById('email').value;
-    const ragioneSociale = document.getElementById('ragioneSociale').value;
     const pIVA = document.getElementById('pIVA').value;
-    const sede = document.getElementById('sede').value;
-    const codSDI = document.getElementById('codSDI').value;
     const pec = document.getElementById('pec').value;
     
-    // Creare l'oggetto anagrafica con i valori raccolti
+    if(nome!="" && cognome!="" &&  codiceFiscale!="" &&  telefono!="" &&  email!=""){
+      // Creare l'oggetto anagrafica con i valori raccolti
     const anagrafica = {
-      nome: nome,
-      cognome: cognome,
       codiceFiscale: codiceFiscale,
       residenza: residenza,
       telefono: telefono,
       email: email,
-      ragioneSociale: ragioneSociale,
       pIVA: pIVA,
-      sede: sede,
-      codSDI: codSDI,
       pec: pec
     };
     
     // Creare l'oggetto dati da inviare nella richiesta POST
     const data = {
+      nome: nome,
+      cognome: cognome,
       anagrafica: anagrafica,
     };
     
     // Effettuare la richiesta POST
-    fetch('/dipendenti/'+dipendenteId, {
+    fetch('/dipendenti/'+userData._id, {
       method: 'PUT',
       headers: {
         'x-access-token':token,
@@ -83,10 +75,17 @@ function getData(){
       .then(response => response.json())
       .then(result => {
         console.log(result); // Gestire la risposta del server       
-        window.location.href="../../home/index.html?token="+token+"&id="+userId; 
+        window.location.href="../../home/index.html"; 
       })
       .catch(error => {
         console.error('Errore durante la richiesta:', error);
       });
+    }else{
+      document.getElementById("warning").textContent="Campi obbligatori mancanti!"
+    }
+    
   }
   
+  function redirectBack(){
+    window.location.href="/home/index.html"
+  }

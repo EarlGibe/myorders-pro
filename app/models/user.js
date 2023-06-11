@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 const userSchema=new Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
+    email: { type: String, required: true },
     role: { type: String, required: true },
     role_id:{ type: Schema.Types.ObjectId, required: true },
     status: { type: Boolean, default: true },
