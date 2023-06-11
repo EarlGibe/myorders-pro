@@ -13,9 +13,9 @@
     <h1>Benvenuto su MyOrdersPro Subagente</h1>
     <div class="buttons">
         <span class="row1">
-            <a href="../getAllAziende/index.html" class="button">Vedi Aziende</a>
-            <a href="../getAllClienti/index.html" class="button">Vedi Clienti</a>
-            <a href="../getAllOrdini/index.html" class="button">Vedi Ordini</a>
+            <a href="../getAllAziende/index.html" class="button">Aziende</a>
+            <a href="../getAllClienti/index.html" class="button">Clienti</a>
+            <a href="../getAllOrdini/index.html" class="button">Ordini</a>
         </span>
 
         <span class="row2">
@@ -41,5 +41,15 @@
 </body>
 <script src="./script.js"></script> 
 <script src="./script-subagente.js"></script>
+<script>
+    var hb = document.getElementsByClassName("hoverable-button");
+    var hbArray = Array.prototype.slice.call(hb);
+    console.log(hbArray);
+    hbArray.forEach(element => {
+        element.style.display = "none";
+    });
+    var index = Math.floor(Math.random() * 4);
+    hbArray[index].style.display = "inline-flex";
+</script>
 
 </html>

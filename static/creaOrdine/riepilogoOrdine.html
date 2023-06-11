@@ -54,13 +54,12 @@
         <label for="capZip">CapZip*:</label>
         <input type="text" id="capZipSpedizione" name="capZip[]" required><br>
 
-
         <button class="verificaIndirizzoButton" onclick="verificaIndirizzoSpedizione()">Verifica esistenza indirizzo</button>
         <span id="verifiedSpedizione"></span>
 
         <br><br>
 
-        <label for="name"><strong>Indirizzo spedizione:</strong></label>
+        <label for="name"><strong>Indirizzo fatturazione:</strong></label>
         <p>L'indirizzo di fatturazione corrisponde con quello di spedizione <input id="checkSameFatturazione" type="checkbox" onchange="toggleIndirizzoFatturazione()" checked></input></p>
         
         <span id="indirizzoFatturazioneSpan">
@@ -90,6 +89,16 @@
         <button  class="verificaIndirizzoButton"  onclick="verificaIndirizzoFatturazione()">Verifica esistenza indirizzo</button>
         <span id="verifiedFatturazione"></span>
       </span>
+
+      <label for="dataSpedizione">Data spedizione:</label>
+      <input type="text" id="dataSpedizione" name="dataSpedizione[]"><br>
+
+      <label for="modalitaPagamento">Modalità pagamento:</label>
+      <input type="text" id="modalitaPagamento" name="modalitaPagamento[]"><br>
+
+      <label for="note">Note:</label>
+      <textarea id="note" name="note[]"></textarea>
+      <br>
 
       <br><br>
 

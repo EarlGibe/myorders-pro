@@ -188,11 +188,86 @@ function getAllArticoli() {
         .then(resp => resp.json())
         .then(function (data) {
             console.log(data);
-            data.forEach(articolo => populateArticoli(articolo));
+            // data.forEach(articolo => populateArticoli(articolo));
             autoUpdate();
         })
         .catch(error => console.error(error));
 }
+
+function handleSearch(){
+    var catalogo = JSON.parse(localStorage.getItem("catalogoSelezionato"));
+    
+    document.getElementById("seachbarForm").addEventListener("click", function(event){
+        event.preventDefault()
+      })
+
+    var query=document.getElementsByName("query")[0].value;
+
+    var articoli=document.getElementsByTagName("tr");
+
+        Array.from(articoli).forEach(articolo=>{
+            if(articolo.id!="intestazione"){
+                articolo.textContent=""
+            }
+        })
+
+    if(query==""||query=="*"){
+        getAllArticoli()
+    }else{
+    
+        var searchTypes = document.getElementsByName("searchType");
+          var selectedSearchType;
+    
+          for (var i = 0; i < searchTypes.length; i++) {
+            if (searchTypes[i].checked) {
+              selectedSearchType = searchTypes[i].value;
+              break;
+            }
+          }
+    
+        if( selectedSearchType=="barcode"){
+            return fetch('../articoli/filtered/'+catalogo._id+'/queryBarcode/' + query, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': token
+                }
+            })
+                .then(resp => resp.json())
+                .then(function (data) {
+                    console.log(data);
+                    data.forEach(articolo => {
+                        if (articolo.status) {
+                            populateArticoli(articolo);
+                            autoUpdate();
+                        }
+                    })
+                })
+                .catch(error => console.error(error));
+        }else{
+            if(selectedSearchType=="nome"){
+                return fetch('../articoli/filtered/'+catalogo._id+'/queryNome/' + query, {
+                    method: 'GET',
+                    headers: {
+                        'x-access-token': token
+                    }
+                })
+                    .then(resp => resp.json())
+                    .then(function (data) {
+                        console.log(data);
+                        data.forEach(articolo => {   
+                            if (articolo.status) {
+                                populateArticoli(articolo);
+                                autoUpdate();
+                            }
+                        })
+                    })
+                    .catch(error => console.error(error));
+            }
+        }
+    }
+
+}
+
 
 function populateArticoli(article) {
 
@@ -641,9 +716,9 @@ function configureModal() {
     var openModalButton = document.getElementById("openModalButton");
     var closeButton = document.getElementsByClassName("close")[0];
 
-    openModalButton.addEventListener("click", function () {
+    openModalButton.addEventListener("click", async function () {
         modal.style.display = "block";
-        
+        await riempiCampiSpedizione();
         var check=document.getElementById("checkSameFatturazione").checked;
         if(check){
             document.getElementById("indirizzoFatturazioneSpan").style.display = "none";
@@ -653,6 +728,31 @@ function configureModal() {
     closeButton.addEventListener("click", function () {
         modal.style.display = "none";
     });
+}
+
+function riempiCampiSpedizione(){
+    var clienteID = JSON.parse(localStorage.getItem("ordineAttivo")).cliente;
+    fetch('../clienti/' + clienteID, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': token
+        },
+      })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) { // Here you get the data to modify as you please
+
+          document.getElementById("paeseSpedizione").value = data.paese;
+          document.getElementById("provinciaSpedizione").value = data.provincia;
+          document.getElementById("regioneSpedizione").value = data.regione;
+          document.getElementById("cittaSpedizione").value = data.anagrafica.citta;
+          document.getElementById("viaSpedizione").value = data.anagrafica.via;
+          document.getElementById("capZipSpedizione").value = data.anagrafica.capZip;
+          document.getElementById("civicoSpedizione").value = data.anagrafica.civico;
+        })
+        .catch(error => {
+          console.error('Errore durante la richiesta:', error);
+        });
 }
 
 function verificaIndirizzoSpedizione(){
@@ -709,7 +809,7 @@ function verificaIndirizzoSpedizione(){
     }
   }
 
-  function verificaIndirizzoFatturazione(){
+function verificaIndirizzoFatturazione(){
     document.getElementById("verifiedFatturazione").textContent="Verifico..."
     document.getElementById("verifiedFatturazione").style.color="black"
 
@@ -812,6 +912,10 @@ function concludiOrdine() {
         civicoFatturazione=document.getElementById("civicoFatturazione").value;
     }
 
+    var dataSpedizione = document.getElementById("dataSpedizione").value;
+    var modalitaPagamento = document.getElementById("modalitaPagamento").value;
+    var note = document.getElementById("note").value;
+
     if (paeseFatturazione && provinciaFatturazione && regioneFatturazione && cittaFatturazione && viaFatturazione && capZipFatturazione && 
         paeseSpedizione && provinciaSpedizione && regioneSpedizione && cittaSpedizione && viaSpedizione && capZipSpedizione) {
             var indirizzoSpedizione={
@@ -842,12 +946,15 @@ function concludiOrdine() {
             },
             body: JSON.stringify({ isEvaso: true, 
                 indirizzoSpedizione: indirizzoSpedizione, 
-                indirizzoFatturazione: indirizzoFatturazione })
+                indirizzoFatturazione: indirizzoFatturazione,
+                dataSpedizione: dataSpedizione,
+                modalitaPagamento: modalitaPagamento,
+                note: note })
         })
             .then((resp) => resp.json()) // Transform the data into json
             .then(function (data) { // Here you get the data to modify as you please
 
-                createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione)
+                createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione, dataSpedizione, modalitaPagamento, note)
 
             })
             .catch(error => console.error(error)); // If there is any error, you will catch them here
@@ -860,7 +967,7 @@ function concludiOrdine() {
 
 }
 
-function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
+function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione, dataSpedizione, modalitaPagamento, note) {
     document.getElementById("successo").textContent = "Attendi..."
     document.getElementById("successo").color = "black"
 
@@ -926,6 +1033,18 @@ function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
 
                         html += "<span><strong>Indirizzo fatturazione: </strong>" + jsonToHTML(indirizzoFatturazione) + "<span>"
 
+                        html += "<br>"
+
+                        html += "<span><strong>Data spedizione: </strong>" + dataSpedizione + "<span>"
+
+                        html += "<br>"
+
+                        html += "<span><strong>Modalità pagamento: </strong>" + modalitaPagamento + "<span>"
+
+                        html += "<br>"
+
+                        html += "<span><strong>Note: </strong>" + note + "<span>"
+
                         html += "<br><hr><br><br>"
 
                         var totaleCatalogo = azienda.getElementsByClassName("totalePerCatalogo");
@@ -962,11 +1081,11 @@ function createPDFFromJSON(indirizzoSpedizione, indirizzoFatturazione) {
                             .then(resp => resp.json())
                             .then(function (data) {
                                 document.getElementById("errore").textContent = ""
-                                document.getElementById("successo").textContent = "Ordine salvato e inviato. \n Sarai reindirizzato alla home fra 3 secondi "
+                                document.getElementById("successo").textContent = "Ordine salvato e inviato."
 
                                 localStorage.removeItem("ordineAttivo");
                                 
-                                setTimeout(()=>window.location.href="../home",3000);
+                                setTimeout(()=>window.location.href="../home/easterEgg.html",500);
                             })
                             .catch(error => console.error(error));
 

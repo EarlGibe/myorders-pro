@@ -8,9 +8,26 @@
 </head>
 <body onload="getAllArticoli()">
     <h1>Articoli disponibili</h1>
+
+    <section class="search-form">
+
+      <label>
+        <input type="radio" name="searchType" value="barcode" checked> Barcode
+      </label>
+      <label>
+        <input type="radio" name="searchType" value="nome"> Nome
+      </label>
+      
+      <form id="seachbarForm">
+  
+        <input type="text" name="query" placeholder="Cerca qualcosa..." />
+        <input type="submit" value="Cerca" onclick="handleSearch()"/>
+      
+      </form>
+    </section>
     
     <table id="productTable">
-      <tr>
+      <tr id="intestazione">
         <th>Nome</th>
         <th>Descrizione</th>
         <th>Prezzo</th>
