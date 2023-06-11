@@ -47,6 +47,9 @@ app.locals.db = mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopolo
             console.log(`Server HTTP listening on port ${port} \n`);
         });
     } 
+    
+    // commentato per far funzionare Render
+    // codice perfettamente funzionante in locale 
 
     /*if (SECURE_START) {
 
